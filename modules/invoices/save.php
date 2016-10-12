@@ -43,7 +43,7 @@ if ($_POST['action'] == "insert" ) {
 
 	if($type == total_invoice && $saved) {
 
-		$logger->log('Total style invoice created, ID: '.$id, Zend_Log::INFO);
+		$logger->info('Total style invoice created, ID: '.$id);
 
 		insertProduct(0,0);
 		$product_id = lastInsertId();
@@ -52,11 +52,11 @@ if ($_POST['action'] == "insert" ) {
 	}
 	elseif ($saved) {
 		
-		$logger->log('Max items:'.$_POST['max_items'], Zend_Log::INFO);
+		$logger->info('Max items:'.$_POST['max_items']);
 		$i = 0;
 		while ($i <= $_POST['max_items']) {
-			$logger->log('i='.$i, Zend_Log::INFO);
-			$logger->log('qty='.$_POST["quantity$i"], Zend_Log::INFO);
+			$logger->info('i='.$i);
+			$logger->info('qty='.$_POST["quantity$i"]);
 			if($_POST["quantity$i"] != null)
 			{
 				insertInvoiceItem($id, $_POST["quantity$i"], $_POST["products$i"], $i, $_POST["tax_id"][$i], $_POST["description$i"], $_POST["unit_price$i"], $_POST["attribute"][$i]);
@@ -76,7 +76,7 @@ if ($_POST['action'] == "insert" ) {
 	}
 
 	if($type == total_invoice && $saved) {
-		$logger->log('Total style invoice updated, product ID: '.$_POST['products0'], Zend_Log::INFO);
+		$logger->info('Total style invoice updated, product ID: '.$_POST['products0']);
 		$sql = "UPDATE ".TB_PREFIX."products SET unit_price = :price, description = :description WHERE id = :id AND domain_id = :domain_id";
 		dbQuery($sql,
 			':price', $_POST['unit_price'],
@@ -87,14 +87,14 @@ if ($_POST['action'] == "insert" ) {
 	}
 
     
-	$logger->log('Max items:'.$_POST['max_items'], Zend_Log::INFO);
+	$logger->info('Max items:'.$_POST['max_items']);
 	$i = 0;
 	while ($i <= $_POST['max_items']) 
 	{
 //	for($i=0;(!empty($_POST["quantity$i"]) && $i < $_POST['max_items']);$i++) {
-		$logger->log('i='.$i, Zend_Log::INFO);
-		$logger->log('qty='.$_POST["quantity$i"], Zend_Log::INFO);
-		$logger->log('product='.$_POST["products$i"], Zend_Log::INFO);
+		$logger->info('i='.$i);
+		$logger->info('qty='.$_POST["quantity$i"]);
+		$logger->info('product='.$_POST["products$i"]);
 
 		if($_POST["delete$i"] == "yes")
 		{

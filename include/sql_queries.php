@@ -771,13 +771,13 @@ function insertProduct($enabled=1,$visible=1, $domain_id='')
     $sth =  dbQuery($sql);
     $attributes = $sth->fetchAll();
 
-	$logger->log('Attr: '.var_export($attributes,true), Zend_Log::INFO);
+	$logger->info('Attr: '.var_export($attributes,true));
     $attr = array();
     foreach($attributes as $k=>$v)
     {
-    	$logger->log('Attr key: '.$k, Zend_Log::INFO);
-    	$logger->log('Attr value: '.var_export($v,true), Zend_Log::INFO);
-    	$logger->log('Attr set value: '.$k, Zend_Log::INFO);
+    	$logger->info('Attr key: '.$k);
+    	$logger->info('Attr value: '.var_export($v,true));
+    	$logger->info('Attr set value: '.$k);
         if($_POST['attribute'.$v[id]] == 'true')
         {
             //$attr[$k]['attr_id'] = $v['id'];
@@ -786,7 +786,7 @@ function insertProduct($enabled=1,$visible=1, $domain_id='')
         }
 
     }
-	$logger->log('Attr array: '.var_export($attr,true), Zend_Log::INFO);
+	$logger->info('Attr array: '.var_export($attr,true));
 	$notes_as_description = ($_POST['notes_as_description'] == 'true' ? 'Y' : NULL) ;
     $show_description =  ($_POST['show_description'] == 'true' ? 'Y' : NULL) ;
 
@@ -2210,8 +2210,8 @@ function updateInvoice($invoice_id, $domain_id='')
 
     $index_id = $current_invoice['index_id'];
 
-//	$logger->log('Curent Index Group: '.$description, Zend_Log::INFO);
-//	$logger->log('Description: '.$description, Zend_Log::INFO);
+//	$logger->info('Curent Index Group: '.$description);
+//	$logger->info('Description: '.$description);
 
     if ($current_pref_group['index_group'] != $new_pref_group['index_group'])
     {
@@ -2270,7 +2270,7 @@ function insertInvoiceItem($invoice_id,$quantity,$product_id,$line_number,$line_
     //do taxes
 
     $attr = array();
-	$logger->log('Line item attributes: '.var_export($attribute,true), Zend_Log::INFO);
+	$logger->info('Line item attributes: '.var_export($attribute,true));
     foreach($attribute as $k=>$v)
     {
         if($attribute[$v] !== '')
@@ -2282,11 +2282,11 @@ function insertInvoiceItem($invoice_id,$quantity,$product_id,$line_number,$line_
 
 	$tax_total = getTaxesPerLineItem($line_item_tax_id,$quantity, $unit_price, $domain_id);
 
-	$logger->log(' ', Zend_Log::INFO);
-	$logger->log(' ', Zend_Log::INFO);
-	$logger->log('Invoice: '.$invoice_id.' Tax '.$line_item_tax_id.' for line item '.$line_number.': '.$tax_total, Zend_Log::INFO);
-	$logger->log('Description: '.$description, Zend_Log::INFO);
-	$logger->log(' ', Zend_Log::INFO);
+	$logger->info(' ');
+	$logger->info(' ');
+	$logger->info('Invoice: '.$invoice_id.' Tax '.$line_item_tax_id.' for line item '.$line_number.': '.$tax_total);
+	$logger->info('Description: '.$description);
+	$logger->info(' ');
 
 	//line item gross total
 	$gross_total = $unit_price  * $quantity;
@@ -2369,16 +2369,16 @@ function getTaxesPerLineItem($line_item_tax_id, $quantity, $unit_price, $domain_
 
 	foreach($line_item_tax_id as $key => $value) 
 	{
-		$logger->log("Key: ".$key." Value: ".$value, Zend_Log::INFO);
+		$logger->info("Key: ".$key." Value: ".$value);
 		$tax = getTaxRate($value, $domain_id);
-		$logger->log('tax rate: '.$tax['tax_percentage'], Zend_Log::INFO);
+		$logger->info('tax rate: '.$tax['tax_percentage']);
 
 		$tax_amount = lineItemTaxCalc($tax, $unit_price, $quantity);
 		//get Total tax for line item
 		$tax_total = $tax_total + $tax_amount;
 
-		//$logger->log('Qty: '.$quantity.' Unit price: '.$unit_price, Zend_Log::INFO);
-		//$logger->log('Tax rate: '.$tax[tax_percentage].' Tax type: '.$tax['tax_type'].' Tax $: '.$tax_amount, Zend_Log::INFO);
+		//$logger->info('Qty: '.$quantity.' Unit price: '.$unit_price);
+		//$logger->info('Tax rate: '.$tax[tax_percentage].' Tax type: '.$tax['tax_type'].' Tax $: '.$tax_amount);
 
 	}
 	return $tax_total;
@@ -2423,7 +2423,7 @@ function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $qua
 							".TB_PREFIX."invoice_item_tax
 					   WHERE
 							invoice_item_id = :invoice_item_id";
-		$logger->log("Invoice item: ".$invoice_item_id." tax lines deleted", Zend_Log::INFO);
+		$logger->info("Invoice item: ".$invoice_item_id." tax lines deleted");
 
 		dbQuery($sql_delete,':invoice_item_id',$invoice_item_id);
 
@@ -2435,16 +2435,16 @@ function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $qua
 		{
 			$tax = getTaxRate($value, $domain_id);
 
-			$logger->log("ITEM :: Key: ".$key." Value: ".$value, Zend_Log::INFO);
-			$logger->log('ITEM :: tax rate: '.$tax['tax_percentage'], Zend_Log::INFO);
-			$logger->log('ITEM :: domain_id: '.$domain_id, Zend_Log::INFO);
+			$logger->info("ITEM :: Key: ".$key." Value: ".$value);
+			$logger->info('ITEM :: tax rate: '.$tax['tax_percentage']);
+			$logger->info('ITEM :: domain_id: '.$domain_id);
 
 			$tax_amount = lineItemTaxCalc($tax,$unit_price,$quantity);
 			//get Total tax for line item (unused here)
 			// $tax_total = $tax_total + $tax_amount;
 
-			$logger->log('ITEM :: Qty: '.$quantity.' Unit price: '.$unit_price, Zend_Log::INFO);
-			$logger->log('ITEM :: Tax rate: '.$tax[tax_percentage].' Tax type: '.$tax['type'].' Tax $: '.$tax_amount, Zend_Log::INFO);
+			$logger->info('ITEM :: Qty: '.$quantity.' Unit price: '.$unit_price);
+			$logger->info('ITEM :: Tax rate: '.$tax[tax_percentage].' Tax type: '.$tax['type'].' Tax $: '.$tax_amount);
 
 			$sql = "INSERT 
 						INTO 
@@ -2493,7 +2493,7 @@ function updateInvoiceItem($id, $quantity, $product_id, $line_number, $line_item
 	//$tax = getTaxRate($tax_id);
 
     $attr = array();
-	$logger->log('Line item attributes: '.var_export($attribute,true), Zend_Log::INFO);
+	$logger->info('Line item attributes: '.var_export($attribute,true));
     foreach($attribute as $k=>$v)
     {
         if($attribute[$v] !== '')
@@ -2505,9 +2505,9 @@ function updateInvoiceItem($id, $quantity, $product_id, $line_number, $line_item
 
 	$tax_total = getTaxesPerLineItem($line_item_tax_id,$quantity, $unit_price);
 
-	$logger->log('Invoice: '.$invoice_id.' Tax '.$line_item_tax_id.' for line item '.$line_number.': '.$tax_total, Zend_Log::INFO);
-	$logger->log('Description: '.$description, Zend_Log::INFO);
-	$logger->log(' ', Zend_Log::INFO);
+	$logger->info('Invoice: '.$invoice_id.' Tax '.$line_item_tax_id.' for line item '.$line_number.': '.$tax_total);
+	$logger->info('Description: '.$description);
+	$logger->info(' ');
 
 	//line item gross total
 	$gross_total = $unit_price  * $quantity;
@@ -2783,7 +2783,7 @@ function delete($module, $idField, $id, $domain_id='')
 	// Tablename and column both pass whitelisting and FK checks
 	$sql = "DELETE FROM ".TB_PREFIX."$module WHERE $s_idField = :id";
 	if ($has_domain_id) $sql .= " AND domain_id = :domain_id";
-    $logger->log("Item deleted: ".$sql, ZEND_Log::INFO);
+    $logger->info("Item deleted: ".$sql);
 	if ($has_domain_id) 
 		return dbQuery($sql, ':id', $id, ':domain_id',$domain_id);
 	else

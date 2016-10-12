@@ -1,4 +1,9 @@
 <?php
+/**
+ * Composer autoloader
+ */
+require_once './vendor/autoload.php';
+
 /* 
  * Zend framework init - start
  */
@@ -68,8 +73,11 @@ if (!is_writable($logFile)) {
 	
    simpleInvoicesError('notWriteable','file',$logFile);
 }
-$writer = new Zend_Log_Writer_Stream($logFile);
-$logger = new Zend_Log($writer);
+
+$writer = new Zend\Log\Writer\Stream($logFile);
+$logger = new Zend\Log\Logger;
+$logger->addWriter($writer);
+
 /*
  * log file - end
  */
@@ -214,22 +222,7 @@ include_once('./include/language.php');
 
 checkConnection();
 
-/*
- * API calls don't use the auth module
- */
-if ($module != 'api'){
-    if (!isset($auth_session->id)){
-        if(!isset($_GET['module'])) {
-            $_GET['module'] = '';
-        }
-
-        if  ($_GET['module'] !== "auth") {
-            header('Location: index.php?module=auth&view=login');
-            exit;
-        }
-    }
-}
-
+include('./include/include_auth.php');
 include_once('./include/manageCustomFields.php');
 include_once("./include/validation.php");
 

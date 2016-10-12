@@ -137,7 +137,7 @@ class expense
             );
 	
 
-        $logger->log("Exp ITEM tax- last insert ID-".lastInsertId(), Zend_Log::INFO);
+        $logger->info("Exp ITEM tax- last insert ID-".lastInsertId());
         $this->expense_item_tax(lastInsertId(),$_POST['tax_id'][0],$_POST['amount'],"1","insert");
 
         return true;
@@ -189,10 +189,11 @@ class expense
     Function: invoice_item_tax
     Purpose: insert/update the multiple taxes per line item into the si_invoice_item_tax table
     */
-    public function expense_item_tax($expense_id,$line_item_tax_id,$unit_price,$quantity,$action="") {
-        
+    public function expense_item_tax($expense_id,$line_item_tax_id,$unit_price,$quantity,$action="") 
+    {    
         global $logger;
-        $logger->log("Exp ITEM :: Key: ".$key." Value: ".$value, Zend_Log::INFO);
+        
+        $logger->info("Exp ITEM :: Key: ".$key." Value: ".$value);
 
         //if editing invoice delete all tax info then insert first then do insert again
         //probably can be done without delete - someone to look into this if required - TODO
@@ -203,7 +204,7 @@ class expense
                                 ".TB_PREFIX."expense_item_tax
                            WHERE
                                 expense_id = :expense_id";
-            $logger->log("Expense item: ".$expense_id." tax lines deleted", Zend_Log::INFO);
+            $logger->info("Expense item: ".$expense_id." tax lines deleted");
 
             dbQuery($sql_delete,':expense_id',$expense_id);
 
@@ -216,15 +217,15 @@ class expense
             {
                 $tax = getTaxRate($value);
 
-                $logger->log("Expense - item tax :: Key: ".$key." Value: ".$value, Zend_Log::INFO);
-                $logger->log('Expense - item tax :: tax rate: '.$tax['tax_percentage'], Zend_Log::INFO);
+                $logger->info("Expense - item tax :: Key: ".$key." Value: ".$value);
+                $logger->info('Expense - item tax :: tax rate: '.$tax['tax_percentage']);
 
                 $tax_amount = lineItemTaxCalc($tax,$unit_price,$quantity);
                 //get Total tax for line item
                 $tax_total = $tax_total + $tax_amount;
 
-                $logger->log('Expense - item tax :: Qty: '.$quantity.' Unit price: '.$unit_price, Zend_Log::INFO);
-                $logger->log('Expense - item tax :: Tax rate: '.$tax[tax_percentage].' Tax type: '.$tax['type'].' Tax $: '.$tax_amount, Zend_Log::INFO);
+                $logger->info('Expense - item tax :: Qty: '.$quantity.' Unit price: '.$unit_price);
+                $logger->info('Expense - item tax :: Tax rate: '.$tax[tax_percentage].' Tax type: '.$tax['type'].' Tax $: '.$tax_amount);
 
                 $sql = "INSERT 
                             INTO 
@@ -258,5 +259,3 @@ class expense
         return true;
     }
 }
-
-?>

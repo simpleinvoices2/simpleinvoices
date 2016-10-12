@@ -45,7 +45,7 @@ class eway
             $return = 'true';
         }
 
-        $logger->log("eway pre check: " . $return, Zend_Log::INFO);
+        $logger->info("eway pre check: " . $return);
         return $return;
     }
 
@@ -74,7 +74,7 @@ class eway
         //Eway only accepts amount in cents - so times 100
 		$value = $this->invoice['total']*100;
 		$eway_invoice_total = htmlsafe(trim($value));
-        $logger->log("eway total: " . $eway_invoice_total, Zend_Log::INFO);
+        $logger->info("eway total: " . $eway_invoice_total);
 
         $enc = new encryption();
         $key = $config->encryption->default->key;	
@@ -104,20 +104,20 @@ class eway
         $this->message = $ewayResponseFields;
         $message ="";
         if($ewayResponseFields["EWAYTRXNSTATUS"]=="False"){
-			$logger->log("Transaction Error: " . $ewayResponseFields["EWAYTRXNERROR"] . "<br>\n", Zend_Log::INFO);
+			$logger->info("Transaction Error: " . $ewayResponseFields["EWAYTRXNERROR"] . "<br>\n");
             foreach($ewayResponseFields as $key => $value)
                 $message .= "\n<br>\$ewayResponseFields[\"$key\"] = $value";
-			$logger->log("Eway message: " . $message . "<br>\n", Zend_Log::INFO);
+			$logger->info("Eway message: " . $message . "<br>\n");
             //header("Location: trasnactionerrorpage.php");
             //exit();
             $return = 'false';		
         }else if($ewayResponseFields["EWAYTRXNSTATUS"]=="True"){
 
 
-			$logger->log("Transaction Success: " . $ewayResponseFields["EWAYTRXNERROR"] . "<br>\n", Zend_Log::INFO);
+			$logger->info("Transaction Success: " . $ewayResponseFields["EWAYTRXNERROR"] . "<br>\n");
             foreach($ewayResponseFields as $key => $value)
                 $message .= "\n<br>\$ewayResponseFields[\"$key\"] = $value";
-			$logger->log("Eway message: " . $message . "<br>\n", Zend_Log::INFO);
+			$logger->info("Eway message: " . $message . "<br>\n");
             //header("Location: trasnactionsuccess.php");
             //exit();
             $payment = new payment();
@@ -131,12 +131,12 @@ class eway
             $payment->online_payment_id = $ewayResponseFields['EWAYTRXNNUMBER'];
             $payment->domain_id = $this->domain_id;
 
-                $payment_type = new payment_type();
-                $payment_type->type = "Eway";
-                $payment_type->domain_id = $this->domain_id;
+            $payment_type = new payment_type();
+            $payment_type->type = "Eway";
+            $payment_type->domain_id = $this->domain_id;
 
             $payment->ac_payment_type = $payment_type->select_or_insert_where();
-            $logger->log('Paypal - payment_type='.$payment->ac_payment_type, Zend_Log::INFO);
+            $logger->info('Paypal - payment_type='.$payment->ac_payment_type);
             $payment->insert();
             #echo $db->lastInsertID();
             $return = 'true';		

@@ -14,9 +14,9 @@ $pdfname = trim($preference['pref_inv_wording']) . $invoice_id;
 
 $url_pdf = urlPDF($invoice_id);
 $url_pdf_encoded = urlencode($url_pdf);
-	$logger->log('Invoice ID: '.$invoice_id.' Get ID: '.$_GET['id'] , Zend_Log::INFO);
-	$logger->log('PDF: '.$url_pdf, Zend_Log::INFO);
-	$logger->log('PDF url: '.$url_pdf_encoded, Zend_Log::INFO);
+$logger->info('Invoice ID: '.$invoice_id.' Get ID: '.$_GET['id']);
+$logger->info('PDF: '.$url_pdf);
+$logger->info('PDF url: '.$url_pdf_encoded);
 
 
 $buffer = file_get_contents("../../index.php?module=invoices&view=template&id=28&action=view&location=print");

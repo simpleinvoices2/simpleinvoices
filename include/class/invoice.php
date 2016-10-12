@@ -159,55 +159,51 @@ class invoice {
 
     public function select($id, $domain_id='')
     {
-		global $logger;
-
-		if(!empty($domain_id)) $this->domain_id = $domain_id;
-
-		$sql = "SELECT 
-                    i.*,
-		            i.date as date_original, 
-                    (SELECT CONCAT(p.pref_inv_wording,' ',i.index_id)) as index_name,
-                    p.pref_inv_wording AS preference,
-                    p.status
-                FROM 
-                    ".TB_PREFIX."invoices i LEFT JOIN 
-					".TB_PREFIX."preferences p  
-						ON (i.preference_id = p.pref_id AND i.domain_id = p.domain_id)
-                WHERE 
-                    i.domain_id = :domain_id 
-                AND 
-					i.id = :id";
-
-		$sth = dbQuery($sql, ':id', $id, ':domain_id', $this->domain_id);
-
+        if(!empty($domain_id)) $this->domain_id = $domain_id;
+        
+        $sql = "
+            SELECT 
+                i.*,
+                i.date as date_original, 
+                (SELECT CONCAT(p.pref_inv_wording,' ',i.index_id)) as index_name,
+                p.pref_inv_wording AS preference,
+                p.status
+            FROM 
+                ".TB_PREFIX."invoices i LEFT JOIN 
+                ".TB_PREFIX."preferences p  
+                ON (i.preference_id = p.pref_id AND i.domain_id = p.domain_id)
+            WHERE 
+                i.domain_id = :domain_id 
+            AND 
+                i.id = :id";
+        
+        $sth = dbQuery($sql, ':id', $id, ':domain_id', $this->domain_id);
+        
         $invoice = $sth->fetch();
-
-	$invoice['calc_date'] = date('Y-m-d', strtotime( $invoice['date'] ) );
-	$invoice['date'] = siLocal::date( $invoice['date'] );
-	$invoice['total'] = getInvoiceTotal($invoice['id'], $domain_id);
-	$invoice['gross'] = $this->getInvoiceGross($invoice['id'], $this->domain_id);
-	$invoice['paid'] = calc_invoice_paid($invoice['id'], $domain_id);
-	$invoice['owing'] = $invoice['total'] - $invoice['paid'];
-
-	$invoice['invoice_items'] = $this->getInvoiceItems($id, $this->domain_id);
-
-	#invoice total tax
-	$sql2 ="SELECT SUM(tax_amount) AS total_tax, SUM(total) AS total FROM ".TB_PREFIX."invoice_items WHERE invoice_id =  :id AND domain_id = :domain_id";
-	$sth2 = dbQuery($sql2, ':id', $id, ':domain_id', $this->domain_id);
-	$result2 = $sth2->fetch();
-	//$invoice['total'] = number_format($result['total'],2);
-	$invoice['total_tax'] = $result2['total_tax'];
-		
-	$invoice['tax_grouped'] = taxesGroupedForInvoice($id);
-	
-	return $invoice;
-    
+        
+        $invoice['calc_date'] = date('Y-m-d', strtotime( $invoice['date'] ) );
+        $invoice['date'] = siLocal::date( $invoice['date'] );
+        $invoice['total'] = getInvoiceTotal($invoice['id'], $domain_id);
+        $invoice['gross'] = $this->getInvoiceGross($invoice['id'], $this->domain_id);
+        $invoice['paid'] = calc_invoice_paid($invoice['id'], $domain_id);
+        $invoice['owing'] = $invoice['total'] - $invoice['paid'];
+        
+        $invoice['invoice_items'] = $this->getInvoiceItems($id, $this->domain_id);
+        
+        #invoice total tax
+        $sql2 ="SELECT SUM(tax_amount) AS total_tax, SUM(total) AS total FROM ".TB_PREFIX."invoice_items WHERE invoice_id =  :id AND domain_id = :domain_id";
+        $sth2 = dbQuery($sql2, ':id', $id, ':domain_id', $this->domain_id);
+        $result2 = $sth2->fetch();
+        //$invoice['total'] = number_format($result['total'],2);
+        $invoice['total_tax'] = $result2['total_tax'];
+        	
+        $invoice['tax_grouped'] = taxesGroupedForInvoice($id);
+        	
+        return $invoice;
 	}
 
     public function get_all($domain_id='')
     {
-		global $logger;
-
 		if (empty($domain_id)) {
 		    $auth_session = new Zend_Session_Namespace('Zend_Auth');
 		    $domain_id    = $auth_session->domain_id;
@@ -233,8 +229,6 @@ class invoice {
 
     public function count($domain_id='')
     {
-		global $logger;
-
 		if (empty($domain_id)) {
 		    $auth_session = new Zend_Session_Namespace('Zend_Auth');
 		    $domain_id    = $auth_session->domain_id;
@@ -247,8 +241,8 @@ class invoice {
 		$sth = dbQuery($sql, ':domain_id', $domain_id);
 
         return $sth;
-
     }
+    
     function select_all($type='', $dir='DESC', $rp='25', $page='1', $having='')
     {
         global $config;
@@ -446,8 +440,6 @@ class invoice {
 
     public function select_all_where()
     {
-		global $logger;
-
 		$auth_session = new Zend_Session_Namespace('Zend_Auth');
 		$domain_id    = $auth_session->domain_id;
 
@@ -460,11 +452,10 @@ class invoice {
 		$sth = dbQuery($sql, ':domain_id', $domain_id);
 
         return $sth->fetchAll();
-
     }
 
-	public function getInvoiceItems($id, $domain_id='') {
-	
+	public function getInvoiceItems($id, $domain_id='') 
+	{
 		global $logger;
 		
 		if(!empty($domain_id)) $this->domain_id = $domain_id;
@@ -499,7 +490,7 @@ class invoice {
 			foreach ($tax as $key => $value)
 			{
 				$invoiceItem['tax'][$key] = $value['tax_id'];
-				$logger->log('Invoice: '.$invoiceItem['invoice_id'].' Item id: '.$invoiceItem['id'].' Tax '.$key.' Tax ID: '.$value['tax_id'], Zend_Log::INFO);
+				$logger->info('Invoice: '.$invoiceItem['invoice_id'].' Item id: '.$invoiceItem['id'].' Tax '.$key.' Tax ID: '.$value['tax_id']);
 			}
 			$invoiceItems[$i] = $invoiceItem;
 		}
@@ -564,7 +555,7 @@ class invoice {
         }
 
         $count = $sth->fetch();
-		$logger->log('Max Invoice: '.$count['max'], Zend_Log::INFO);
+		$logger->info('Max Invoice: '.$count['max']);
         return $count['max'];
     }
 
