@@ -4,6 +4,15 @@
  */
 require_once './vendor/autoload.php';
 
+/**
+ * Service manager
+ */
+$serviceManager = new \Zend\ServiceManager\ServiceManager([
+    'factories' => [
+        'Smarty' => \SimpleInvoices\Service\SmartyFactory::class
+    ],
+]);
+
 /* 
  * Zend framework init - start
  */
@@ -16,8 +25,6 @@ require_once 'Zend/Loader/Autoloader.php';
 
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
-#Zend_Loader::registerAutoload();
-
 
 //session_start();
 Zend_Session::start();
@@ -106,22 +113,17 @@ Zend_Date::setOptions(array('cache' => $cache)); // Active aussi pour Zend_Local
  * Zend Framework cache section - end
  */
 
-$smarty = new Smarty();
+//$smarty = new Smarty();
+$smarty = $serviceManager->get('Smarty');
 
-$smarty->debugging = false;
 
 //cache directory. Have to be writeable (chmod 777)
-$smarty -> compile_dir = "tmp/cache";
+//$smarty->compile_dir = "tmp/cache";
 if(!is_writable($smarty -> compile_dir)) {
 	simpleInvoicesError("notWriteable", 'folder', $smarty -> compile_dir);
 	//exit("Simple Invoices Error : The folder <i>".$smarty -> compile_dir."</i> has to be writeable");
 }
 
-//adds own smarty plugins
-$smarty->plugins_dir = array("plugins","include/smarty_plugins");
-
-//add stripslash smarty function
-$smarty->register_modifier("unescape","stripslashes");
 /* 
  * Smarty inint - end
  */
