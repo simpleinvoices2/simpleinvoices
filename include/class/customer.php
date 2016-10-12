@@ -6,7 +6,8 @@ class customer
 
 	public function __construct()
 	{
-		$this->domain_id = domain_id::get($this->domain_id);
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+		$this->domain_id = $auth_session->domain_id;
 	}
 
     public function get($id)

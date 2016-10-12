@@ -169,8 +169,12 @@ class email
 
     public function get_admin_email()
     {
-    
-		$domain_id = domain_id::get($this->domain_id);
+        if (empty($this->domain_id)) {
+            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $domain_id    = $auth_session->domain_id;
+        } else {
+            $domain_id = $this->domain_id;
+        }
 
 		$sql = "SELECT u.email 
 				FROM ".TB_PREFIX."user u 

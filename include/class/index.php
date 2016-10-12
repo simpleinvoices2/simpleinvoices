@@ -16,8 +16,10 @@ class index
 
     public static function next($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
-
-        $domain_id = domain_id::get($domain_id);
+        if (empty($domain_id)) {
+            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $domain_id    = $auth_session->domain_id;
+        }
 
         $sql = "SELECT id 
                 FROM ".TB_PREFIX."index 
@@ -45,8 +47,11 @@ class index
 
     public static function increment($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
-    
-       $domain_id = domain_id::get($domain_id);
+        if (empty($domain_id)) {
+            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $domain_id    = $auth_session->domain_id;
+        }
+        
         $next = index::next($node, $sub_node, $domain_id, $sub_node_2);
 
         if ($next == 1)
@@ -79,8 +84,10 @@ class index
 
     public static function rewind($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
-
-        $domain_id = domain_id::get($domain_id);
+        if (empty($domain_id)) {
+            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $domain_id    = $auth_session->domain_id;
+        }
         
         $sql = "UPDATE ".TB_PREFIX."index 
                 SET id = (id - 1) 

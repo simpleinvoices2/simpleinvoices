@@ -12,7 +12,9 @@ function sql($type='', $dir, $sort, $rp, $page )
 	global $config;
 	global $LANG;
 
-	$domain_id = domain_id::get();
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 	$valid_search_fields = array('id', 'name');
 
 	//SC: Safety checking values that will be directly subbed in

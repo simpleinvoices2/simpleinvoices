@@ -213,7 +213,10 @@ function lastInsertId() {
 
 function _invoice_check_fk($biller, $customer, $type, $preference) {
 	global $dbh;
-	$domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 
 	//Check biller
 	$sth = $dbh->prepare('SELECT count(id) FROM '.TB_PREFIX.'biller WHERE id = :id AND domain_id = :domain_id');
@@ -244,7 +247,10 @@ function _invoice_check_fk($biller, $customer, $type, $preference) {
  */
 function _invoice_items_check_fk($invoice, $product, $tax, $update) {
 	global $dbh;
-	$domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 
 	//Check invoice
 	if (is_null($update) || !is_null($invoice)) {
@@ -265,9 +271,12 @@ function _invoice_items_check_fk($invoice, $product, $tax, $update) {
 	return true;
 }
 
-function getGenericRecord($table, $id, $domain_id='', $id_field='id') {
-
-	$domain_id = domain_id::get($domain_id);
+function getGenericRecord($table, $id, $domain_id='', $id_field='id') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$record_sql = "SELECT * FROM `".TB_PREFIX."$table` WHERE `$id_field` = :id and `domain_id` = :domain_id";
 	$sth = dbQuery($record_sql, ':id', $id, ':domain_id',$domain_id);
@@ -309,9 +318,14 @@ function getSQLPatches() {
 	return $sth->fetchAll();
 }
 
-function getPreferences($domain_id='') {
+function getPreferences($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+	
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."preferences WHERE domain_id = :domain_id ORDER BY pref_description";
 	$sth  = dbQuery($sql,':domain_id', $domain_id);
@@ -335,7 +349,11 @@ function getPreferences($domain_id='') {
 function getActiveTaxes($domain_id='') {
 	global $LANG;
 	global $db_server;
-	$domain_id = domain_id::get($domain_id);
+	
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT * FROM ".TB_PREFIX."tax WHERE tax_enabled != 0 and domain_id = :domain_id ORDER BY tax_description";
 	if ($db_server == 'pgsql') {
@@ -358,19 +376,27 @@ function getActiveTaxes($domain_id='') {
 	return $taxes;
 }
 
-function getActivePreferences($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
-
+function getActivePreferences($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
+    
 	$sql = "SELECT * FROM ".TB_PREFIX."preferences WHERE pref_enabled and domain_id = :domain_id ORDER BY pref_description";
 	$sth  = dbQuery($sql, ':domain_id', $domain_id);
 
 	return $sth->fetchAll();
 }
 
-function getCustomFieldLabels($domain_id='') {
+function getCustomFieldLabels($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."custom_fields WHERE domain_id = :domain_id ORDER BY cf_custom_field";
 	$sth = dbQuery($sql,':domain_id',$domain_id);
@@ -389,7 +415,11 @@ function getCustomFieldLabels($domain_id='') {
 
 function getBillers($domain_id='') {
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+	
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."biller WHERE domain_id = :domain_id ORDER BY name";
 	$sth  = dbQuery($sql,':domain_id',$domain_id);
@@ -409,10 +439,15 @@ function getBillers($domain_id='') {
 	return $billers;
 }
 
-function getActiveBillers($domain_id='') {
+function getActiveBillers($domain_id='') 
+{
 	global $db_server;
-	$domain_id = domain_id::get($domain_id);
 
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
+	
 	$sql = "SELECT * FROM ".TB_PREFIX."biller WHERE enabled != 0 AND domain_id = :domain_id ORDER BY name";
 	if ($db_server == 'pgsql') {
 		$sql = "SELECT * FROM ".TB_PREFIX."biller WHERE enabled AND domain_id = :domain_id ORDER BY name";
@@ -422,8 +457,8 @@ function getActiveBillers($domain_id='') {
 	return $sth->fetchAll();
 }
 
-function getTaxTypes() {
-
+function getTaxTypes() 
+{
 	$types = array(
                     '%' => '%',
                     '$' => '$'
@@ -431,9 +466,14 @@ function getTaxTypes() {
 	return $types;
 }
 
-function getPaymentType($id, $domain_id='') {
+function getPaymentType($id, $domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."payment_types WHERE pt_id = :id AND domain_id = :domain_id";
 	$sth = dbQuery($sql, ':id', $id, ':domain_id',$domain_id);
@@ -445,7 +485,11 @@ function getPaymentType($id, $domain_id='') {
 
 function getPayment($id, $domain_id='') {
 	global $config;
-	$domain_id = domain_id::get($domain_id);
+	
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT
 		ap.*,
@@ -470,9 +514,12 @@ function getPayment($id, $domain_id='') {
 	return $payment;
 }
 
-function getInvoicePayments($id, $domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getInvoicePayments($id, $domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT
 				ap.*,
@@ -498,9 +545,12 @@ function getInvoicePayments($id, $domain_id='') {
 	return dbQuery($sql, ':id', $id, ':domain_id', $domain_id);
 }
 
-function getCustomerPayments($id, $domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getCustomerPayments($id, $domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT
 				ap.*,
@@ -526,9 +576,12 @@ function getCustomerPayments($id, $domain_id='') {
 	return dbQuery($sql, ':id', $id, ':domain_id', $domain_id);
 }
 
-function getPayments($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getPayments($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT
 				ap.*,
@@ -553,9 +606,13 @@ function getPayments($domain_id='') {
 	return dbQuery($sql,':domain_id',$domain_id);
 }
 
-function progressPayments($sth, $domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function progressPayments($sth, $domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
+    
 	$payments = null;
 
 	for($i=0;$payment = $sth->fetch();$i++) {
@@ -573,9 +630,14 @@ function progressPayments($sth, $domain_id='') {
 	return $payments;
 }
 
-function getPaymentTypes($domain_id='') {
+function getPaymentTypes($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."payment_types WHERE domain_id = :domain_id ORDER BY pt_description";
 	$sth = dbQuery($sql, ':domain_id',$domain_id);
@@ -594,10 +656,15 @@ function getPaymentTypes($domain_id='') {
 	return $paymentTypes;
 }
 
-function getActivePaymentTypes($domain_id='') {
+function getActivePaymentTypes($domain_id='') 
+{
 	global $LANG;
 	global $db_server;
-	$domain_id = domain_id::get($domain_id);
+	
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT * FROM ".TB_PREFIX."payment_types WHERE pt_enabled != 0 and domain_id = :domain_id ORDER BY pt_description";
 	if ($db_server == 'pgsql') {
@@ -619,9 +686,14 @@ function getActivePaymentTypes($domain_id='') {
 	return $paymentTypes;
 }
 
-function getProduct($id, $domain_id='') {
+function getProduct($id, $domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."products WHERE id = :id and domain_id = :domain_id";
 	$sth = dbQuery($sql, ':id', $id, ':domain_id', $domain_id);
@@ -638,9 +710,12 @@ function getProduct($id, $domain_id='') {
 	return mysqlQuery($sql);
 }*/
 
-function insertProductComplete($enabled=1,$visible=1,$description, $unit_price, $custom_field1 = NULL, $custom_field2, $custom_field3, $custom_field4, $notes, $domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function insertProductComplete($enabled=1,$visible=1,$description, $unit_price, $custom_field1 = NULL, $custom_field2, $custom_field3, $custom_field4, $notes, $domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "INSERT into
     ".TB_PREFIX."products (
@@ -681,9 +756,14 @@ function insertProductComplete($enabled=1,$visible=1,$description, $unit_price, 
 		);
 }
 
-function insertProduct($enabled=1,$visible=1, $domain_id='') {
+function insertProduct($enabled=1,$visible=1, $domain_id='') 
+{
     global $logger;
-	$domain_id = domain_id::get($domain_id);
+
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	if (isset($_POST['enabled'])) $enabled = $_POST['enabled'];
     //select all attribts
@@ -771,10 +851,13 @@ function insertProduct($enabled=1,$visible=1, $domain_id='') {
 }
 
 
-function updateProduct($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
-
+function updateProduct($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
+    
     //select all attributes
     $sql = "SELECT * FROM ".TB_PREFIX."products_attributes";
     $sth =  dbQuery($sql);
@@ -832,10 +915,15 @@ function updateProduct($domain_id='') {
 		);
 }
 
-function getProducts($domain_id='') {
+function getProducts($domain_id='') 
+{
 	global $LANG;
 	global $db_server;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."products WHERE visible = 1 AND domain_id = :domain_id ORDER BY description";
 	if ($db_server == 'pgsql') {
@@ -859,9 +947,12 @@ function getProducts($domain_id='') {
 	return $products;
 }
 
-function getActiveProducts($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getActiveProducts($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT * FROM ".TB_PREFIX."products WHERE enabled AND domain_id = :domain_id ORDER BY description";
 	$sth = dbQuery($sql, ':domain_id',$domain_id);
@@ -869,9 +960,14 @@ function getActiveProducts($domain_id='') {
 	return $sth->fetchAll();
 }
 
-function getTaxes($domain_id='') {
+function getTaxes($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+	
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."tax WHERE domain_id = :domain_id ORDER BY tax_description";
 	$sth = dbQuery($sql, ':domain_id', $domain_id);
@@ -893,7 +989,13 @@ function getTaxes($domain_id='') {
 
 function getDefaultGeneric($param, $bool=true, $domain_id='') {
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+	
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	} else {
+        $domain_id = $domain_id;
+	}
 
 	$sql = "SELECT value FROM ".TB_PREFIX."system_defaults s WHERE ( s.name = :param AND s.domain_id = :domain_id)";
 	$sth = dbQuery($sql, ':param', $param, ':domain_id', $domain_id);
@@ -902,45 +1004,60 @@ function getDefaultGeneric($param, $bool=true, $domain_id='') {
 	return $paramval;
 }
 
-function getDefaultCustomer($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getDefaultCustomer($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT c.name AS name FROM ".TB_PREFIX."customers c, ".TB_PREFIX."system_defaults s WHERE ( s.name = 'customer' AND c.id = s.value AND c.domain_id = s.domain_id AND s.domain_id = :domain_id)";
 	$sth = dbQuery($sql, ':domain_id', $domain_id);
 	return $sth->fetch();
 }
 
-function getDefaultPaymentType($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getDefaultPaymentType($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT p.pt_description AS pt_description FROM ".TB_PREFIX."payment_types p, ".TB_PREFIX."system_defaults s WHERE ( s.name = 'payment_type' AND p.pt_id = s.value AND p.domain_id = s.domain_id AND s.domain_id = :domain_id)";
 	$sth = dbQuery($sql,':domain_id', $domain_id);
 	return $sth->fetch();
 }
 
-function getDefaultPreference($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getDefaultPreference($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT * FROM ".TB_PREFIX."preferences p, ".TB_PREFIX."system_defaults s WHERE ( s.name = 'preference' AND p.pref_id = s.value AND p.domain_id = s.domain_id AND s.domain_id = :domain_id)";
 	$sth = dbQuery($sql,':domain_id', $domain_id);
 	return $sth->fetch();
 }
 
-function getDefaultBiller($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
-
+function getDefaultBiller($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
+    
 	$sql = "SELECT b.name AS name FROM ".TB_PREFIX."biller b, ".TB_PREFIX."system_defaults s WHERE ( s.name = 'biller' AND b.id = s.value AND b.domain_id = s.domain_id AND s.domain_id = :domain_id)";
 	$sth = dbQuery($sql,':domain_id', $domain_id);
 	return $sth->fetch();
 }
 
-function getDefaultTax($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getDefaultTax($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT * FROM ".TB_PREFIX."tax t, ".TB_PREFIX."system_defaults s WHERE s.name = 'tax' AND t.tax_id = s.value AND t.domain_id = s.domain_id AND s.domain_id = :domain_id";
 	$sth = dbQuery($sql,':domain_id',$domain_id);
@@ -975,9 +1092,14 @@ function getDefaultLanguage() {
 	return getDefaultGeneric('language', false);
 }
 
-function getInvoiceTotal($invoice_id, $domain_id='') {
+function getInvoiceTotal($invoice_id, $domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql ="SELECT SUM(total) AS total FROM ".TB_PREFIX."invoice_items WHERE invoice_id =  :invoice_id AND domain_id = :domain_id";
 	$sth = dbQuery($sql, ':invoice_id', $invoice_id,':domain_id', $domain_id);
@@ -985,17 +1107,25 @@ function getInvoiceTotal($invoice_id, $domain_id='') {
 	return $res['total'];
 }
 
-function setInvoiceStatus($invoice, $status, $domain_id=''){
-
-	$domain_id = domain_id::get($domain_id);
+function setInvoiceStatus($invoice, $status, $domain_id='')
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "UPDATE " . TB_PREFIX . "invoices SET status_id =  :status WHERE id =  :id AND domain_id = :domain_id";
 	$sth  = dbQuery($sql, ':status', $status, ':id', $invoice,':domain_id', $domain_id);
 }
 
-function getInvoice($id, $domain_id='') {
+function getInvoice($id, $domain_id='') 
+{
 	global $config;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."invoices WHERE id =  :id AND domain_id =  :domain_id";
 
@@ -1032,7 +1162,10 @@ Purpose: to show a nice summary of total $ for tax for an invoice
 */
 function numberOfTaxesForInvoice($invoice_id, $domain_id='')
 {
-	$domain_id = domain_id::get($domain_id);
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT
 				DISTINCT tax.tax_id
@@ -1061,7 +1194,10 @@ Purpose: to show a nice summary of total $ for tax for an invoice
 */
 function taxesGroupedForInvoice($invoice_id, $domain_id='')
 {
-	$domain_id = domain_id::get($domain_id);
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT
 				tax.tax_description as tax_name,
@@ -1093,7 +1229,10 @@ Purpose: to show a nice summary of total $ for tax for an invoice item - used fo
 */
 function taxesGroupedForInvoiceItem($invoice_item_id, $domain_id='')
 {
-	$domain_id = domain_id::get($domain_id);
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT
 				item_tax.id as row_id,
@@ -1115,9 +1254,12 @@ function taxesGroupedForInvoiceItem($invoice_item_id, $domain_id='')
 
 }
 
-function setStatusExtension($extension_id, $status=2, $domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function setStatusExtension($extension_id, $status=2, $domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	//status=2 = toggle status
 	if ($status == 2) {
@@ -1134,9 +1276,12 @@ function setStatusExtension($extension_id, $status=2, $domain_id='') {
 	return false;
 }
 
-function getExtensionID($extension_name = "none", $domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
+function getExtensionID($extension_name = "none", $domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT * FROM ".TB_PREFIX."extensions WHERE name = :extension_name AND (domain_id =  0 OR domain_id = :domain_id ) ORDER BY domain_id DESC LIMIT 1";
 	$sth = dbQuery($sql,':extension_name', $extension_name, ':domain_id', $domain_id);
@@ -1146,10 +1291,15 @@ function getExtensionID($extension_name = "none", $domain_id='') {
 	return $extension_info['id'];				//  0 = core, >0 is extension id
 }
 
-function getSystemDefaults($domain_id='') {
-
-	$domain_id = domain_id::get($domain_id);
-
+function getSystemDefaults($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    } else {
+        $domain_id = $domain_id;
+    }
+    
 	$db = new db();
 
     #get sql patch level - if less than 198 do sql with no exntesion table
@@ -1218,9 +1368,11 @@ function getSystemDefaults($domain_id='') {
 
 }
 
-function updateDefault($name,$value,$extension_name="core") {
-
-	$domain_id = domain_id::get();
+function updateDefault($name,$value,$extension_name="core") 
+{
+    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    
+	$domain_id = $auth_session->domain_id;
 
 	$extension_id = getExtensionID($extension_name);
 	if (!($extension_id >= 0))
@@ -1259,7 +1411,10 @@ function getInvoiceType($id) {
 
 function insertBiller() {
 	global $db_server;
-	$domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 
 	if ($db_server == 'pgsql') {
 		$sql = "INSERT into
@@ -1360,9 +1515,11 @@ function insertBiller() {
 	}*/
 }
 
-function updateBiller() {
-
-	$domain_id = domain_id::get();
+function updateBiller() 
+{
+    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    
+	$domain_id = $auth_session->domain_id;
 
 	$sql = "UPDATE
 				".TB_PREFIX."biller
@@ -1426,7 +1583,10 @@ function updateBiller() {
 
 function updateCustomer() {
 	global $config;
-	$domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 
 //	$encrypted_credit_card_number = '';
 	$is_new_cc_num = ($_POST['credit_card_number_new'] !='');
@@ -1529,7 +1689,10 @@ function updateCustomer() {
 
 function insertCustomer() {
     global $config;
-	$domain_id = domain_id::get();
+    
+    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    
+	$domain_id = $auth_session->domain_id;
 
 	extract( $_POST );
 	$sql = "INSERT INTO 
@@ -1590,7 +1753,10 @@ function insertCustomer() {
 function searchCustomers($search) {
 //TODO remove this function - note used anymore
 	global $db_server;
-	$domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 
 	$sql = "SELECT * FROM ".TB_PREFIX."customers WHERE domain_id = :domain_id AND name LIKE :search";
 	if ($db_server == 'pgsql') {
@@ -1631,9 +1797,14 @@ function getInvoices(&$sth) {
 	return $invoice;
 }
 
-function getCustomerInvoices($id, $domain_id='') {
+function getCustomerInvoices($id, $domain_id='') 
+{
 	global $config;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 // tested for MySQL	
 	$sql = "SELECT	
@@ -1669,9 +1840,14 @@ function getCustomerInvoices($id, $domain_id='') {
 
 }
 
-function getCustomers($domain_id='') {
+function getCustomers($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$customer = null;
 
@@ -1706,10 +1882,15 @@ function getCustomers($domain_id='') {
 	return $customers;
 }
 
-function getActiveCustomers($domain_id='') {
+function getActiveCustomers($domain_id='') 
+{
 	global $LANG;
 	global $db_server;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT * FROM ".TB_PREFIX."customers WHERE enabled != 0 and domain_id = :domain_id ORDER BY name";
 	if ($db_server == 'pgsql') {
@@ -1721,9 +1902,12 @@ function getActiveCustomers($domain_id='') {
 }
 
 /* DELETE this function */
-function getTopDebtor($domain_id='') {
-
-  $domain_id = domain_id::get($domain_id);
+function getTopDebtor($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
   $debtor = null;
 
@@ -1757,9 +1941,12 @@ function getTopDebtor($domain_id='') {
 }
 
 /* DELETE this function */
-function getTopCustomer($domain_id='') {
-
-  $domain_id = domain_id::get($domain_id);
+function getTopCustomer($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
   $customer = null;
 
@@ -1793,9 +1980,12 @@ function getTopCustomer($domain_id='') {
 }
 
 /* DELETE this function */
-function getTopBiller($domain_id='') {
-
-  $domain_id = domain_id::get($domain_id);
+function getTopBiller($domain_id='') 
+{
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
   $biller = null;
 
@@ -1823,9 +2013,14 @@ function getTopBiller($domain_id='') {
   return $biller;
 }
 
-function insertTaxRate($domain_id='') {
+function insertTaxRate($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "INSERT into ".TB_PREFIX."tax
 				(domain_id, tax_description, tax_percentage, type,  tax_enabled)
@@ -1844,9 +2039,14 @@ function insertTaxRate($domain_id='') {
 	return $display_block;
 }
 
-function updateTaxRate($domain_id='') {
+function updateTaxRate($domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "UPDATE
 				".TB_PREFIX."tax
@@ -1885,9 +2085,14 @@ function SqlDateWithTime($in_date){
 	return $out_date;
 }
 
-function insertInvoice($type, $domain_id='') {
+function insertInvoice($type, $domain_id='') 
+{
 	global $db_server;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	if ($db_server == 'mysql' && !_invoice_check_fk(
 		$_POST['biller_id'], $_POST['customer_id'],
@@ -1988,11 +2193,14 @@ function insertInvoice($type, $domain_id='') {
     return $sth;
 }
 
-function updateInvoice($invoice_id, $domain_id='') {
-	
-//  global $logger;
+function updateInvoice($invoice_id, $domain_id='') 
+{
     global $db_server;
-    $domain_id = domain_id::get($domain_id);
+ 
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$invoiceobj = new invoice();
     $current_invoice = $invoiceobj->select($_POST['id']);
@@ -2048,12 +2256,16 @@ function updateInvoice($invoice_id, $domain_id='') {
 		);
 }
 
-function insertInvoiceItem($invoice_id,$quantity,$product_id,$line_number,$line_item_tax_id,$description="", $unit_price="", $attribute="", $domain_id='') {
-
+function insertInvoiceItem($invoice_id,$quantity,$product_id,$line_number,$line_item_tax_id,$description="", $unit_price="", $attribute="", $domain_id='') 
+{
 	global $logger;
 	global $db_server;
 	global $LANG;
-    $domain_id = domain_id::get($domain_id);
+    
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
     //do taxes
 
@@ -2147,7 +2359,11 @@ Purpose: get the total tax for the line item
 function getTaxesPerLineItem($line_item_tax_id, $quantity, $unit_price, $domain_id='')
 {
 	global $logger;
-    $domain_id = domain_id::get($domain_id);
+    
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$tax_total = 0;
 
@@ -2189,10 +2405,14 @@ function lineItemTaxCalc($tax, $unit_price, $quantity)
 Function: invoice_item_tax
 Purpose: insert/update the multiple taxes per line item into the si_invoice_item_tax table
 */
-function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $quantity, $action='', $domain_id='') {
-	
+function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $quantity, $action='', $domain_id='') 
+{	
 	global $logger;
-    $domain_id = domain_id::get($domain_id);
+    
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	//if editing invoice delete all tax info then insert first then do insert again
 	//probably can be done without delete - someone to look into this if required - TODO
@@ -2258,12 +2478,16 @@ function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $qua
 	return true;
 }
 
-function updateInvoiceItem($id, $quantity, $product_id, $line_number, $line_item_tax_id, $description, $unit_price, $attribute="", $domain_id='') {
-
+function updateInvoiceItem($id, $quantity, $product_id, $line_number, $line_item_tax_id, $description, $unit_price, $attribute="", $domain_id='') 
+{
 	global $logger;
 	global $LANG;
 	global $db_server;
-    $domain_id = domain_id::get($domain_id);
+ 
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	//$product = getProduct($product_id);
 	//$tax = getTaxRate($tax_id);
@@ -2386,10 +2610,15 @@ function printEntries($menu,$id,$depth) {
 }
 */
 
-function searchBillerAndCustomerInvoice($biller, $customer, $domain_id='') {
+function searchBillerAndCustomerInvoice($biller, $customer, $domain_id='') 
+{
 //TODO remove this function - not used
 	global $db_server;
-    $domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT  b.name AS biller, 
 	c.name AS customer, 
@@ -2414,9 +2643,13 @@ WHERE b.name LIKE :biller
 		);
 }
 
-function searchInvoiceByDate($startdate, $enddate, $domain_id='') {
-//TODO remove this function - not used
-    $domain_id = domain_id::get($domain_id);
+function searchInvoiceByDate($startdate, $enddate, $domain_id='') 
+{
+    //TODO remove this function - not used
+    if (empty($domain_id)) {
+        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $domain_id    = $auth_session->domain_id;
+    }
 
 	$sql = "SELECT  b.name AS biller, 
 	c.name AS customer, 
@@ -2449,10 +2682,15 @@ WHERE i.domain_id = :domain_id
  * attempt is returned.
  */
 
-function delete($module, $idField, $id, $domain_id='') {
+function delete($module, $idField, $id, $domain_id='') 
+{
 	global $dbh;
 	global $logger;
-    $domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$has_domain_id = false;
 
@@ -2552,10 +2790,14 @@ function delete($module, $idField, $id, $domain_id='') {
 		return dbQuery($sql, ':id', $id);
 }
 
-function maxInvoice($domain_id='') {
-
+function maxInvoice($domain_id='') 
+{
 	global $LANG;
-    $domain_id = domain_id::get($domain_id);
+ 
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$sql = "SELECT max(id) as maxId FROM ".TB_PREFIX."invoices WHERE domain_id = :domain_id";
 
@@ -3058,7 +3300,10 @@ function convertInitCustomFields() {
 // This function is exactly the same as convertCustomFields() in ./include/customFieldConversion.php but without the print_r and echo output while storing
 	/* check if any value set -> keeps all data for sure */
 	global $dbh;
-    $domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+    $domain_id = $auth_session->domain_id;
 
 	$sql = "SELECT * FROM ".TB_PREFIX."custom_fields WHERE domain_id = :domain_id";
 	$sth = $dbh->prepare($sql, ':domain_id', $domain_id);
@@ -3152,9 +3397,14 @@ function saveInitCustomField($id, $category, $name, $description) {
 * Arguments:
 * field		- The custom field in question
 **/
-function get_custom_field_label($field, $domain_id='')         {
+function get_custom_field_label($field, $domain_id='')
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
     $sql =  "SELECT cf_custom_label FROM ".TB_PREFIX."custom_fields WHERE cf_custom_field = :field AND domain_id = :domain_id";
     $sth = dbQuery($sql, ':field', $field, ':domain_id', $domain_id);
@@ -3172,9 +3422,14 @@ function get_custom_field_label($field, $domain_id='')         {
     return $cf['cf_custom_label'];
 }
 
-function calc_invoice_paid($inv_idField, $domain_id='') {
+function calc_invoice_paid($inv_idField, $domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	#amount paid calc - start
 	$x1 = "SELECT COALESCE(SUM(ac_amount), 0) AS amount FROM ".TB_PREFIX."payment WHERE ac_inv_id = :inv_id AND domain_id = :domain_id";
@@ -3187,9 +3442,14 @@ function calc_invoice_paid($inv_idField, $domain_id='') {
 	}
 }
 
-function calc_customer_total($customer_id, $domain_id='', $isReal=false) {
+function calc_customer_total($customer_id, $domain_id='', $isReal=false) 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$real1 = '';
 	$real2 = '';
@@ -3216,9 +3476,14 @@ function calc_customer_total($customer_id, $domain_id='', $isReal=false) {
 	return $invoice['total'];
 }
 
-function calc_customer_paid($customer_id, $domain_id='', $isReal=false) {
+function calc_customer_paid($customer_id, $domain_id='', $isReal=false) 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	$real1 = '';
 	$real2 = '';
@@ -3253,9 +3518,14 @@ function calc_customer_paid($customer_id, $domain_id='', $isReal=false) {
 * Arguments:
 * invoice_id		- The name of the field, ie. Custom Field 1, etc..
 **/
-function calc_invoice_tax($invoice_id, $domain_id='') {
+function calc_invoice_tax($invoice_id, $domain_id='') 
+{
 	global $LANG;
-	$domain_id = domain_id::get($domain_id);
+
+	if (empty($domain_id)) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id    = $auth_session->domain_id;
+	}
 
 	#invoice total tax
 	$sql ="SELECT SUM(tax_amount) AS total_tax FROM ".TB_PREFIX."invoice_items WHERE invoice_id = :invoice_id AND domain_id = :domain_id";
@@ -3285,9 +3555,11 @@ function calc_invoice_tax($invoice_id, $domain_id='') {
 * Depending on the permission passed, either a formatted input box and the label of the custom field or a table row and data
 **/
 
-function show_custom_field($custom_field,$custom_field_value,$permission,$css_class_tr,$css_class1,$css_class2,$td_col_span,$seperator) {
-
-	$domain_id = domain_id::get();
+function show_custom_field($custom_field,$custom_field_value,$permission,$css_class_tr,$css_class1,$css_class2,$td_col_span,$seperator) 
+{
+    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    
+	$domain_id = $auth_session->domain_id;
 
 	# get the last character of the $custom field - used to set the name of the field
 

@@ -39,7 +39,10 @@ class invoice {
 
 	public function __construct()
 	{
-		$this->domain_id = domain_id::get($this->domain_id);
+	    if (empty($this->domain_id)) {
+	       $auth_session    = new Zend_Session_Namespace('Zend_Auth');
+	       $this->domain_id = $auth_session->domain_id;
+	    }
 	}
 
 	public function insert()
@@ -205,7 +208,10 @@ class invoice {
     {
 		global $logger;
 
-		$domain_id = domain_id::get($domain_id);
+		if (empty($domain_id)) {
+		    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+		    $domain_id    = $auth_session->domain_id;
+		}
 
 		$sql = "SELECT 
                     i.id as id,
@@ -229,8 +235,11 @@ class invoice {
     {
 		global $logger;
 
-		$domain_id = domain_id::get($domain_id);
-
+		if (empty($domain_id)) {
+		    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+		    $domain_id    = $auth_session->domain_id;
+		}
+		
 		$sql = "SELECT count(id) AS count
                 FROM ".TB_PREFIX."invoices 
                 WHERE domain_id = :domain_id 
@@ -244,7 +253,13 @@ class invoice {
     {
         global $config;
 
-		$domain_id = domain_id::get($this->domain_id);
+        if (empty($this->domain_id)) {
+            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $domain_id    = $auth_session->domain_id;
+        } else {
+            $domain_id = $this->domain_id;
+        }
+		
 		$valid_search_fields = array('iv.index_id', 'b.name', 'c.name');
 
         if(empty($having)) $having = $this->having;
@@ -433,7 +448,8 @@ class invoice {
     {
 		global $logger;
 
-		$domain_id = domain_id::get($this->domain_id);
+		$auth_session = new Zend_Session_Namespace('Zend_Auth');
+		$domain_id    = $auth_session->domain_id;
 
         if($this->filter == "date")
         {

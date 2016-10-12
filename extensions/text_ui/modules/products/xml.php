@@ -7,7 +7,7 @@ $sort = (isset($_POST['sortname'])) ? $_POST['sortname'] : "description" ;
 $rp = (isset($_POST['rp'])) ? $_POST['rp'] : "25" ;
 $page = (isset($_GET['page'])) ? $_GET['page'] : "1" ;
 
-$domain_id = domain_id::get();
+$domain_id = $auth_session->domain_id;
 $valid_search_fields = array('id', 'description', 'unit_price');
 
 //SC: Safety checking values that will be directly subbed in

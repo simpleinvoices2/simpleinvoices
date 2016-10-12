@@ -17,6 +17,10 @@ $autoloader->setFallbackAutoloader(true);
 //session_start();
 Zend_Session::start();
 $auth_session = new Zend_Session_Namespace('Zend_Auth');
+if (empty($auth_session->domain_id)) {
+    // set the default domain
+    $auth_session->domain_id = 1;
+}
 
 
 //start use of zend_cache   

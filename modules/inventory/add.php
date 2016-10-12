@@ -4,7 +4,7 @@
 if ($_POST['op'] =='add' AND !empty($_POST['product_id']))
 {
 	$inventory = new inventory();
-	$inventory->domain_id=domain_id::get();
+	$inventory->domain_id= $auth_session->domain_id;
 	$inventory->product_id=$_POST['product_id'];
 	$inventory->quantity=$_POST['quantity'];
 	$inventory->cost=$_POST['cost'];

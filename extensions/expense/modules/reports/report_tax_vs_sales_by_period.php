@@ -19,7 +19,7 @@
 
 checkLogin();
 
-$domain_id = domain_id::get();
+$domain_id = $auth_session->domain_id;
 
 /*
 * Get earliest invoice date

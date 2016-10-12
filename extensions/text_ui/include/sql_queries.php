@@ -1,11 +1,16 @@
 <?php
 // Fails on overriding parent public static class method of same name
 // Late binding absent in general in PHP
-class text_ui_invoice extends invoice {
-    public static function getInvoiceItems($id, $domain_id='') {
-
-// $domain_id is a parent class member
-        $domain_id = domain_id::get($domain_id);
+class text_ui_invoice extends invoice 
+{
+    public static function getInvoiceItems($id, $domain_id='') 
+    {
+        // $domain_id is a parent class member
+        if (empty($domain_id)) {
+            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $domain_id    = $auth_session->domain_id;
+        }
+        
         $sql = "SELECT * FROM ".TB_PREFIX."invoice_items WHERE invoice_id = :id AND domain_id = :domain_id";
         $sth = dbQuery($sql, ':id', $id, ':domain_id', $domain_id);
 

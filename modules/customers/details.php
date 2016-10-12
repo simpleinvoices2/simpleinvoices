@@ -28,10 +28,10 @@ $customer['wording_for_enabled'] = $customer['enabled']==1?$LANG['enabled']:$LAN
 
 //TODO: Perhaps possible a bit nicer?
 $stuff = null;
-$stuff['total'] = calc_customer_total($customer['id'],domain_id::get(),true);
+$stuff['total'] = calc_customer_total($customer['id'], $auth_session->domain_id,true);
 
 #amount paid calc - start
-$stuff['paid'] = calc_customer_paid($customer['id'],domain_id::get(),true);;
+$stuff['paid'] = calc_customer_paid($customer['id'], $auth_session->domain_id,true);;
 #amount paid calc - end
 
 #amount owing calc - start

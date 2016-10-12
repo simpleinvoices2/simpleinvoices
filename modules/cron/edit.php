@@ -4,7 +4,7 @@
 if ($_POST['op'] =='edit' AND !empty($_POST['invoice_id']))
 {
 	$edit = new cron();
-	$edit->domain_id=domain_id::get();
+	$edit->domain_id = $auth_session->domain_id;
 	$edit->id=$_GET['id'];
 	$edit->invoice_id=$_POST['invoice_id'];
 	$edit->start_date=$_POST['start_date'];
@@ -26,10 +26,10 @@ $get_cron = new cron();
 $get_cron->id = $_GET['id'];
 $cron = $get_cron->select();
 
-$smarty -> assign('invoice_all',$invoice_all);
-$smarty -> assign('saved',$saved);
-$smarty -> assign('cron',$cron);
+$smarty->assign('invoice_all',$invoice_all);
+$smarty->assign('saved',$saved);
+$smarty->assign('cron',$cron);
 
-$smarty -> assign('pageActive', 'cron');
-$smarty -> assign('subPageActive', 'cron_edit');
-$smarty -> assign('active_tab', '#money');
+$smarty->assign('pageActive', 'cron');
+$smarty->assign('subPageActive', 'cron_edit');
+$smarty->assign('active_tab', '#money');

@@ -1,7 +1,13 @@
 <?php
 function smarty_function_online_payment_link($params, &$smarty) {
 	global $LANG;
-	$domain_id = domain_id::get($params['domain_id']);
+	
+	if (empty($params['domain_id'])) {
+    	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+    	$domain_id = $auth_session->domain_id;
+	} else {
+	    $domain_id = $params['domain_id'];
+	}
 
 	$url = getURL();
         if (in_array("paypal",explode(",", $params['type'])))

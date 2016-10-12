@@ -1,17 +1,16 @@
 <?php
-
 /*
-* Script: auto_complete_search.php
-* 	Do the autocomplete of invoice id in the process payment page
-*
-* License:
-*	 GPL v2 or above
-*/
+ * Script: auto_complete_search.php
+ * 	Do the autocomplete of invoice id in the process payment page
+ *
+ * License:
+ *	 GPL v2 or above
+ */
 
 define("BROWSE","browse");
 //if this page has error with auth remove the above line and figure out how to do it right
 
-$domain_id = domain_id::get();
+$domain_id = $auth_session->domain_id;
 
 #$sql = "SELECT * FROM ".TB_PREFIX."invoices where domain_id = ".$domain_id;
 

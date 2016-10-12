@@ -19,7 +19,7 @@
 
 checkLogin();
 
-$domain_id = domain_id::get();
+$domain_id = $auth_session->domain_id;
 
 function firstOfMonth() {
 	return date("Y-m-d", strtotime('01-'.date('m').'-'.date('Y').' 00:00:00'));

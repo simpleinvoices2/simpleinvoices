@@ -4,7 +4,7 @@
 if ($_POST['op'] =='add' AND !empty($_POST['invoice_id']))
 {
 	$cron = new cron();
-	$cron->domain_id=domain_id::get();
+	$cron->domain_id = $auth_session->domain_id;
 	$cron->invoice_id=$_POST['invoice_id'];
 	$cron->start_date=$_POST['start_date'];
 	$cron->end_date=$_POST['end_date'];

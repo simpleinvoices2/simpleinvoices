@@ -8,7 +8,7 @@ $sort = "id" ;
 $rp = (isset($_POST['rp'])) ? $_POST['rp'] : "25" ;
 $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 
-$domain_id = domain_id::get();
+$domain_id = $auth_session->domain_id;
 
 $valid_search_fields = array('id', 'name', 'description');
 

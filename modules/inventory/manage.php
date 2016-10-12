@@ -13,19 +13,19 @@
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
 
-	$sql = "SELECT count(*) AS count FROM ".TB_PREFIX."inventory where domain_id = :domain_id";
-	$sth = dbQuery($sql, ':domain_id',domain_id::get()) or die(htmlsafe(end($dbh->errorInfo())));
-	$number_of_rows  = $sth->fetch(PDO::FETCH_ASSOC);
+$sql = "SELECT count(*) AS count FROM ".TB_PREFIX."inventory where domain_id = :domain_id";
+$sth = dbQuery($sql, ':domain_id', $auth_session->domain_id) or die(htmlsafe(end($dbh->errorInfo())));
+$number_of_rows  = $sth->fetch(PDO::FETCH_ASSOC);
 
 //all funky xml - sql stuff done in xml.php
 
 
 //$smarty -> assign("invoices",$invoices);
-$smarty -> assign("number_of_rows",$number_of_rows);
+$smarty->assign("number_of_rows",$number_of_rows);
 
-$smarty -> assign('pageActive', 'inventory');
-$smarty -> assign('active_tab', '#product');
+$smarty->assign('pageActive', 'inventory');
+$smarty->assign('active_tab', '#product');
 
 $url =  'index.php?module=inventory&view=xml';
 
-$smarty -> assign('url', $url);
+$smarty->assign('url', $url);

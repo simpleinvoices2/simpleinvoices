@@ -1,14 +1,20 @@
 <?php
-function smarty_function_online_payment_link($params, &$smarty) {
+function smarty_function_online_payment_link($params, &$smarty) 
+{
 	global $LANG;
-	$domain_id = domain_id::get($params['domain_id']);
+	
+	if (empty($params['domain_id'])) {
+	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $domain_id = $auth_session->domain_id;
+	} else {
+        $domain_id = $params['domain_id'];
+	}
 
 	$url = getURL();
-        if (in_array("paypal",explode(",", $params['type'])))
+	
+    if (in_array("paypal",explode(",", $params['type'])))
 	{
-
-		$link = "<a 
-				href=\"https://www.paypal.com/xclick/?business=".urlencode($params['business'])."&item_name=".urlencode($params['item_name'])."&invoice=".urlencode($params['invoice'])."&amount=".urlencode(number_format($params['amount'], 2, '.', ''))."&currency_code=".urlencode($params['currency_code'])."&notify_url=".urlencode($params['notify_url'])."&return=".urlencode($params['return_url'])."&no_shipping=1&no_note=1&custom=domain_id:".urlencode($domain_id)."; \">";
+		$link = "<a href=\"https://www.paypal.com/xclick/?business=".urlencode($params['business'])."&item_name=".urlencode($params['item_name'])."&invoice=".urlencode($params['invoice'])."&amount=".urlencode(number_format($params['amount'], 2, '.', ''))."&currency_code=".urlencode($params['currency_code'])."&notify_url=".urlencode($params['notify_url'])."&return=".urlencode($params['return_url'])."&no_shipping=1&no_note=1&custom=domain_id:".urlencode($domain_id)."; \">";
 		
 		if($params['include_image'] == "true")
 		{
@@ -22,7 +28,7 @@ function smarty_function_online_payment_link($params, &$smarty) {
 		echo $link;
 	}
 
-        if (in_array("eway_shared",explode(",", $params['type'])))
+    if (in_array("eway_shared",explode(",", $params['type'])))
 	{
 
 		$link = "<a 

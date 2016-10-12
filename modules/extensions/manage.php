@@ -2,9 +2,13 @@
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
+
 function getExtensions() {
 	global $LANG;
-	$domain_id = domain_id::get();
+	
+	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	
+	$domain_id = $auth_session->domain_id;
 	
 	$sql = "SELECT * FROM ".TB_PREFIX."extensions WHERE domain_id = 0 OR domain_id = :domain_id ORDER BY name";
 
@@ -26,9 +30,9 @@ if ($action == 'toggle') {
 	setStatusExtension($extension_id) or die(htmlsafe("Something went wrong with the status change!"));
 }
 
-$smarty -> assign("exts",getExtensions());
+$smarty->assign("exts",getExtensions());
 
-$smarty -> assign('pageActive', 'setting');
-$smarty -> assign('active_tab', '#setting');
-$smarty -> assign('subPageActive', 'setting_extensions');
+$smarty->assign('pageActive', 'setting');
+$smarty->assign('active_tab', '#setting');
+$smarty->assign('subPageActive', 'setting_extensions');
 ?>
