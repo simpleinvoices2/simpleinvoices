@@ -1,11 +1,11 @@
 <?php
 /*
-* Script: logout.php
-* 	Logout page
-*
-* License:
-*	 GPL v3 or above
-*/
+ * Script: logout.php
+ * 	Logout page
+ *
+ * License:
+ *	 GPL v3 or above
+ */
 
 $menu = false;
 
@@ -17,5 +17,3 @@ if (!defined("BROWSE")) define("BROWSE", "browse");
 Zend_Session::start();
 Zend_Session::destroy(true);
 header('Location: .');
-
-?>
