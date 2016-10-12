@@ -19,16 +19,11 @@ define("BROWSE","browse");
  */
 
 /**
- * Function: filenameEscape
- *
  * Escapes a filename
  *
- * Parameters:
- * str		- the string to escape
- *
- * Returns:
- * The escaped string.
- **/
+ * @param string $str The string to escape
+ * @return string The escaped string
+ */
 function filenameEscape($str)
 {
     // Returns an escaped value.
@@ -36,9 +31,9 @@ function filenameEscape($str)
     return $safe_str;
 }
 
-$module = isset($_GET['module']) ? filenameEscape($_GET['module']) : null;
-$view   = isset($_GET['view'])  ? filenameEscape($_GET['view'])    : null;
-$action = isset($_GET['case'])  ? filenameEscape($_GET['case'])    : null;
+$module = isset($_GET['module']) ? filenameEscape($_GET['module'])  : null;
+$view   = isset($_GET['view'])   ? filenameEscape($_GET['view'])    : null;
+$action = isset($_GET['case'])   ? filenameEscape($_GET['case'])    : null;
 
 require_once("./include/init.php");
 
