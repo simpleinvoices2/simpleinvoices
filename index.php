@@ -1,12 +1,11 @@
 <?php
-
 /*
-* Script: index.php
-* 	Main controller file for Simple Invoices
-*
-* License:
-*	 GPL v3 or above
-*/
+ * Script: index.php
+ * 	Main controller file for Simple Invoices
+ *
+ * License:
+ *	 GPL v3 or above
+ */
 
 //minor change to test github emails - test
 
@@ -16,13 +15,26 @@ define("BROWSE","browse");
 
 
 /*
-* The include configs and requirements stuff section - start
-*/
+ * The include configs and requirements stuff section - start
+ */
 
-/*
-* Load stuff required before init.php
-*/
-require_once("./include/init_pre.php");
+/**
+ * Function: filenameEscape
+ *
+ * Escapes a filename
+ *
+ * Parameters:
+ * str		- the string to escape
+ *
+ * Returns:
+ * The escaped string.
+ **/
+function filenameEscape($str)
+{
+    // Returns an escaped value.
+    $safe_str = preg_replace('/[^a-z0-9\-_\.]/i','_',$str);
+    return $safe_str;
+}
 
 $module = isset($_GET['module']) ? filenameEscape($_GET['module']) : null;
 $view   = isset($_GET['view'])  ? filenameEscape($_GET['view'])    : null;
