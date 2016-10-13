@@ -2,6 +2,7 @@
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Payment;
 use SimpleInvoices\Deprecate\Email;
+use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
 
 $p = new paypal_class;             // initiate an instance of the class
 #$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';   // testing paypal url
@@ -67,7 +68,7 @@ if ($p->validate_ipn()) {
 		$payment->online_payment_id = $p->ipn_data['txn_id'];
 		$payment->domain_id = $domain_id;
 
-			$payment_type = new payment_type();
+			$payment_type = new PaymentType();
 			$payment_type->type = "Paypal";
 			$payment_type->domain_id = $domain_id;
 

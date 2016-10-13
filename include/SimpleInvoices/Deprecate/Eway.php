@@ -1,6 +1,7 @@
 <?php
 namespace SimpleInvoices\Deprecate;
 
+use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
 //use SimpleInvoices\Deprecate\Payment;
 
 class Eway 
@@ -134,7 +135,7 @@ class Eway
             $payment->online_payment_id = $ewayResponseFields['EWAYTRXNNUMBER'];
             $payment->domain_id = $this->domain_id;
 
-            $payment_type = new payment_type();
+            $payment_type = new PaymentType();
             $payment_type->type = "Eway";
             $payment_type->domain_id = $this->domain_id;
 

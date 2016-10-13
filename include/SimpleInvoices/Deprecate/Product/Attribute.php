@@ -1,7 +1,16 @@
 <?php
+namespace SimpleInvoices\Deprecate\Product;
 
-class product_attributes
+/**
+ * THIS CLASS IS BROKEN!
+ * 
+ * Static calls when methods are not static!
+ */
+class Attribute
 {
+    /**
+     * @param unknown $id
+     */
     public function get($id)
     {
         $sql = "SELECT pa.*, pat.name AS `type` 
@@ -16,6 +25,10 @@ class product_attributes
         return $attribute;
     }
 
+    /**
+     * @param unknown $id
+     * @return mixed
+     */
     public function getName($id)
     {
         $sql = "SELECT * FROM ".TB_PREFIX."products_attributes WHERE id = :id";
@@ -24,12 +37,19 @@ class product_attributes
         return $attribute['name'];
     }
 
+    /**
+     * @param unknown $id
+     */
     public function getType($id)
     {
         $attribute = product_attributes::get($id);
         return $attribute['type'];
     }
 
+    /**
+     * @param unknown $attribute_id
+     * @param unknown $value_id
+     */
     public function getValue($attribute_id, $value_id)
     {
        
@@ -48,6 +68,9 @@ class product_attributes
 
     }
 
+    /**
+     * @param unknown $id
+     */
 	public function getVisible($id)
     {
         $sql = "SELECT visible FROM ".TB_PREFIX."products_attributes WHERE id = :id";
@@ -59,7 +82,6 @@ class product_attributes
         } else {
             return false;
         }
-
     }
 
 	public function getAll()

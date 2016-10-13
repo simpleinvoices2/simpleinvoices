@@ -2,6 +2,7 @@
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Payment;
 use SimpleInvoices\Deprecate\Email;
+use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
 
 $logger->info('ACH API page called');
 if ($_POST['pg_response_code']=='A01') {
@@ -38,7 +39,7 @@ if ($_POST['pg_response_code']=='A01') {
 		$payment->online_payment_id = $_POST['pg_consumerorderid'];
 		$payment->domain_id = '1';
 
-			$payment_type = new payment_type();
+			$payment_type = new PaymentType();
 			$payment_type->type = "ACH";
 			$payment_type->domain_id = '1';
 

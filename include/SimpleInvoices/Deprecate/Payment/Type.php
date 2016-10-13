@@ -1,6 +1,7 @@
 <?php
+namespace SimpleInvoices\Deprecate\Payment;
 
-class payment_type
+class Type
 {
 
     public $type;
@@ -8,7 +9,7 @@ class payment_type
 
 	public function __construct()
 	{
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 
@@ -37,12 +38,12 @@ class payment_type
 	    //add new payment type if no Paypal type
 	    if($pt == '')
 	    {
-		    $new_pt = new payment_type();
+		    $new_pt = new Type();
 		    $new_pt->pt_description = $this->type;
 		    $new_pt->pt_enabled = "1";
 		    $new_pt->insert();
 
-		    $payment_type = new payment_type();
+		    $payment_type = new Type();
 		    $payment_type->type = $this->type;
 		    $payment_type->domain_id = $this->domain_id;
 		    return $payment_type->select_or_insert_where();

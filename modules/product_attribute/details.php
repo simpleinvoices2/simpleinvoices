@@ -1,4 +1,6 @@
 <?php
+use SimpleInvoices\Deprecate\Product\Attribute as ProductAttribute;
+
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
 
@@ -13,7 +15,12 @@ $id = $_GET['id'];
 $sql_prod = "SELECT * FROM ".TB_PREFIX."products_attributes WHERE id = :id;";
 $sth_prod =  dbQuery($sql_prod, ':id', $id);
 $product_attribute = $sth_prod->fetch();
-$type = product_attributes::get($id);
+/**
+ * This was moved to SimpleInvoices\Deprecated\Product\Attribute
+ * @var unknown
+ */
+$prodAttr = new ProductAttribute();
+$type = $prodAttr->get($id);
 $product_attribute['type'] = $type['type'];
 
 $sql2= "SELECT id, name FROM ".TB_PREFIX."products_attribute_type";
