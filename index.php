@@ -8,6 +8,9 @@
  */
 
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Mvc\MvcEvent;
+use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\EventManager;
 
 //minor change to test github emails - test
 
@@ -329,6 +332,21 @@ if ( ($extensionPHPFile == 0) &&  $my_path = GetCustomPath($module . '/' . $view
  * ==============================================================================================
  */
 
+/**
+ * trigger the 'dispatch' event.
+ */
+if (!$eventManager instanceof EventManagerInterface) {
+    $eventManager = $serviceManager->get(EventManager::class);
+}
+    
+$event = new MvcEvent();
+$event->setName(MvcEvent::EVENT_DISPATCH);
+$event->setRequest( $serviceManager->get('Request') );
+$eventManager->triggerEvent($event);
+
+/**
+ * Render the output
+ */
 $renderer = new \SimpleInvoices\Smarty\Renderer($serviceManager);
 $renderer->render();
 
