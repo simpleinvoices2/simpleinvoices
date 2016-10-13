@@ -19,7 +19,6 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
 /* 
  * Zend framework init - start
  */
-set_include_path(get_include_path() . PATH_SEPARATOR . "./include/class");
 set_include_path(get_include_path() . PATH_SEPARATOR . "./library/");
 set_include_path(get_include_path() . PATH_SEPARATOR . "./library/pdf");
 set_include_path(get_include_path() . PATH_SEPARATOR . "./include/");

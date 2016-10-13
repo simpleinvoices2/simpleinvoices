@@ -1,0 +1,6 @@
+TODO LIST
+=========
+
+* images folder should be moved to the public folder.
+
+* Zend\Json is really deprecated is it is not used in the code.

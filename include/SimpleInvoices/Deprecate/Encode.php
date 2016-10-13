@@ -1,6 +1,7 @@
 <?php
 namespace SimpleInvoices\Deprecate;
 
+use Zend\Json\Json;
 class Encode
 {
 
@@ -58,14 +59,19 @@ class Encode
         return $xml;
     }
 
-	public static function json($data, $format='plain')
-	{
-		if( $format=='pretty' ) {
-            $message = \Zend_Json::encode($data);
-            return \Zend_Json::prettyPrint($message, array("format" => "html"));
-        } else {
-            return \Zend_Json::encode($data);
+    /**
+     * @deprecated Not used throught the code.
+     * @param mixed $data
+     * @param string $format
+     */
+    public static function json($data, $format='plain')
+    {
+        $message = Json::encode($data);
+        if ( strcasecmp($format, 'pretty') === 0 ) {
+            $message = Json::prettyPrint($message, ["format" => "html"]);
         }
+        
+        return $message;
 	}
 
 } // end of class

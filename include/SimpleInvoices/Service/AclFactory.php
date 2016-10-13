@@ -4,6 +4,8 @@ namespace SimpleInvoices\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Permissions\Acl\Acl;
+use Zend\Permissions\Acl\Role\GenericRole;
 
 class AclFactory implements FactoryInterface
 {
@@ -13,25 +15,21 @@ class AclFactory implements FactoryInterface
      * @param  ContainerInterface $container
      * @param  string             $requestedName
      * @param  null|array         $options
-     * @return object
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
-     * @throws ContainerException if any other error occurs
+     * @return Acl
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $acl = new \Zend_Acl();
+        $acl = new Acl();
         
-        //create the user roles
-        $acl->addRole(new \Zend_Acl_Role('administrator'));
-        $acl->addRole(new \Zend_Acl_Role('domain_administrator'));
-        $acl->addRole(new \Zend_Acl_Role('user'));
-        $acl->addRole(new \Zend_Acl_Role('operator'));
-        $acl->addRole(new \Zend_Acl_Role('viewer'));
-        $acl->addRole(new \Zend_Acl_Role('customer'));
-        $acl->addRole(new \Zend_Acl_Role('biller'));
-        
+        // create the user roles
+        $acl->addRole(new GenericRole('administrator'));
+        $acl->addRole(new GenericRole('domain_administrator'));
+        $acl->addRole(new GenericRole('user'));
+        $acl->addRole(new GenericRole('operator'));
+        $acl->addRole(new GenericRole('viewer'));
+        $acl->addRole(new GenericRole('customer'));
+        $acl->addRole(new GenericRole('biller'));
+       
         //create the resources
         $acl->addResource('api');
         $acl->addResource('auth');
@@ -85,7 +83,7 @@ class AclFactory implements FactoryInterface
         // Staff inherits view privilege from guest, but also needs additional privileges
         //$acl->allow('student', null, array('customers'));
         //$acl->deny('student');
-        
+       
         // everyone see auth page
         $acl->allow(null,'auth');
         $acl->allow(null,'api');
@@ -111,7 +109,6 @@ class AclFactory implements FactoryInterface
         $acl->deny('user','tax_rates');
         $acl->deny('user','preferences');
         $acl->deny('user','payment_types');
-        
         
         // operator - is a user Role with restrictions as below:
         // Cannot edit invoices, cron (recurrences), add/edit billers/customers
