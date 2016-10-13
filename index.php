@@ -393,7 +393,7 @@ if($module == "export" OR $view == "export" OR $module == "api")
      */
 	if($extensionPostLoadJquery == 0 AND $module !='auth') 
 	{
-		$smarty -> $smarty_output("../include/jquery/post_load.jquery.ext.js.tpl");
+		$smarty -> $smarty_output("../public/assets/jquery/post_load.jquery.ext.js.tpl");
 	}
 
 /*

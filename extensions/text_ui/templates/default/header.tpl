@@ -17,14 +17,14 @@
 
 
 		<!-- jQuery Files -->
-	<script type="text/javascript" src="./include/jquery/jquery-1.2.6.min.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery-1.2.6.min.js"></script>
 	{$extension_jquery_files }
-	<script type="text/javascript" src="./include/jquery/jquery.plugins.js"></script>
-	<script type="text/javascript" src="./include/jquery/rte/jquery.rte.js"></script>
-	<script type="text/javascript" src="./include/jquery/jquery.conf.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.plugins.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/rte/jquery.rte.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.conf.js"></script>
 	<link rel="stylesheet" type="text/css" href="./extensions/text_ui/templates/default/css/flexigrid.css">
-	<link rel="stylesheet" type="text/css" href="./include/jquery/jquery.plugins.css" title="default" media="screen" />
-		<link rel="stylesheet" type="text/css" href="./include/jquery/rte/rte.css" />
+	<link rel="stylesheet" type="text/css" href="./public/assets/jquery/jquery.plugins.css" title="default" media="screen" />
+		<link rel="stylesheet" type="text/css" href="./public/assets/jquery/rte/rte.css" />
 {literal}
 	<!-- Menu header -->
 	<!--[if lte IE 6]>

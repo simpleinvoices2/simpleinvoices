@@ -18,10 +18,10 @@
 	<link rel="shortcut icon" href="./images/common/favicon.ico" />
 
 {literal}
-	<link rel="stylesheet" type="text/css" href="./include/jquery/wysiwyg/wysiwyg.css" />
-	<link rel="stylesheet" type="text/css" href="./include/jquery/jquery.plugins.css" title="default" media="screen" />
-	<link rel="stylesheet" type="text/css" href="./include/jquery/rte/rte.css" />	
-	<link rel="stylesheet" type="text/css" href="./include/jquery/cluetip/jquery.cluetip.css" />
+	<link rel="stylesheet" type="text/css" href="./public/assets/jquery/wysiwyg/wysiwyg.css" />
+	<link rel="stylesheet" type="text/css" href="./public/assets/jquery/jquery.plugins.css" title="default" media="screen" />
+	<link rel="stylesheet" type="text/css" href="./public/assets/jquery/rte/rte.css" />	
+	<link rel="stylesheet" type="text/css" href="./public/assets/jquery/cluetip/jquery.cluetip.css" />
 
 	<link rel="stylesheet" type="text/css" href="./templates/default/css/main.css" media="all"/>
 	<link rel="stylesheet" type="text/css" href="./templates/default/css/print.css" media="print" />
@@ -29,23 +29,23 @@
 	<link rel="stylesheet" type="text/css" href="./templates/default/css/main_ie.css" media="all" />
 <![endif]-->
 
-	<script type="text/javascript" src="./include/jquery/jquery-1.2.6.min.js"></script>
-	<script type="text/javascript" src="./include/jquery/jquery.init.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery-1.2.6.min.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.init.js"></script>
 	<!-- jQuery Files -->
-	<script type="text/javascript" src="./include/jquery/jquery-ui-personalized-1.6rc2.packed.js"></script>	
-	<script type="text/javascript" src="./include/jquery/cluetip/jquery.hoverIntent.minified.js"></script>
-	<script type="text/javascript" src="./include/jquery/cluetip/jquery.cluetip.js"></script>
-	<script type="text/javascript" src="./include/jquery/jquery.flexigrid.1.0b3.pack.js"></script>
-	<script type="text/javascript" src="./include/jquery/jquery.plugins.js"></script>
-	<script type="text/javascript" src="./include/jquery/wysiwyg/wysiwyg.modified.packed.js"></script>
-	<script type="text/javascript" src="./include/jquery/jquery.livequery.pack.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery-ui-personalized-1.6rc2.packed.js"></script>	
+	<script type="text/javascript" src="./public/assets/jquery/cluetip/jquery.hoverIntent.minified.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/cluetip/jquery.cluetip.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.flexigrid.1.0b3.pack.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.plugins.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/wysiwyg/wysiwyg.modified.packed.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.livequery.pack.js"></script>
 {/literal}
     {$extension_jquery_files }
-	{include file='../include/jquery/jquery.functions.js.tpl'}
-	{include file='../include/jquery/jquery.conf.js.tpl'}
+	{include file='../public/assets/jquery/jquery.functions.js.tpl'}
+	{include file='../public/assets/jquery/jquery.conf.js.tpl'}
 {literal}
 
-	<!--<script type="text/javascript" src="./include/jquery/jquery.conf.js.tpl"></script>-->
+	<!--<script type="text/javascript" src="./public/assets/jquery/jquery.conf.js.tpl"></script>-->
 
 {/literal}
 	{if $config->debug->level == "All"}
@@ -53,7 +53,7 @@
 	<script type="text/javascript" src="./library/blackbirdjs/blackbird.js"></script>
 	{/if}
 {literal}
-	<script type="text/javascript" src="./include/jquery/jquery.validationEngine.js"></script>
+	<script type="text/javascript" src="./public/assets/jquery/jquery.validationEngine.js"></script>
 {/literal}
 
 {$smarty.capture.hook_head_end}
