@@ -9,9 +9,12 @@ require_once './vendor/autoload.php';
  */
 $serviceManager = new \Zend\ServiceManager\ServiceManager([
     'factories' => [
-        'Smarty' => \SimpleInvoices\Service\SmartyFactory::class
+        'Smarty' => \SimpleInvoices\Service\SmartyFactory::class,
+        'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class
     ],
 ]);
+
+
 
 /* 
  * Zend framework init - start
@@ -124,15 +127,9 @@ if(!is_writable($smarty -> compile_dir)) {
 	//exit("Simple Invoices Error : The folder <i>".$smarty -> compile_dir."</i> has to be writeable");
 }
 
-/* 
- * Smarty inint - end
- */
-
-
 $path = pathinfo($_SERVER['REQUEST_URI']);
 //SC: Install path handling will need changes if used in non-HTML contexts
 $install_path = htmlsafe($path['dirname']);
-
 
 include_once('./config/define.php');
 
@@ -218,7 +215,7 @@ include_once("./include/validation.php");
 //if authentication enabled then do acl check etc..
 if ($config->authentication->enabled == 1 )
 {
-	include_once("./include/acl.php");
+    $acl = $serviceManager->get('SimpleInvoices\Permission\Acl');
 	include_once("./include/check_permission.php");
 }
 

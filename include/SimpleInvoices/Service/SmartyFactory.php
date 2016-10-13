@@ -27,6 +27,8 @@ class SmartyFactory implements FactoryInterface
         
         $smarty->compile_dir = "tmp/cache";
         
+        // TODO: Probablly throw a exception
+        //       Current code is in include/init.php
         //if(!is_writable($smarty->compile_dir)) {
         //    simpleInvoicesError("notWriteable", 'folder', $smarty -> compile_dir);
         //    //exit("Simple Invoices Error : The folder <i>".$smarty -> compile_dir."</i> has to be writeable");
