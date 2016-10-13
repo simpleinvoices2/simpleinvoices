@@ -153,8 +153,6 @@ ini_set('display_errors', $config->phpSettings->display_errors);
 ini_set('log_errors', $config->phpSettings->log_errors); 
 ini_set('error_log', $config->phpSettings->error_log); 
 
-
-
 $zendDb = Zend_Db::factory($config->database->adapter, array(
     'host'     => $config->database->params->host,
     'username' => $config->database->params->username,
@@ -170,18 +168,7 @@ include_once("./include/class/index.php");
 $db = db::getInstance();
 
 include_once("./include/sql_queries.php");
-
-$smarty->register_modifier("siLocal_number", array("siLocal", "number"));
-$smarty->register_modifier("siLocal_number_clean", array("siLocal", "number_clean"));
-$smarty->register_modifier("siLocal_number_trim", array("siLocal", "number_trim"));
-$smarty->register_modifier("siLocal_number_formatted", array("siLocal", "number_formatted"));
-$smarty->register_modifier("siLocal_date", array("siLocal", "date"));
-$smarty->register_modifier('htmlsafe', 'htmlsafe');
-$smarty->register_modifier('urlsafe', 'urlsafe');
-$smarty->register_modifier('urlencode', 'urlencode');
-$smarty->register_modifier('outhtml', 'outhtml');
-$smarty->register_modifier('htmlout', 'outhtml'); //common typo
-$smarty->register_modifier('urlescape', 'urlencode'); //common typo 
+ 
 $install_tables_exists = checkTableExists(TB_PREFIX."biller");
 if ($install_tables_exists == true)
 {
