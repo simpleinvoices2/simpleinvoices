@@ -75,7 +75,6 @@ class AclFactory implements FactoryInterface
         
         // If no action exists, then check with $acl->isAllowed($auth_session->role_name, $module, $acl_view)
         // Otherwise, check with $acl->isAllowed($auth_session->role_name, $module, $acl_action)
-        // All checks are set in include/check_permission.php
         
         //assign roles to resources
         
