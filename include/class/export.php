@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Biller;
 
 class export
 {
@@ -211,7 +212,7 @@ class export
 				$invoice = $invoiceobj->select($this->id, $this->domain_id);
  			    $invoice_number_of_taxes = numberOfTaxesForInvoice($this->id, $this->domain_id);
 				$customer = getCustomer($invoice['customer_id'], $this->domain_id);
-				$billerobj = new biller();
+				$billerobj = new Biller();
 				$billerobj->domain_id = $this->domain_id;
 				$biller = $billerobj->select($invoice['biller_id']);
 				$preference = getPreference($invoice['preference_id'], $this->domain_id);

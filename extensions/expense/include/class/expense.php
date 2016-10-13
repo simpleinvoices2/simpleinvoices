@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Biller;
 
 class expense
 {
@@ -40,7 +41,7 @@ class expense
         $add['customer_all'] = $customerobj->get_all();
 
         //get billers with domain_id from session by constructor
-		$billerobj = new biller();
+		$billerobj = new Biller();
         $add['biller_all'] = $billerobj->get_all();
 
         //get invoices
@@ -77,7 +78,7 @@ class expense
         $detail['customer_all'] = $customerobj->get_all();
 
         //get billers with domain_id from session by constructor
-		$billerobj = new biller();
+		$billerobj = new Biller();
         $detail['biller_all'] = $billerobj->get_all();
 
         //get invoices
