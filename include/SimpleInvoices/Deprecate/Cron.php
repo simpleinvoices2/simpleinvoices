@@ -1,7 +1,9 @@
 <?php
+namespace SimpleInvoices\Deprecate;
+
 use SimpleInvoices\Deprecate\Invoice;
 
-class cron {
+class Cron {
 	
  	public $start_date;
  	public $domain_id;
@@ -16,7 +18,7 @@ class cron {
 
 	public function __construct()
 	{
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 
@@ -231,7 +233,7 @@ class cron {
         global $db;
 
         $today = date('Y-m-d');
-        $cron = new cron();
+        $cron = new Cron();
         $data = $cron->select_crons_to_run();
 
         $return['cron_message'] ="Cron started";

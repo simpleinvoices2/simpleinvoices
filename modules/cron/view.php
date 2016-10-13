@@ -1,9 +1,10 @@
 <?php
+use SimpleInvoices\Deprecate\Cron;
 //use SimpleInvoices\Deprecate\Invoice;
 
 if ($_POST['op'] =='edit' AND !empty($_POST['invoice_id']))
 {
-    $cron = new cron();
+    $cron = new Cron();
     $cron->domain_id = $auth_session->domain_id;
     $cron->invoice_id=$_POST['invoice_id'];
     $cron->start_date=$_POST['start_date'];
@@ -18,7 +19,7 @@ if ($_POST['op'] =='edit' AND !empty($_POST['invoice_id']))
 //$invoiceobj = new Invoice();
 //$invoice_all = $invoiceobj->get_all();
 
-$get_cron = new cron();
+$get_cron = new Cron();
 $get_cron->id = $_GET['id'];
 $cron = $get_cron->select();
 

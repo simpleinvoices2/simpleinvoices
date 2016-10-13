@@ -1,9 +1,10 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Cron;
 
 if ($_POST['op'] =='add' AND !empty($_POST['invoice_id']))
 {
-    $cron = new cron();
+    $cron = new Cron();
     $cron->domain_id = $auth_session->domain_id;
     $cron->invoice_id=$_POST['invoice_id'];
     $cron->start_date=$_POST['start_date'];
@@ -13,7 +14,7 @@ if ($_POST['op'] =='add' AND !empty($_POST['invoice_id']))
     $cron->email_biller=$_POST['email_biller'];
     $cron->email_customer=$_POST['email_customer'];
     $result = $cron->insert();
-
+    
     $saved = !empty($result) ? "true" : "false";
 }      
 

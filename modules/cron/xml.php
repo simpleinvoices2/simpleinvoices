@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Cron;
 //use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
@@ -11,7 +12,7 @@ $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 
 //$sql = "SELECT * FROM ".TB_PREFIX."cron LIMIT $start, $limit";
 
-$cron = new cron();
+$cron = new Cron();
 $cron->sort = $sort;
 $crons = $cron->select_all('', $dir, $rp, $page);
 $sth_count_rows = $cron->select_all('count', $dir, $rp, $page);
