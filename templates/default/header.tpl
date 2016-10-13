@@ -15,7 +15,7 @@
 	<meta http-equiv="Content-Script-Type" content="text/javascript" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
 	<meta name="robots" content="noindex, nofollow" />
-	<link rel="shortcut icon" href="./images/common/favicon.ico" />
+	<link rel="shortcut icon" href="{$basePath}/images/common/favicon.ico" />
 
 {literal}
 	<link rel="stylesheet" type="text/css" href="{/literal}{$basePath}{literal}/public/assets/jquery/wysiwyg/wysiwyg.css" />
@@ -23,10 +23,10 @@
 	<link rel="stylesheet" type="text/css" href="{/literal}{$basePath}{literal}/public/assets/jquery/rte/rte.css" />	
 	<link rel="stylesheet" type="text/css" href="{/literal}{$basePath}{literal}/public/assets/jquery/cluetip/jquery.cluetip.css" />
 
-	<link rel="stylesheet" type="text/css" href="./templates/default/css/main.css" media="all"/>
-	<link rel="stylesheet" type="text/css" href="./templates/default/css/print.css" media="print" />
+	<link rel="stylesheet" type="text/css" href="{/literal}{$basePath}{literal}/templates/default/css/main.css" media="all"/>
+	<link rel="stylesheet" type="text/css" href="{/literal}{$basePath}{literal}/templates/default/css/print.css" media="print" />
 <!--[if IE]>
-	<link rel="stylesheet" type="text/css" href="./templates/default/css/main_ie.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="{/literal}{$basePath}{literal}/templates/default/css/main_ie.css" media="all" />
 <![endif]-->
 
 	<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery-1.2.6.min.js"></script>
@@ -41,16 +41,16 @@
 	<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery.livequery.pack.js"></script>
 {/literal}
     {$extension_jquery_files }
-	{include file='.{/literal}{$basePath}{literal}/public/assets/jquery/jquery.functions.js.tpl'}
-	{include file='.{/literal}{$basePath}{literal}/public/assets/jquery/jquery.conf.js.tpl'}
+	{include file='./public/assets/jquery/jquery.functions.js.tpl'}
+	{include file='./public/assets/jquery/jquery.conf.js.tpl'}
 {literal}
 
 	<!--<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery.conf.js.tpl"></script>-->
 
 {/literal}
 	{if $config->debug->level == "All"}
-	<link rel="stylesheet" type="text/css" href="./library/blackbirdjs/blackbird.css" />	
-	<script type="text/javascript" src="./library/blackbirdjs/blackbird.js"></script>
+	<link rel="stylesheet" type="text/css" href="{$basePath}/library/blackbirdjs/blackbird.css" />	
+	<script type="text/javascript" src="{$basePath}/library/blackbirdjs/blackbird.js"></script>
 	{/if}
 {literal}
 	<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery.validationEngine.js"></script>
