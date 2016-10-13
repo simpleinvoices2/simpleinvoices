@@ -5,6 +5,29 @@
 require_once './vendor/autoload.php';
 
 /**
+ * Load configuration
+ * 
+ * Differences from ZF1
+ *
+ * The Zend\Config\Reader component no longer supports the following features:
+ * 
+ *     + Inheritance of sections.
+ *     + Reading of specific sections.
+ *     
+ */
+include_once('./config/define.php');
+$reader = new \Zend\Config\Reader\Ini();
+if( is_file('./config/custom.config.php') ){
+    $config = $reader->fromFile('./config/custom.config.php');
+    $config = new \Zend\Config\Config($config['production'], true);
+    //Zend_Config_Ini('./config/custom.config.php', $environment,true);
+} else {
+    $config = $reader->fromFile('./config/config.php');
+    $config = new \Zend\Config\Config($config['production'], true);
+    //$config = new Zend_Config_Ini('./config/config.php', $environment,true);	//added 'true' to allow modifications from db
+}
+
+/**
  * Service manager
  */
 $serviceManager = new \Zend\ServiceManager\ServiceManager([
@@ -15,7 +38,8 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
     ],
 ]);
 
-
+// ... add the configuration to the service manager
+$serviceManager->setService('Config', $serviceManager);
 
 /* 
  * Zend framework init - start
@@ -131,17 +155,6 @@ $path = pathinfo($_SERVER['REQUEST_URI']);
 //SC: Install path handling will need changes if used in non-HTML contexts
 $install_path = htmlsafe($path['dirname']);
 
-include_once('./config/define.php');
-
-/*
- * Include another config file if required
- */
-if( is_file('./config/custom.config.php') ){
-     $config = new Zend_Config_Ini('./config/custom.config.php', $environment,true);
-} else {
-    $config = new Zend_Config_Ini('./config/config.php', $environment,true);	//added 'true' to allow modifications from db
-}
-
 //set up app with relevant php setting
 date_default_timezone_set($config->phpSettings->date->timezone);
 error_reporting($config->debug->error_reporting);
@@ -192,7 +205,7 @@ if ( $install_tables_exists != false )
 // If no extension loaded, load Core
 if (! $config->extension)
 {
-	$extension_core = new Zend_Config(array('core'=>array(
+	$extension_core = new \Zend\Config\Config(array('core'=>array(
 		'id'=>1,
 		'domain_id'=>1,
 		'name'=>'core',
