@@ -1,14 +1,16 @@
 <?php
 /*
-* Script: email.php
-* 	Email invoice page
-*
-* License:
-*	 GPL v3 or above
-*
-* Website:
-* 	http://www.simpleinvoices.org
+ * Script: email.php
+ * 	Email invoice page
+ *
+ * License:
+ *	 GPL v3 or above
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
  */
+
+use SimpleInvoices\Deprecate\Invoice;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -16,7 +18,7 @@ checkLogin();
 #get the invoice id
 $invoice_id = $_GET['id'];
 
-$invoiceobj = new invoice();
+$invoiceobj = new Invoice();
 $invoice = $invoiceobj->select($invoice_id);
 
 $preference = getPreference($invoice['preference_id']);

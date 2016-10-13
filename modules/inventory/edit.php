@@ -1,24 +1,25 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
 if ($_POST['op'] =='edit' AND !empty($_POST['product_id']))
 {
     $saved = "false";
-
-	$inventory = new inventory();
-	$inventory->id=$_GET['id'];
-	$inventory->domain_id= $auth_session->domain_id;
-	$inventory->product_id=$_POST['product_id'];
-	$inventory->quantity=$_POST['quantity'];
-	$inventory->cost=$_POST['cost'];
-	$inventory->date=$_POST['date'];
-	$inventory->note=$_POST['note'];
-	$result = $inventory->update();
-
-	$saved = !empty($result) ? "true" : "false";
+    
+    $inventory = new inventory();
+    $inventory->id=$_GET['id'];
+    $inventory->domain_id= $auth_session->domain_id;
+    $inventory->product_id=$_POST['product_id'];
+    $inventory->quantity=$_POST['quantity'];
+    $inventory->cost=$_POST['cost'];
+    $inventory->date=$_POST['date'];
+    $inventory->note=$_POST['note'];
+    $result = $inventory->update();
+    
+    $saved = !empty($result) ? "true" : "false";
 }      
 
-$invoices = new invoice();
-$invoices->sort='id';
+$invoices = new Invoice();
+$invoices->sort = 'id';
 $invoice_all = $invoices->select_all('count');
 
 $get_inventory = new inventory();

@@ -1,4 +1,6 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
+
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
 
@@ -8,7 +10,7 @@ $expense_id = $_GET['id'];
 $expenseobj = new expense();
 $customerobj = new customer();
 $billerobj = new biller();
-$invoiceobj = new invoice();
+$invoiceobj = new Invoice();
 $productobj = new product();
 $expenseaccountobj = new expenseaccount();
 $expensetaxobj = new expensetax();

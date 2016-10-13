@@ -1,21 +1,22 @@
 <?php
-
 /*
-* Script: report_sales_by_period.php
-* 	Sales reports by period add page
-*
-* Authors:
-*	 Justin Kelly
-*
-* Last edited:
-* 	 2008-05-13
-*
-* License:
-*	 GPL v3
-*
-* Website:
-* 	http://www.simpleinvoices.org
-*/
+ * Script: report_sales_by_period.php
+ * 	Sales reports by period add page
+ *
+ * Authors:
+ *	 Justin Kelly
+ *
+ * Last edited:
+ * 	 2008-05-13
+ *
+ * License:
+ *	 GPL v3
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
+ */
+
+use SimpleInvoices\Deprecate\Invoice;
 
 checkLogin();
 
@@ -30,8 +31,6 @@ function lastOfMonth() {
 
 }
 
-
-
 isset($_POST['start_date']) ? $start_date = $_POST['start_date'] : $start_date = firstOfMonth() ;
 isset($_POST['end_date']) ? $end_date = $_POST['end_date'] : $end_date = lastOfMonth() ;
 
@@ -41,7 +40,7 @@ isset($_POST['customer_id']) ? $customer_id = $_POST['customer_id'] : $customer_
 
 if (isset($_POST['submit']))
 {
-	$invoice = new invoice();
+	$invoice = new Invoice();
 	$invoice->start_date = $start_date;
 	$invoice->end_date = $end_date;
 	$invoice->biller = $biller_id;

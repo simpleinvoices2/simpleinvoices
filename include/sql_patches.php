@@ -1,6 +1,7 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
-	$patch['0']['name'] = "Start";
+$patch['0']['name'] = "Start";
 	$patch['0']['patch'] = "SHOW TABLES LIKE 'test'";
 	$patch['0']['date'] = "20060514";
 
@@ -1286,7 +1287,7 @@ ADD `language` VARCHAR( 255 ) NULL ;";
     $patch['212']['patch'] = "update `".TB_PREFIX."invoices` set index_id = id;";
     $patch['212']['date'] = "20090902";
 
-	$invoiceobj = new invoice();
+	$invoiceobj = new Invoice();
     $max_invoice = $invoiceobj->max();
 	unset($invoiceobj);
     $patch['213']['name'] = "Update the index table with max invoice id - if required";

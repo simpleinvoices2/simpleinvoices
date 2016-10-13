@@ -1,20 +1,22 @@
 <?php
 /*
-* Script: details.php
-* 	Customers details page
-*
-* Authors:
-*	 Justin Kelly, Nicolas Ruflin
-*
-* Last edited:
-* 	 2007-07-19
-*
-* License:
-*	 GPL v2 or above
-*
-* Website:
-* 	http://www.simpleinvoices.org
+ * Script: details.php
+ * 	Customers details page
+ *
+ * Authors:
+ *	 Justin Kelly, Nicolas Ruflin
+ *
+ * Last edited:
+ * 	 2007-07-19
+ *
+ * License:
+ *	 GPL v2 or above
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
  */
+
+use SimpleInvoices\Deprecate\Invoice;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -50,7 +52,7 @@ $having = 'money_owed' ;
 $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 
 //$sql = "SELECT * FROM ".TB_PREFIX."invoices LIMIT $start, $limit";
-$invoice_owing = new invoice();
+$invoice_owing = new Invoice();
 $invoice_owing->sort=$sort;
 $invoice_owing->having_and="real";
 $invoice_owing->query=$_REQUEST['query'];
@@ -67,17 +69,16 @@ if($large_dataset == $LANG['enabled'])
 $invoices_owing = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 //$customFieldLabel = getCustomFieldLabels("biller");
-$smarty -> assign("stuff",$stuff);
-$smarty -> assign('customer',$customer);
-$smarty -> assign('invoices',$invoices);
-$smarty -> assign('invoices_owing',$invoices_owing);
-$smarty -> assign('customFieldLabel',$customFieldLabel);
+$smarty->assign("stuff",$stuff);
+$smarty->assign('customer',$customer);
+$smarty->assign('invoices',$invoices);
+$smarty->assign('invoices_owing',$invoices_owing);
+$smarty->assign('customFieldLabel',$customFieldLabel);
+$smarty->assign('pageActive', 'customer');
 
-$smarty -> assign('pageActive', 'customer');
 $subPageActive = $_GET['action'] =="view"  ? "customer_view" : "customer_edit" ;
-$smarty -> assign('subPageActive', $subPageActive);
-$smarty -> assign('pageActive', 'customer');
 
+$smarty->assign('subPageActive', $subPageActive);
+$smarty->assign('pageActive', 'customer');
+$smarty->assign('active_tab', '#people');
 
-$smarty -> assign('active_tab', '#people');
-?>

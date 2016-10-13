@@ -1,5 +1,5 @@
 <?php
-
+use SimpleInvoices\Deprecate\Invoice;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -24,7 +24,7 @@ $master_invoice_id = $_GET['id'];
 $invoice = null;
 
 if(isset($_GET['id'])) {
-	$invoiceobj = new invoice();
+	$invoiceobj = new Invoice();
 	$invoice = $invoiceobj->select($master_invoice_id);
 } else {
 	$sql = "SELECT * FROM ".TB_PREFIX."invoices WHERE domain_id = :domain_id";
@@ -36,7 +36,7 @@ if(isset($_GET['id'])) {
 */
 	$sth = dbQuery($sql, ':domain_id', $auth_session->domain_id);
     $invoice = $sth->fetch();
-    #$sth = new invoice();
+    #$sth = new Invoice();
     #$invoice = $sth->select_all();
 }
 $customer = getCustomer($invoice['customer_id']);
@@ -44,7 +44,7 @@ $biller = getBiller($invoice['biller_id']);
 $defaults = getSystemDefaults();
 $pt = getPaymentType($defaults['payment_type']);
 
-$invoices = new invoice();
+$invoices = new Invoice();
 $invoices->sort='id';
 $invoices->having='money_owed';
 $invoices->having_and='real';

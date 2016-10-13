@@ -1,14 +1,17 @@
 <?php
 /*
-* Script: details.php
-* 	invoice details page
-*
-* License:
-*	 GPL v3 or above
-*
-* Website:
-* 	http://www.simpleinvoices.org
+ * Script: details.php
+ * 	invoice details page
+ *
+ * License:
+ *	 GPL v3 or above
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
  */
+
+use SimpleInvoices\Deprecate\Invoice;
+
 #table
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
@@ -19,7 +22,7 @@ $master_invoice_id = $_GET['id'];
 
 $invoice = getInvoice($master_invoice_id);
 
-$invoiceobj = new invoice();
+$invoiceobj = new Invoice();
 $invoiceItems = $invoiceobj->getInvoiceItems($master_invoice_id);
 
 //var_dump($invoiceItems);

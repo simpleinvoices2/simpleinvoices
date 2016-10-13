@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\I18n\SiLocal;
+use SimpleInvoices\Deprecate\Invoice;
 
 header("Content-type: text/xml");
 
@@ -11,7 +12,7 @@ $having = (isset($_GET['having'])) ? $_GET['having'] : "" ;
 $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 
 //$sql = "SELECT * FROM ".TB_PREFIX."invoices LIMIT $start, $limit";
-$invoice = new invoice();
+$invoice = new Invoice();
 $invoice->sort=$sort;
 
 if($auth_session->role_name =='customer') {

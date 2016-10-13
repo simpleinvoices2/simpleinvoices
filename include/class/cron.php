@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
 class cron {
 	
@@ -332,7 +333,7 @@ class cron {
                         $return['cron_message_'.$value['cron_id']] = "Cron ID: ". $value['cron_id'] ." - Cron for ".$value['index_name']." with start date of ".$value['start_date'].", end date of ".$value['end_date']." where it runs each ".$value['recurrence']." ".$value['recurrence_type']." was run today :: Info diff=".$diff;
                         $i++;
 
-                        $ni = new invoice();
+                        $ni = new Invoice();
                         $ni->id = $value['invoice_id'];
                         $ni->domain_id = $domain_id;
 						// $domain_id gets propagated from invoice to be copied from
@@ -347,7 +348,7 @@ class cron {
 
                         ## email the people
                         
-						$invoiceobj = new invoice();
+						$invoiceobj = new Invoice();
                         $invoice= $invoiceobj->select($new_invoice_id, $domain_id);
                         $preference = getPreference($invoice['preference_id'], $domain_id);
                         $biller = getBiller($invoice['biller_id'], $domain_id);

@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
 $p = new paypal_class;             // initiate an instance of the class
 #$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';   // testing paypal url
@@ -72,7 +73,7 @@ if ($p->validate_ipn()) {
 		$logger->info('Paypal - payment_type='.$payment->ac_payment_type);
 		$payment->insert();
 
-		$invoiceobj = new invoice();
+		$invoiceobj = new Invoice();
 		$invoice = $invoiceobj->select($p->ipn_data['invoice']);
 
 		$biller = getBiller($invoice['biller_id']);

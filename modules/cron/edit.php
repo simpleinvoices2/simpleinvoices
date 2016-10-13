@@ -1,24 +1,23 @@
 <?php
-
+use SimpleInvoices\Deprecate\Invoice;
 
 if ($_POST['op'] =='edit' AND !empty($_POST['invoice_id']))
 {
-	$edit = new cron();
-	$edit->domain_id = $auth_session->domain_id;
-	$edit->id=$_GET['id'];
-	$edit->invoice_id=$_POST['invoice_id'];
-	$edit->start_date=$_POST['start_date'];
-	$edit->end_date=$_POST['end_date'];
-	$edit->recurrence=$_POST['recurrence'];
-	$edit->recurrence_type=$_POST['recurrence_type'];
-	$edit->email_biller=$_POST['email_biller'];
-	$edit->email_customer=$_POST['email_customer'];
-	$result = $edit->update();
-
-	$saved = !empty($result) ? "true" : "false";
+    $edit = new cron();
+    $edit->domain_id = $auth_session->domain_id;
+    $edit->id=$_GET['id'];
+    $edit->invoice_id=$_POST['invoice_id'];
+    $edit->start_date=$_POST['start_date'];
+    $edit->end_date=$_POST['end_date'];
+    $edit->recurrence=$_POST['recurrence'];
+    $edit->recurrence_type=$_POST['recurrence_type'];
+    $edit->email_biller=$_POST['email_biller'];
+    $edit->email_customer=$_POST['email_customer'];
+    $result = $edit->update();
+    $saved = !empty($result) ? "true" : "false";
 }      
 
-$invoices = new invoice();
+$invoices = new Invoice();
 $invoices->sort='id';
 $invoice_all = $invoices->select_all('count');
 

@@ -40,6 +40,7 @@ isset($_POST['custom_field3']) ? $custom_field3 = $_POST['custom_field3'] : $cus
 
 if (isset($_POST['submit']))
 {
+    // TODO: WTF is invoice2 ???
 	$invoice = new invoice2();
 	$invoice->start_date = $start_date;
 	$invoice->end_date = $end_date;

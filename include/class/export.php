@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
 class export
 {
@@ -94,7 +95,7 @@ class export
 		{
 			case "statement":
 			{
-				$invoice = new invoice();
+				$invoice = new Invoice();
 				$invoice->domain_id = $this->domain_id;
 				$invoice->biller = $this->biller_id;
 				$invoice->customer = $this->customer_id;
@@ -205,7 +206,7 @@ class export
 			case "invoice":
 			{
 			
-				$invoiceobj = new invoice();
+				$invoiceobj = new Invoice();
 				$invoiceobj->domain_id = $this->domain_id;
 				$invoice = $invoiceobj->select($this->id, $this->domain_id);
  			    $invoice_number_of_taxes = numberOfTaxesForInvoice($this->id, $this->domain_id);

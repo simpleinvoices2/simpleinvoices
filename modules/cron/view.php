@@ -1,31 +1,30 @@
 <?php
-
+//use SimpleInvoices\Deprecate\Invoice;
 
 if ($_POST['op'] =='edit' AND !empty($_POST['invoice_id']))
 {
-	$cron = new cron();
-	$cron->domain_id = $auth_session->domain_id;
-	$cron->invoice_id=$_POST['invoice_id'];
-	$cron->start_date=$_POST['start_date'];
-	$cron->end_date=$_POST['end_date'];
-	$cron->recurrence=$_POST['recurrence'];
-	$cron->recurrence_type=$_POST['recurrence_type'];
-	$cron->email_biller=$_POST['email_biller'];
-	$cron->email_customer=$_POST['email_customer'];
-	$result = $cron->insert();
-
-	$saved = !empty($result) ? "true" : "false";
+    $cron = new cron();
+    $cron->domain_id = $auth_session->domain_id;
+    $cron->invoice_id=$_POST['invoice_id'];
+    $cron->start_date=$_POST['start_date'];
+    $cron->end_date=$_POST['end_date'];
+    $cron->recurrence=$_POST['recurrence'];
+    $cron->recurrence_type=$_POST['recurrence_type'];
+    $cron->email_biller=$_POST['email_biller'];
+    $cron->email_customer=$_POST['email_customer'];
+    $result = $cron->insert();
+    $saved = !empty($result) ? "true" : "false";
 }      
-//$invoiceobj = new invoice();
+//$invoiceobj = new Invoice();
 //$invoice_all = $invoiceobj->get_all();
 
 $get_cron = new cron();
 $get_cron->id = $_GET['id'];
 $cron = $get_cron->select();
 
-//$smarty -> assign('invoice_all',$invoice_all);
-$smarty -> assign('saved',$saved);
-$smarty -> assign('cron',$cron);
-$smarty -> assign('pageActive', 'cron');
-$smarty -> assign('subPageActive', 'cron_view');
-$smarty -> assign('active_tab', '#money');
+//$smarty->assign('invoice_all',$invoice_all);
+$smarty->assign('saved',$saved);
+$smarty->assign('cron',$cron);
+$smarty->assign('pageActive', 'cron');
+$smarty->assign('subPageActive', 'cron_view');
+$smarty->assign('active_tab', '#money');

@@ -1,15 +1,16 @@
 <?php
-
 /*
-* Script: report_sales_by_period.php
-* 	Sales reports by period add page
-*
-* License:
-*	 GPL v3
-*
-* Website:
-* 	http://www.simpleinvoices.org
-*/
+ * Script: report_sales_by_period.php
+ * 	Sales reports by period add page
+ *
+ * License:
+ *	 GPL v3
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
+ */
+
+use SimpleInvoices\Deprecate\Invoice;
 
 checkLogin();
 
@@ -21,12 +22,10 @@ function lastOfMonth() {
 	return date("Y-m-d", strtotime('-1 second',strtotime('+1 month',strtotime('01-'.date('m').'-'.date('Y').' 00:00:00'))));
 }
 
-
-
 isset($_POST['start_date']) ? $start_date = $_POST['start_date'] : $start_date = firstOfMonth() ;
 isset($_POST['end_date']) ? $end_date = $_POST['end_date'] : $end_date = lastOfMonth() ;
 
-$invoice = new invoice();
+$invoice = new Invoice();
 $invoice->start_date = $start_date;
 $invoice->end_date = $end_date;
 $invoice->having = "date_between";

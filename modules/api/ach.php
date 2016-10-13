@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
 $logger->info('ACH API page called');
 if ($_POST['pg_response_code']=='A01') {
@@ -43,7 +44,7 @@ if ($_POST['pg_response_code']=='A01') {
 		$logger->info('ACH - payment_type='.$payment->ac_payment_type);
 		$payment->insert();
 
-		$invoiceobj = new invoice();
+		$invoiceobj = new Invoice();
 		$invoice = $invoiceobj->select($_POST['pg_consumerorderid']);
 		$biller = getBiller($invoice['biller_id']);
 

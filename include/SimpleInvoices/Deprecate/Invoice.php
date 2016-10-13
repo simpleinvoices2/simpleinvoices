@@ -1,7 +1,9 @@
 <?php
+namespace SimpleInvoices\Deprecate;
+
 use SimpleInvoices\I18n\SiLocal;
 
-class invoice {
+class Invoice {
 	
     public $id;
     public $domain_id;
@@ -42,7 +44,7 @@ class invoice {
 	public function __construct()
 	{
 	    if (empty($this->domain_id)) {
-	       $auth_session    = new Zend_Session_Namespace('Zend_Auth');
+	       $auth_session    = new \Zend_Session_Namespace('Zend_Auth');
 	       $this->domain_id = $auth_session->domain_id;
 	    }
 	}
@@ -564,7 +566,7 @@ class invoice {
 	public function recur()
 	{
 		$invoice = $this->select($this->id, $this->domain_id);
-		$ni = new invoice();
+		$ni = new Invoice();
 		$ni->domain_id     = $invoice['domain_id'];
 		// Next Index is obtained during insert
 		// $ni->index_id     = $invoice['index_id'];
@@ -583,7 +585,7 @@ class invoice {
 		$ni_id = $ni->insert();
 
 		//insert each line item
-		$nii = new invoice();
+		$nii = new Invoice();
 		$nii->invoice_id = $ni_id;
 		$nii->domain_id  = $ni->domain_id;
 

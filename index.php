@@ -7,6 +7,8 @@
  *	 GPL v3 or above
  */
 
+use SimpleInvoices\Deprecate\Invoice;
+
 //minor change to test github emails - test
 
 //stop browsing to files directly - all viewing to be handled by index.php
@@ -161,7 +163,7 @@ if (($module == "options") && ($view == "database_sqlpatches")) {
 				//If no invoices in db then show home page as default - else show Manage Invoices page
 				if ($module==null)
 				{
-					$invoiceobj = new invoice();
+					$invoiceobj = new Invoice();
 					if ( $invoiceobj->are_there_any() > "0" )  
 					{
 					    $module = "invoices" ;

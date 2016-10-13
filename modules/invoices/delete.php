@@ -1,20 +1,23 @@
 <?php
 /*
-* Script: delete.php
-* 	Do the deletion of an invoice page
-*
-* Authors:
-*	 Justin Kelly, Nicolas Ruflin
-*
-* Last edited:
-* 	 2007-07-27
-*
-* License:
-*	 GPL v2 or above
-*
-* Website:
-* 	http://www.simpleinvoices.org
-*/
+ * Script: delete.php
+ * 	Do the deletion of an invoice page
+ *
+ * Authors:
+ *	 Justin Kelly, Nicolas Ruflin
+ *
+ * Last edited:
+ * 	 2007-07-27
+ *
+ * License:
+ *	 GPL v2 or above
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
+ */
+
+use SimpleInvoices\Deprecate\Invoice;
+
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
 
@@ -25,14 +28,14 @@ $preference = getPreference($invoice['preference_id']);
 $defaults = getSystemDefaults();
 $invoicePaid = calc_invoice_paid($invoice_id);
 
-$invoiceobj = new invoice();
+$invoiceobj = new Invoice();
 $invoiceItems = $invoiceobj->getInvoiceItems($invoice_id);
 
-$smarty -> assign("invoice",$invoice);
-$smarty -> assign("preference",$preference);
-$smarty -> assign("defaults",$defaults);
-$smarty -> assign("invoicePaid",$invoicePaid);
-$smarty -> assign("invoiceItems",$invoiceItems);
+$smarty->assign("invoice",$invoice);
+$smarty->assign("preference",$preference);
+$smarty->assign("defaults",$defaults);
+$smarty->assign("invoicePaid",$invoicePaid);
+$smarty->assign("invoiceItems",$invoiceItems);
 
 /*If delete is disabled - dont allow people to view this page*/
 if ( $defaults['delete'] == 'N' ) {
@@ -47,7 +50,7 @@ if ( ($_GET['stage'] == 2 ) AND ($_POST['doDelete'] == 'y') ) {
 	$error = false;
 
     //delete line item taxes
-	$invoiceobj = new invoice();
+	$invoiceobj = new Invoice();
     $invoice_line_items = $invoiceobj->getInvoiceItems($invoice_id);
 
     foreach( $invoice_line_items as $key => $value)
@@ -80,9 +83,7 @@ if ( ($_GET['stage'] == 2 ) AND ($_POST['doDelete'] == 'y') ) {
 	}
 	//TODO - what about the stuff in the products table for the total style invoices?
 	echo "<meta http-equiv='refresh' content='2;URL=index.php?module=invoices&view=manage' />";
-
 }
 
-$smarty -> assign('pageActive', 'invoice');
-$smarty -> assign('active_tab', '#money');
-?>
+$smarty->assign('pageActive', 'invoice');
+$smarty->assign('active_tab', '#money');

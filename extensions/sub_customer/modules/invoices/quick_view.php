@@ -1,21 +1,22 @@
 <?php
-
 /*
-* Script: quick_view.php
-* 	Quick view model
-*
-* Authors:
-*	 Justin Kelly, Nicolas Ruflin, Ap.Muthu
-*
-* Last edited:
-* 	 2008-01-03
-*
-* License:
-*	 GPL v2 or above
-*	 
-* Website:
-* 	http://www.simpleinvoices.or
+ * Script: quick_view.php
+ * 	Quick view model
+ *
+ * Authors:
+ *	 Justin Kelly, Nicolas Ruflin, Ap.Muthu
+ *
+ * Last edited:
+ * 	 2008-01-03
+ *
+ * License:
+ *	 GPL v2 or above
+ *
+ * Website:
+ * 	http://www.simpleinvoices.or
  */
+
+use SimpleInvoices\Deprecate\Invoice;
 
 checkLogin();
 
@@ -32,7 +33,7 @@ $biller = getBiller($invoice['biller_id']);
 $preference = getPreference($invoice['preference_id']);
 $defaults = getSystemDefaults();
 
-$invoiceobj = new invoice();
+$invoiceobj = new Invoice();
 $invoiceItems = $invoiceobj->getInvoiceItems($invoice_id);
 
 $sub_customer = getCustomer($invoice['custom_field1']);

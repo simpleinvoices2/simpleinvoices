@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Invoice;
 
 class expense
 {
@@ -43,7 +44,7 @@ class expense
         $add['biller_all'] = $billerobj->get_all();
 
         //get invoices
-		$invoiceobj = new invoice();
+		$invoiceobj = new Invoice();
         $add['invoice_all'] = $invoiceobj->get_all();
 
         //get products
@@ -80,7 +81,7 @@ class expense
         $detail['biller_all'] = $billerobj->get_all();
 
         //get invoices
-		$invoiceobj = new invoice();
+		$invoiceobj = new Invoice();
         $detail['invoice_all'] = $invoiceobj->get_all();
 
         //get products
