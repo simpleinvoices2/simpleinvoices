@@ -1,12 +1,13 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class customer
+class Customer
 {
 	public $domain_id;
 
 	public function __construct()
 	{
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 
