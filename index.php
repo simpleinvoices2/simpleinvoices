@@ -287,277 +287,48 @@ $file= "$module/$view";
 /*
  * If extension is enabled load its javascript files	- end
  */
-	
-/*
- * Header - start 
- */
-if( !in_array($module."_".$view, $early_exit) )
-{
-		$extensionHeader = 0;
-		foreach($config->extension as $extension)
-		{
-			/*
-             * If extension is enabled then continue and include the requested file for that extension if it exists
-             */	
-			if($extension->enabled == "1")
-			{
-				if(file_exists("./extensions/$extension->name/templates/default/header.tpl")) 
-				{
-					$smarty -> $smarty_output("../extensions/$extension->name/templates/default/header.tpl");
-
-					$extensionHeader++;
-				}
-			}
-		}
-		
-		/*
-         * If no extension php file for requested file load the normal template file if it exists
-         */
-		if($extensionHeader == 0) 
-		{
-			$smarty -> $smarty_output(GetCustomPath('header'));
-		}
-		
-}
-/*
- * Prep the page - load the header stuff - end
- */
 
 
-/*
+/**
+ * This would be the dispatch!!
+ * ==============================================================================================
+ * * ---------------------------------------- START ---------------------------------------------
  * Include the php file for the requested page section - start
  */
 
-	
-		/*
-         * If extension is enabled load the extension php file for the module	
-         * Note: this system is probably slow - if you got a better method for handling extensions let me know
-         */
-		$extensionPHPFile = 0;
-		foreach($config->extension as $extension)
-		{
-			/*
-             * If extension is enabled then continue and include the requested file for that extension if it exists
-             */	
-			if($extension->enabled == "1")
-			{
-
-
-				//echo "Enabled:".$value['name']."<br><br>";
-				if(file_exists("./extensions/$extension->name/modules/$module/$view.php")) {
-
-					include_once("./extensions/$extension->name/modules/$module/$view.php");
-					$extensionPHPFile++;
-				}
-			}
-		}
-		
-		/*
-         * If no extension php file for requested file load the normal php file if it exists
-         */
-		if( ($extensionPHPFile == 0) and  $my_path=GetCustomPath("$module/$view",'module') ){
-			include($my_path);
-		}
-
 /*
- * Include the php file for the requested page section - end
- */
-if($module == "export" OR $view == "export" OR $module == "api")
-{
-    exit(0);
-}	
-
-/*
- * If extension is enabled load its post load javascript files	- start
- * By Post load - i mean post of the .php so that it can used info from the .php in the javascript
+ * If extension is enabled load the extension php file for the module
  * Note: this system is probably slow - if you got a better method for handling extensions let me know
  */
-	$extensionPostLoadJquery = 0;
-	foreach($config->extension as $extension)
-	{
-		/*
-         * If extension is enabled then continue and include the requested file for that extension if it exists
-         */	
-		if($extension->enabled == "1")
-		{
-			if(file_exists("./extensions/$extension->name/include/jquery/$extension->name.post_load.jquery.ext.js.tpl")) {
-					$smarty -> $smarty_output("../extensions/$extension->name/include/jquery/$extension->name.post_load.jquery.ext.js.tpl");
-			}
-		}
-		
-	}
-	
+$extensionPHPFile = 0;
+foreach($config->extension as $extension)
+{
     /*
-     * If no extension php file for requested file load the normal php file if it exists
-     * Don't load it in the authentication module. It's not needed! Generates wrong HTML code.
+     * If extension is enabled then continue and include the requested file for that extension if it exists
      */
-	if($extensionPostLoadJquery == 0 AND $module !='auth') 
-	{
-		$smarty -> $smarty_output("../public/assets/jquery/post_load.jquery.ext.js.tpl");
-	}
-
-/*
- * If extension is enabled load its javascript files	- end
- */
-		
-		
-		
-
-/*
- * Menu : If extension has custom menu use it else use default - start
- */
-
-	if($menu == "true")
-	{	
-		$extensionMenu = 0;
-		foreach($config->extension as $extension)
-		{
-			/*
-			* If extension is enabled then continue and include the requested file for that extension if it exists
-			*/	
-			if($extension->enabled == "1")
-			{
-				if(file_exists("./extensions/$extension->name/templates/default/menu.tpl")) 
-				{
-					$smarty -> $smarty_output("../extensions/$extension->name/templates/default/menu.tpl");
-					$extensionMenu++;
-				}
-			}
-		}
-		/*
-		* If no extension php file for requested file load the normal php file if it exists
-		*/
-		if($extensionMenu == "0") 
-		{
-			$smarty -> $smarty_output(GetCustomPath('menu'));
-		}
-	}
-/*
- * Menu : If extension has custom menu use it else use default - end
- */
-
-
-/*
- * Main : If extension has custom layout use it else use default - start
- */
-
-    if( !in_array($module."_".$view, $early_exit) )
+    if($extension->enabled == "1")
     {
-		$extensionMain = 0;
-		foreach($config->extension as $extension)
-		{
-            /*
-             * If extension is enabled then continue and include the requested file for that extension if it exists
-             */	
-			if($extension->enabled == "1")
-			{
-				if(file_exists("./extensions/$extension->name/templates/default/main.tpl")) 
-				{
-					$smarty -> $smarty_output("../extensions/$extension->name/templates/default/main.tpl");
-					$extensionMain++;
-				}
-			}
-		}
-		
-		/*
-         * If no extension php file for requested file load the normal php file if it exists
-         */
-		if($extensionMain == "0") 
-		{
-			$smarty -> $smarty_output(GetCustomPath('main'));
-		}
-    }
-    
-/*
- * Main : If extension has custom menu use it else use default - end
- */
+        if(file_exists("./extensions/$extension->name/modules/" . $module . '/' . $view . ".php")) {
 
-
-/*
- * Include the smarty template for the requested page section - start
- */
-
-    /*
-     * If no extensions template is applicable then show the default one
-     * use the $extensionTemplates variable to count the number of applicable extensions template
-     * --if = 0 after checking all extensions then show default
-     */
-	$extensionTemplates = 0;
-	$my_tpl_path='';
-	foreach($config->extension as $extension)
-	{
-		/*
-         * If extension is enabled then continue and include the requested file for that extension if it exists
-         */	
-		if($extension->enabled == "1")
-		{
-			if(file_exists("./extensions/$extension->name/templates/default/$module/$view.tpl")) 
-			{
-				$path 		= "../extensions/$extension->name/templates/default/$module/";
-				$my_tpl_path="../extensions/{$extension->name}/templates/default/$module/$view.tpl";
-				$extensionTemplates++;
-			}	
-		}
-	}
-    
-    /*
-     * If no application templates found then show default template
-     * TODO Note: if more than one extension has got a template for the requested file than thats trouble :(
-     * - we really need a better extensions system
-     */
-
-	if( $extensionTemplates == 0 ) 
-	{ 
-		if($my_tpl_path=GetCustomPath("$module/$view")){
-			$path = dirname($my_tpl_path).'/';
-			$extensionTemplates++;
-		}
-	}
-	
-	$smarty->assign("path",$path);
-	$smarty -> $smarty_output($my_tpl_path);
-	
-	// If no smarty template - add message - onyl uncomment for dev - commented out for release
-	if ($extensionTemplates == 0 )
-	{
-		error_log("NOTEMPLATE!!!");
-	}
-
-/*
- * Include the template for the requested page section - end
- */
-	
-/*
- * Footer - start 
- */
-	if( !in_array($module."_".$view, $early_exit) )
-	{
-		$extensionFooter = 0;
-		foreach($config->extension as $extension)
-		{
-			/*
-			* If extension is enabled then continue and include the requested file for that extension if it exists
-			*/	
-			if($extension->enabled == "1")
-			{
-				if(file_exists("./extensions/$extension->name/templates/default/footer.tpl")) 
-				{
-					$smarty -> $smarty_output("../extensions/$extension->name/templates/default/footer.tpl");
-					$extensionFooter++;
-				}
-			}
-		}
-		/*
-         * If no extension php file for requested file load the normal php file if it exists
-         */
-        if($extensionFooter == 0) {
-            $smarty -> $smarty_output(GetCustomPath('footer'));
+            include_once("./extensions/$extension->name/modules/" . $module . '/' . $view . ".php");
+            $extensionPHPFile++;
         }
     }
-	
+}
+
 /*
- * Footer - end 
+ * If no extension php file for requested file load the normal php file if it exists
+ */
+if ( ($extensionPHPFile == 0) &&  $my_path = GetCustomPath($module . '/' . $view, 'module') ) {
+    include($my_path);
+}
+
+/**
+ * Include the php file for the requested page section - end
+ * ----------------------------------------- END ------------------------------------------------
+ * ==============================================================================================
  */
 
-
+$renderer = new \SimpleInvoices\Smarty\Renderer($serviceManager);
+$renderer->render();
 

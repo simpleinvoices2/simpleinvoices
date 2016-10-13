@@ -317,33 +317,15 @@ if ($config->authentication->enabled == 1 )
     $checkPermission == "denied" ? exit($LANG['denied_page']) :"" ;
 }
 
-/*
-Array: Early_exit
-- Pages that don't need header or exit prior to adding the template add in here
-*/
-$early_exit = array();
-$early_exit[] = "auth_login";
-$early_exit[] = "api_cron";
-$early_exit[] = "auth_logout";
-$early_exit[] = "export_pdf";
-$early_exit[] = "export_invoice";
-$early_exit[] = "statement_export";
-$early_exit[] = "invoice_template";
-$early_exit[] = "payments_print";
-#$early_exit[] = "reports_report_statement";
-$early_exit[] = "documentation_view";
-//$early_exit[] = "install_index";
-
-
-switch ($module)
-{
-	case "export" :	
-		$smarty_output = "fetch";
-		break;
-	default :
-		$smarty_output = "display";
-		break;
-}
+//switch ($module)
+//{
+//	case "export" :	
+//		$smarty_output = "fetch";
+//		break;
+//	default :
+//		$smarty_output = "display";
+//		break;
+//}
 
 //get the url - used for templates / pdf
 $siUrl = getURL();
