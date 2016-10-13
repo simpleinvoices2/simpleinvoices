@@ -12,6 +12,7 @@
 
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Email;
+use SimpleInvoices\Deprecate\Export;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -36,12 +37,12 @@ if ($_GET['stage'] == 2 ) {
 	#echo $block_stage2;
 	
 	// Create invoice
-	$export = new export();
-	$export -> format = "pdf";
-	$export -> file_location = 'file';
-	$export -> module = 'invoice';
-	$export -> id = $invoice_id;
-	$export -> execute();
+	$export = new Export();
+	$export->format = "pdf";
+	$export->file_location = 'file';
+	$export->module = 'invoice';
+	$export->id = $invoice_id;
+	$export->execute();
 
 	#$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
 

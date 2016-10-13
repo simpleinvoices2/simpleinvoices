@@ -1,4 +1,5 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
 /*
 Class: Index
@@ -11,13 +12,13 @@ $sub_node = the sub set of the node - ie. this is the 'invoice preference' if no
 $sub_node_2 = 2nd sub set of the node - ir. this is the 'biller' if node = 'invoice'
 */
 
-class index
+class Index
 {
 
     public static function next($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
         if (empty($domain_id)) {
-            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         }
 
@@ -42,26 +43,22 @@ class index
         else $id = $index['id'] + 1;
         
         return $id;
-
     }
 
     public static function increment($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
         if (empty($domain_id)) {
-            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         }
         
-        $next = index::next($node, $sub_node, $domain_id, $sub_node_2);
+        $next = Index::next($node, $sub_node, $domain_id, $sub_node_2);
 
         if ($next == 1)
         {
-
             $sql = "INSERT INTO ".TB_PREFIX."index (id, node, sub_node, sub_node_2, domain_id) 
 					VALUES (:id, :node, :sub_node, :sub_node_2, :domain_id)";
-
         } else {
-
             $sql ="UPDATE ".TB_PREFIX."index 
                     SET   id = :id 
                     WHERE node = :node
@@ -79,13 +76,12 @@ class index
 			 ':domain_id',$domain_id); 
 
         return $next;
-
     }
 
     public static function rewind($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
         if (empty($domain_id)) {
-            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         }
         
@@ -104,7 +100,6 @@ class index
 		    ':domain_id', $domain_id); 
 
         return $sth;
-
     }
 }
 
@@ -218,8 +213,8 @@ class index
     public static function increment($node,$sub_node="",$sub_node_2="")
     {
 
-        $next = index::next($node,$sub_node,$sub_node_2);
-        $current = index::select($node,$sub_node,$sub_node_2);
+        $next = Index::next($node,$sub_node,$sub_node_2);
+        $current = Index::select($node,$sub_node,$sub_node_2);
 	#echo "next:".$next."current:".$current;
 	$defaults = getSystemDefaults();
 

@@ -1,8 +1,9 @@
 <?php
+namespace SimpleInvoices\Deprecate\Cron;
 
 // Cronlog runs outside of sessions and triggered by Cron
 // Manually set the domain_id class member before using class methods
-class cronlog {
+class Log {
 
 	public $domain_id;
 	public $cron_id;
@@ -10,7 +11,7 @@ class cronlog {
 
 	public function __construct()
 	{
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 

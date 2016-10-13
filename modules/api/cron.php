@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Cron;
+use SimpleInvoices\Deprecate\Encode;
 
 /*
  // Typical Cron Job to run each day:
@@ -20,12 +21,12 @@ $message = $cron->run();
 try {
     //json
     //header('Content-type: application/json');
-    //echo encode::json( $message, 'pretty' );
+    //echo Encode::json( $message, 'pretty' );
     
     //xml
     ob_end_clean();
     header('Content-type: application/xml');
-    echo encode::xml( $message );
+    echo Encode::xml( $message );
 } catch (\Exception $e) {
     echo $e->getMessage();
 }

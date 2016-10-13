@@ -11,6 +11,7 @@
  */
 
 use SimpleInvoices\Deprecate\Email;
+use SimpleInvoices\Deprecate\Export;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -39,18 +40,18 @@ if ($_GET['stage'] == 2 ) {
 	
 
 	#get the invoice id
-	$export = new export();
-	$export -> format = 'pdf';
-	$export -> file_type = $get_file_type;
-	$export -> file_location = 'file';
-	$export -> module = 'statement';
-	$export -> biller_id = $biller_id;
-	$export -> customer_id = $customer_id;
-	$export -> start_date = $start_date;
-	$export -> end_date = $end_date;
-	$export -> show_only_unpaid = $show_only_unpaid;
-	$export -> filter_by_date = $filter_by_date;
-	$export -> execute();
+	$export = new Export();
+	$export->format = 'pdf';
+	$export->file_type = $get_file_type;
+	$export->file_location = 'file';
+	$export->module = 'statement';
+	$export->biller_id = $biller_id;
+	$export->customer_id = $customer_id;
+	$export->start_date = $start_date;
+	$export->end_date = $end_date;
+	$export->show_only_unpaid = $show_only_unpaid;
+	$export->filter_by_date = $filter_by_date;
+	$export->execute();
 
 	#$attachment = file_get_contents('./tmp/cache/statement_'.$biller_id.'_'.$customer_id.'_'.$start_date.'_'.$end_date.'.pdf');
 	$attachment = 'statement_'.$biller_id.'_'.$customer_id.'_'.$start_date.'_'.$end_date.'.pdf';

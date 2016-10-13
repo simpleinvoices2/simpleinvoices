@@ -1,8 +1,17 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class decode
+/**
+ * TODO: It seems it is unused... shall I delete it?
+ * 
+ * @deprecated
+ */
+class Decode
 {
-
+    /**
+     * @deprecated
+     * @param unknown $xml
+     */
 	public static function xml($xml) {
 		$xmlary = array();
 			

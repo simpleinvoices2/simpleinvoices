@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Encode;
 
 //get invoice details
 
@@ -8,5 +9,5 @@ $invoiceobj = new Invoice();
 $invoice = $invoiceobj->select('1');
 
 header('Content-type: application/xml');
-echo encode::xml($invoice);
+echo Encode::xml($invoice);
 print_r($invoice);

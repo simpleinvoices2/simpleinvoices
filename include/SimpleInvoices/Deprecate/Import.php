@@ -1,6 +1,7 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class import {
+class Import {
 
 	public $file;
 	public $debug;
@@ -29,10 +30,4 @@ class import {
 	{
 		dbQuery($this->collate());
 	}
-
 }
-
-
-
-
-?>

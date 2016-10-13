@@ -15,7 +15,7 @@ class Eway
     
 	public function __construct()
 	{
-	    $auth_session    = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session    = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 
@@ -73,14 +73,14 @@ class Eway
             $this->preference = getPreference($this->invoice['preference_id'], $this->domain_id);
         }
 
-        $eway = new ewaylib($this->biller['eway_customer_id'],'REAL_TIME', false);
+        $eway = new \ewaylib($this->biller['eway_customer_id'],'REAL_TIME', false);
 
         //Eway only accepts amount in cents - so times 100
 		$value = $this->invoice['total']*100;
 		$eway_invoice_total = htmlsafe(trim($value));
         $logger->info("eway total: " . $eway_invoice_total);
 
-        $enc = new encryption();
+        $enc = new \encryption();
         $key = $config->encryption->default->key;	
         $credit_card_number = $enc->decrypt($key, $this->customer['credit_card_number']);
 

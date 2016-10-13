@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * TODO: Is this really necesary?
+ */
 class import {
 
 	public $file;
@@ -68,16 +70,13 @@ class import {
 			
 		}
 	}
-	
-	
+    
 	public function doImport()
 	{
 		$json = $this->getFile();
 		$decode = $this->decode( $this->getFile() );
 		$this->process($decode);
 	}
-	
-	
 }
 
 
@@ -92,5 +91,3 @@ $import->file = "EssentialData.json";
 $import->pattern_find = "si_";
 $import->pattern_replace = "XID";
 $import->replace();
-
-?>

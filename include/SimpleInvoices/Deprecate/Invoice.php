@@ -92,8 +92,8 @@ class Invoice {
 		$pref_group=getPreference($this->preference_id, $this->domain_id);
 
 		$sth= dbQuery($sql,
-			#':index_id', index::next('invoice',$pref_group['index_group'], $domain_id,$this->biller_id),
-			':index_id',      index::next('invoice',$pref_group['index_group'], $this->domain_id),
+			#':index_id', Index::next('invoice',$pref_group['index_group'], $domain_id,$this->biller_id),
+			':index_id',      Index::next('invoice',$pref_group['index_group'], $this->domain_id),
 			':domain_id',     $this->domain_id,
 			':biller_id',     $this->biller_id,
 			':customer_id',   $this->customer_id,
@@ -107,8 +107,8 @@ class Invoice {
 			':custom_field4', $this->custom_field4
 			);
 
-	    #index::increment('invoice',$pref_group['index_group'], $domain_id,$this->biller_id);
-	    index::increment('invoice',$pref_group['index_group'], $this->domain_id);
+	    #Index::increment('invoice',$pref_group['index_group'], $domain_id,$this->biller_id);
+	    Index::increment('invoice',$pref_group['index_group'], $this->domain_id);
 
 	    return lastInsertID();
 	}
@@ -209,7 +209,7 @@ class Invoice {
     public function get_all($domain_id='')
     {
 		if (empty($domain_id)) {
-		    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+		    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		    $domain_id    = $auth_session->domain_id;
 		}
 
@@ -234,7 +234,7 @@ class Invoice {
     public function count($domain_id='')
     {
 		if (empty($domain_id)) {
-		    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+		    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		    $domain_id    = $auth_session->domain_id;
 		}
 		
@@ -252,7 +252,7 @@ class Invoice {
         global $config;
 
         if (empty($this->domain_id)) {
-            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         } else {
             $domain_id = $this->domain_id;
@@ -444,7 +444,7 @@ class Invoice {
 
     public function select_all_where()
     {
-		$auth_session = new Zend_Session_Namespace('Zend_Auth');
+		$auth_session = new \Zend_Session_Namespace('Zend_Auth');
 		$domain_id    = $auth_session->domain_id;
 
         if($this->filter == "date")

@@ -1,6 +1,7 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class encode
+class Encode
 {
 
     public static function xml($array, $level=1) {
@@ -60,10 +61,10 @@ class encode
 	public static function json($data, $format='plain')
 	{
 		if( $format=='pretty' ) {
-            $message = Zend_Json::encode($data);
-            return Zend_Json::prettyPrint($message, array("format" => "html"));
+            $message = \Zend_Json::encode($data);
+            return \Zend_Json::prettyPrint($message, array("format" => "html"));
         } else {
-            return Zend_Json::encode($data);
+            return \Zend_Json::encode($data);
         }
 	}
 

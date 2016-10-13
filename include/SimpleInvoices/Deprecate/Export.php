@@ -1,8 +1,10 @@
 <?php
-use SimpleInvoices\Deprecate\Invoice;
-use SimpleInvoices\Deprecate\Biller;
+namespace SimpleInvoices\Deprecate;
 
-class export
+//use SimpleInvoices\Deprecate\Invoice;
+//use SimpleInvoices\Deprecate\Biller;
+
+class Export
 {
 	public $format;
 	public $file_type;
@@ -18,7 +20,7 @@ class export
     
 	public function __construct()
 	{
-	    $auth_session    = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session    = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 
@@ -184,21 +186,21 @@ class export
 
 				//$this->assignTemplateLanguage($preference); //Not tested at this time
  
-               $smarty -> assign("payment",$payment);
-                $smarty -> assign("invoice",$invoice);
-                $smarty -> assign("biller",$biller);
-                $smarty -> assign("logo",$logo);
-                $smarty -> assign("customer",$customer);
-                $smarty -> assign("invoiceType",$invoiceType);
-                $smarty -> assign("paymentType",$paymentType);
-                $smarty -> assign("preference",$preference);
-                $smarty -> assign("customFieldLabels",$customFieldLabels);
+                $smarty->assign("payment",$payment);
+                $smarty->assign("invoice",$invoice);
+                $smarty->assign("biller",$biller);
+                $smarty->assign("logo",$logo);
+                $smarty->assign("customer",$customer);
+                $smarty->assign("invoiceType",$invoiceType);
+                $smarty->assign("paymentType",$paymentType);
+                $smarty->assign("preference",$preference);
+                $smarty->assign("customFieldLabels",$customFieldLabels);
 
-                $smarty -> assign('pageActive', 'payment');
-                $smarty -> assign('active_tab', '#money');
+                $smarty->assign('pageActive', 'payment');
+                $smarty->assign('active_tab', '#money');
 
 				$css = $siUrl."/templates/invoices/default/style.css";
-				$smarty -> assign('css',$css);
+				$smarty->assign('css',$css);
 				
                 $templatePath = "./templates/default/payments/print.tpl";
 				$data = $smarty -> fetch(".".$templatePath);
@@ -236,7 +238,7 @@ class export
 
 				//$smarty = new Smarty();
 				
-				$smarty -> plugins_dir = $pluginsdir;
+				$smarty->plugins_dir = $pluginsdir;
 				 
 				$pageActive = "invoices";
 				$smarty->assign('pageActive', $pageActive);
@@ -245,19 +247,19 @@ class export
 					//echo "test";
 					$this->assignTemplateLanguage($preference);
 
-					$smarty -> assign('biller',$biller);
-					$smarty -> assign('customer',$customer);
-					$smarty -> assign('invoice',$invoice);
-					$smarty -> assign('invoice_number_of_taxes',$invoice_number_of_taxes);
-					$smarty -> assign('preference',$preference);
-					$smarty -> assign('logo',$logo);
-					$smarty -> assign('template',$template);
-					$smarty -> assign('invoiceItems',$invoiceItems);
-					$smarty -> assign('template_path',$template_path);
-					$smarty -> assign('css',$css);
-					$smarty -> assign('customFieldLabels',$customFieldLabels);					
+					$smarty->assign('biller',$biller);
+					$smarty->assign('customer',$customer);
+					$smarty->assign('invoice',$invoice);
+					$smarty->assign('invoice_number_of_taxes',$invoice_number_of_taxes);
+					$smarty->assign('preference',$preference);
+					$smarty->assign('logo',$logo);
+					$smarty->assign('template',$template);
+					$smarty->assign('invoiceItems',$invoiceItems);
+					$smarty->assign('template_path',$template_path);
+					$smarty->assign('css',$css);
+					$smarty->assign('customFieldLabels',$customFieldLabels);					
 
-					$data = $smarty -> fetch(".".$templatePath);
+					$data = $smarty->fetch(".".$templatePath);
 				
 				}
 				
@@ -277,12 +279,13 @@ class export
 	
 	
 	//assign the language and set the locale from the preference
+	// TODO: What a nasty assinment of $LANG!!
 	function assignTemplateLanguage($preference)
 	{
 		//get and assign the language file from the preference table
 		if($pref_language=$preference['language'] and $LANG=getLanguageArray($pref_language) and is_array($LANG) and count($LANG) ){
 			global $smarty;
-			$smarty -> assign('LANG',$LANG);
+			$smarty->assign('LANG', $LANG);
 		}
 		//overide the config's locale with the one assigned from the preference table
 		if($pref_locale=$preference['locale'] and strlen($pref_locale) > 4 ){

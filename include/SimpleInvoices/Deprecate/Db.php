@@ -1,6 +1,7 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class db
+class Db
 {
 
     private $_db;
@@ -32,13 +33,13 @@ class db
 			{
 
 			    case "pgsql":
-			    	$this->_db = new PDO(
+			    	$this->_db = new \PDO(
 						$pdoAdapter.':host='.$config->database->params->host.';	dbname='.$config->database->params->dbname,	$config->database->params->username, $config->database->params->password
 					);
 			    	break;
 			    	
 			    case "sqlite":
-			    	$connlink = new PDO(
+			    	$connlink = new \PDO(
 						$pdoAdapter.':host='.$config->database->params->host.';	dbname='.$config->database->params->dbname,	$config->database->params->username, $config->database->params->password
 					);
 					break;
@@ -48,14 +49,14 @@ class db
                     {
                         case true:
         
-                            $this->_db = new PDO(
-                                'mysql:host='.$config->database->params->host.'; port='.$config->database->params->port.'; dbname='.$config->database->params->dbname, $config->database->params->username, $config->database->params->password,  array( PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8;")
+                            $this->_db = new \PDO(
+                                'mysql:host='.$config->database->params->host.'; port='.$config->database->params->port.'; dbname='.$config->database->params->dbname, $config->database->params->username, $config->database->params->password,  array( \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8;")
                             );
-				$this->_db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+				$this->_db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
                             break;
                     
                         case false:
-                            $this->_db = new PDO(
+                            $this->_db = new \PDO(
                                 $pdoAdapter.':host='.$config->database->params->host.'; port='.$config->database->params->port.'; dbname='.$config->database->params->dbname,	$config->database->params->username, $config->database->params->password
                             );
                         break;
@@ -66,7 +67,7 @@ class db
 
 			
 		}
-		catch( PDOException $exception )
+		catch( \PDOException $exception )
 		{
 			simpleInvoicesError("dbConnection",$exception->getMessage());
 			die($exception->getMessage());

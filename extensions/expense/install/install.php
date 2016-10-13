@@ -1,8 +1,9 @@
 <?php
+use SimpleInvoices\Deprecate\Import;
+
 $menu = false;
 
-
-$import = new import();
+$import = new Import();
 $domain_id = $auth_session->domain_id;
 
 if (checkTableExists('expense') == false)
@@ -17,4 +18,3 @@ if (checkTableExists('expense') == false)
     //  $import->file = "./extensions/expense/install/db3.sql";
     //  $import->execute();
 }
-

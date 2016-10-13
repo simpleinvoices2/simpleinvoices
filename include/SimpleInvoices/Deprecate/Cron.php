@@ -240,7 +240,7 @@ class Cron {
         $return['cron_message'] ="Cron started";
         $number_of_crons_run = "0";
 
-        $cron_log = new cronlog();
+        $cron_log = new Cron\Log();
         $cron_log->run_date = $today;
 
         foreach ($data as $key=>$value)
@@ -343,7 +343,7 @@ class Cron {
                         $new_invoice_id = $ni->recur();
 
                         //insert into cron_log date of run
-                        //$cron_log = new cronlog();
+                        //$cron_log = new Cron\Log();
                         //$cron_log->run_date = $today;
                         //$cron_log->domain_id = $domain_id;
                         //$cron_log->cron_id = $value['cron_id'];
@@ -365,7 +365,7 @@ class Cron {
                         // email invoice
                         if( ($value['email_biller'] == "1") OR ($value['email_customer'] == "1") )
                         {
-                            $export = new export();
+                            $export = new Export();
                             $export -> domain_id = $domain_id;
                             $export -> format = "pdf";
                             $export -> file_location = 'file';
@@ -429,7 +429,7 @@ class Cron {
                                     * If you want a new copy of the invoice being emailed to the customer 
                                     * use this code
                                     */
-                                    $export_rec = new export();
+                                    $export_rec = new Export();
                                     $export_rec -> domain_id = $domain_id;
                                     $export_rec -> format = "pdf";
                                     $export_rec -> file_location = 'file';
@@ -463,7 +463,7 @@ class Cron {
                                     * uncomment the code below
                                     */
                                     /*
-                                    $export = new export();
+                                    $export = new Export();
                                     $export -> format = "pdf";
                                     $export -> file_location = 'file';
                                     $export -> module = 'payment';
@@ -541,7 +541,7 @@ class Cron {
         }
         //insert into cron_log date of run
         /*
-		    $cron_log = new cronlog();
+		    $cron_log = new CronLog();
             $cron_log->run_date = $today;
             $cron_log->domain_id = $domain_id;
             $cron_log->insert();

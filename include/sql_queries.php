@@ -1,6 +1,8 @@
 <?php
 use SimpleInvoices\I18n\SiLocal;
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Index;
+use SimpleInvoices\Deprecate\Db;
 
 if(LOGGING) {
 	//Logging connection to prevent mysql_insert_id problems. Need to be called before the second connect...
@@ -1302,7 +1304,7 @@ function getSystemDefaults($domain_id='')
         $domain_id = $domain_id;
     }
     
-	$db = new db();
+	$db = new Db();
 
     #get sql patch level - if less than 198 do sql with no exntesion table
     if ((checkTableExists(TB_PREFIX."system_defaults") == false))
@@ -2173,8 +2175,8 @@ function insertInvoice($type, $domain_id='')
 	$clean_date=SqlDateWithTime($_POST['date']);
 
 	$sth= dbQuery($sql,
-		#':index_id', index::next('invoice',$pref_group[index_group], $domain_id,$_POST[biller_id]),
-		':index_id',		index::next('invoice',$pref_group['index_group'], $domain_id),
+		#':index_id', Index::next('invoice',$pref_group[index_group], $domain_id,$_POST[biller_id]),
+		':index_id',		Index::next('invoice',$pref_group['index_group'], $domain_id),
 		':domain_id',		$domain_id,
 		':biller_id',		$_POST['biller_id'],
 		':customer_id', 	$_POST['customer_id'],
@@ -2188,9 +2190,9 @@ function insertInvoice($type, $domain_id='')
 		':customField4',	$_POST['customField4']
 		);
 
-    #index::increment('invoice',$pref_group[index_group], $domain_id,$_POST[biller_id]);
+    #Index::increment('invoice',$pref_group[index_group], $domain_id,$_POST[biller_id]);
 	// Needed only if si_index table exists
-    index::increment('invoice',$pref_group[index_group], $domain_id);
+    Index::increment('invoice',$pref_group[index_group], $domain_id);
 
     return $sth;
 }
@@ -2217,7 +2219,7 @@ function updateInvoice($invoice_id, $domain_id='')
 
     if ($current_pref_group['index_group'] != $new_pref_group['index_group'])
     {
-        $index_id = index::increment('invoice',$new_pref_group['index_group']);
+        $index_id = Index::increment('invoice',$new_pref_group['index_group']);
     }
 
 	if ($db_server == 'mysql' && !_invoice_check_fk(
@@ -2813,7 +2815,7 @@ function maxInvoice($domain_id='')
 //in this file are functions for all sql queries
 function checkTableExists($table = "" ) {
 
-	//$db = db::getInstance();
+	//$db = \SimpleInvoices\Deprecate\Db::getInstance()();
 	//var_dump($db);
 	$table == "" ? TB_PREFIX."biller" : $table;
 

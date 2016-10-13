@@ -1,6 +1,12 @@
 <?php
+namespace SimpleInvoices\Deprecate\Import;
 
-class importjson extends import
+use SimpleInvoices\Deprecate\Import;
+
+/**
+ * Originally called: importjson
+ */
+class Json extends Import
 {
 	public $pattern_find;
 	public $pattern_replace;
@@ -22,7 +28,6 @@ class importjson extends import
 
 			if($this->debug) echo "<br>";
 			if($this->debug) echo "<b>Table: ".$table."</b>";
-			
 			
 			$columns ="";
 			$values="";
@@ -59,7 +64,5 @@ class importjson extends import
         $replace = $this->replace($json);
 		$decode = $this->decode($replace);
 		return $this->process($decode);
-
 	}
-
 }
