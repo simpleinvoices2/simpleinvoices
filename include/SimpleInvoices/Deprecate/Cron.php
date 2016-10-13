@@ -1,7 +1,7 @@
 <?php
 namespace SimpleInvoices\Deprecate;
 
-use SimpleInvoices\Deprecate\Invoice;
+//use SimpleInvoices\Deprecate\Invoice;
 
 class Cron {
 	

@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Deprecate\Payment;
 
 class eway 
 {
@@ -120,7 +121,7 @@ class eway
 			$logger->info("Eway message: " . $message . "<br>\n");
             //header("Location: trasnactionsuccess.php");
             //exit();
-            $payment = new payment();
+            $payment = new Payment();
             $payment->ac_inv_id = $this->invoice['id'];
             #$payment->ac_inv_id = $_POST['invoice'];
             $payment->ac_amount = $this->invoice['total'];

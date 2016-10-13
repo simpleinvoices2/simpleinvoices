@@ -17,6 +17,7 @@
  */
 
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Payment;
 
 checkLogin();
 
@@ -53,7 +54,7 @@ $sth = $db->query($sql, ':domain_id', $domain_id);
 
 $accounts = $sth->fetchAll();
 
-$payment = new payment();
+$payment = new Payment();
 $payment->start_date = $start_date;
 $payment->end_date = $end_date;
 $payment->filter = "date";

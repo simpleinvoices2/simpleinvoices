@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Payment;
 
 $p = new paypal_class;             // initiate an instance of the class
 #$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';   // testing paypal url
@@ -37,7 +38,7 @@ if ($p->validate_ipn()) {
 	
 	//check if payment has already been entered
 
-	$check_payment = new payment();
+	$check_payment = new Payment();
 	$check_payment->filter='online_payment_id';
 	$check_payment->online_payment_id = $p->ipn_data['txn_id'];
 	$check_payment->domain_id = $domain_id;
@@ -53,7 +54,7 @@ if ($p->validate_ipn()) {
 	if($number_of_payments == '0')
 	{
 
-		$payment = new payment();
+		$payment = new Payment();
 		$payment->ac_inv_id = $p->ipn_data['invoice'];
 		#$payment->ac_inv_id = $_POST['invoice'];
 		$payment->ac_amount = $p->ipn_data['mc_gross'];

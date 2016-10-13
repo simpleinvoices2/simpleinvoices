@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Payment;
 
 $logger->info('ACH API page called');
 if ($_POST['pg_response_code']=='A01') {
@@ -12,7 +13,7 @@ if ($_POST['pg_response_code']=='A01') {
 	$logger->info('ACH Data:');
 	$logger->info($paypal_data);
 
-	$check_payment = new payment();
+	$check_payment = new Payment();
 	$check_payment->filter='online_payment_id';
 	$check_payment->online_payment_id = $_POST['pg_consumerorderid'];
 	$check_payment->domain_id = '1';
@@ -28,7 +29,7 @@ if ($_POST['pg_response_code']=='A01') {
 	if($number_of_payments == '0')
 	{
 
-		$payment = new payment();
+		$payment = new Payment();
 		$payment->ac_inv_id = $_POST['pg_consumerorderid'];
 		$payment->ac_amount = $_POST['pg_total_amount'];
 		$payment->ac_notes = $paypal_data;

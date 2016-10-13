@@ -1,6 +1,7 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class payment
+class Payment
 {
 
     public $start_date;
