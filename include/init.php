@@ -10,7 +10,8 @@ require_once './vendor/autoload.php';
 $serviceManager = new \Zend\ServiceManager\ServiceManager([
     'factories' => [
         'Smarty' => \SimpleInvoices\Service\SmartyFactory::class,
-        'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class
+        'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class,
+        'Request' => \SimpleInvoices\Service\RequestFactory::class,
     ],
 ]);
 

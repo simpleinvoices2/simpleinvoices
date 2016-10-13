@@ -13,6 +13,8 @@
         "zendframework/zend-log": "^2.9.1",
         "zendframework/zend-loader": "^2.5.1",
         "zendframework/zend-permissions-acl": "^2.6.0",
+        "zendframework/zend-http": "^2.5.5",
+        "zendframework/zend-mail": "^2.7.1",
         "zendframework/zend-json": "^3.0.0"
     },
     "autoload": {

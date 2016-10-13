@@ -9,13 +9,13 @@
 <link rel="Stylesheet" href="library/WebApp/Design/Render.css" />
 	<script type="text/javascript" src="library/WebApp/Action/Logic.js"></script>
 		<!-- jQuery Files -->
-	<script type="text/javascript" src="./public/assets/jquery/jquery-1.2.6.min.js"></script>
-	<script type="text/javascript" src="./public/assets/jquery/jquery.flexigrid.1.0b3.pack.js"></script>
+	<script type="text/javascript" src="{$basePath}/public/assets/jquery/jquery-1.2.6.min.js"></script>
+	<script type="text/javascript" src="{$basePath}/public/assets/jquery/jquery.flexigrid.1.0b3.pack.js"></script>
 	{$extension_jquery_files }
-	<script type="text/javascript" src="./public/assets/jquery/jquery.plugins.js"></script>
-	<script type="text/javascript" src="./public/assets/jquery/jquery.conf.js"></script>
+	<script type="text/javascript" src="{$basePath}/public/assets/jquery/jquery.plugins.js"></script>
+	<script type="text/javascript" src="{$basePath}/public/assets/jquery/jquery.conf.js"></script>
 	<link rel="stylesheet" type="text/css" href="./extensions/mini/templates/default/css/flexigrid.css" />
-	<link rel="stylesheet" type="text/css" href="./public/assets/jquery/jquery.plugins.css" title="default" media="screen" />
+	<link rel="stylesheet" type="text/css" href="{$basePath}/public/assets/jquery/jquery.plugins.css" title="default" media="screen" />
 
 
 

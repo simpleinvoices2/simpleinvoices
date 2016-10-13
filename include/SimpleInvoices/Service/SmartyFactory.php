@@ -53,6 +53,14 @@ class SmartyFactory implements FactoryInterface
         $smarty->register_modifier('htmlout', 'outhtml'); //common typo
         $smarty->register_modifier('urlescape', 'urlencode'); //common typo
         
+        $request = $container->get('Request');
+        $basePath = $request->getBasePath();
+        if (empty($basePath)) {
+            $smarty->assign('basePath', './');
+        } else {
+            $smarty->assign('basePath', $basePath);
+        }
+        
         return $smarty;
     }
     
