@@ -214,7 +214,7 @@ if (! $config->extension)
 		'name'=>'core',
 		'description'=>'Core part of Simple Invoices - always enabled',
 		'enabled'=>1
-		)));
+	)));
 	$config->extension = $extension_core;
 }
 
@@ -278,5 +278,3 @@ include_once("./include/backup.lib.php");
 
 $defaults = getSystemDefaults();
 $smarty -> assign("defaults",$defaults);
-
-?>

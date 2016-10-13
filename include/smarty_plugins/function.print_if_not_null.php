@@ -13,15 +13,10 @@
 **/
 //function print_if_not_null($label,$field,$class1,$class2,$colspan) {
 	
-function smarty_function_print_if_not_null($params, &$smarty) {
-        if ($params['field'] != null) {
-                $print_if_not_null =  "
-        <tr>
-                <td class='".htmlsafe($params[class1])."'>".htmlsafe($params[label]).":</td>
-				<td class='".htmlsafe($params[class2])."' colspan='".htmlsafe($params[colspan])."'>".htmlsafe($params[field])."</td>
-        </tr>";  
-			echo $print_if_not_null;
-        }
+function smarty_function_print_if_not_null($params, &$smarty) 
+{
+    if ($params['field'] != null) {
+        $print_if_not_null =  "<tr><td class='".htmlsafe($params[class1])."'>".htmlsafe($params[label]).":</td><td class='".htmlsafe($params[class2])."' colspan='".htmlsafe($params[colspan])."'>".htmlsafe($params[field])."</td></tr>";  
+        echo $print_if_not_null;
+    }
 }
-
-?>
