@@ -1,6 +1,7 @@
 <?php
+namespace SimpleInvoices\Deprecate;
 
-class email
+class Email
 {
 	public $format;
 
@@ -34,12 +35,12 @@ class email
         }
         if($config->email->use_local_sendmail == false)
         {
-    		$transport = new Zend_Mail_Transport_Smtp($config->email->host, $authentication);
+    		$transport = new \Zend_Mail_Transport_Smtp($config->email->host, $authentication);
         }
 
 		// Create e-mail message
-		$mail = new Zend_Mail('utf-8');
-		$mail->setType(Zend_Mime::MULTIPART_MIXED);
+		$mail = new \Zend_Mail('utf-8');
+		$mail->setType(\Zend_Mime::MULTIPART_MIXED);
 		$mail->setBodyText($this->notes);
 		$mail->setBodyHTML($this->notes);
 		$mail->setFrom($this->from, $this->from_friendly);
@@ -65,7 +66,7 @@ class email
             $content = file_get_contents('./tmp/cache/'.$this->attachment);
             $at = $mail->createAttachment($content);
             $at->type = 'application/pdf';
-            $at->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+            $at->disposition = \Zend_Mime::DISPOSITION_ATTACHMENT;
             $at->filename = $this->attachment;
         }
 		// Send e-mail through SMTP
@@ -76,7 +77,7 @@ class email
             } else{
                 $mail->send();
             }
-		} catch(Zend_Mail_Protocol_Exception $e) {
+		} catch(\Zend_Mail_Protocol_Exception $e) {
 			echo '<strong>Zend Mail Protocol Exception:</strong> ' .  $e->getMessage();
 			exit;
 		}
@@ -170,7 +171,7 @@ class email
     public function get_admin_email()
     {
         if (empty($this->domain_id)) {
-            $auth_session = new Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         } else {
             $domain_id = $this->domain_id;

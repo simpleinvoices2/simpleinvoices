@@ -1,7 +1,9 @@
 <?php
-use SimpleInvoices\Deprecate\Payment;
+namespace SimpleInvoices\Deprecate;
 
-class eway 
+//use SimpleInvoices\Deprecate\Payment;
+
+class Eway 
 {
 
     public $biller;
@@ -112,7 +114,7 @@ class eway
             //header("Location: trasnactionerrorpage.php");
             //exit();
             $return = 'false';		
-        }else if($ewayResponseFields["EWAYTRXNSTATUS"]=="True"){
+        } else if($ewayResponseFields["EWAYTRXNSTATUS"]=="True") {
 
 
 			$logger->info("Transaction Success: " . $ewayResponseFields["EWAYTRXNERROR"] . "<br>\n");
@@ -145,12 +147,9 @@ class eway
 
         return $return ;		
     }
-
+    
     function get_message()
     {
-    
         return $this->message;
-
     }
-
 }

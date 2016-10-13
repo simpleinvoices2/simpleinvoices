@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\I18n\SiLocal;
+use SimpleInvoices\Deprecate\Inventory;
 
 header("Content-type: text/xml");
 
@@ -10,7 +11,7 @@ $rp = (isset($_POST['rp'])) ? $_POST['rp'] : "25" ;
 $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 
 //$sql = "SELECT * FROM ".TB_PREFIX."invoices LIMIT $start, $limit";
-$inventory = new inventory();
+$inventory = new Inventory();
 $inventory->sort=$sort;
 $inventory_all = $inventory->select_all('', $dir, $rp, $page);
 $sth_count_rows = $inventory->select_all('count',$dir, $rp, $page);

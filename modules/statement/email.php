@@ -1,14 +1,16 @@
 <?php
 /*
-* Script: email.php
-* 	Email invoice page
-*
-* License:
-*	 GPL v3 or above
-*
-* Website:
-* 	http://www.simpleinvoices.org
+ * Script: email.php
+ * 	Email invoice page
+ *
+ * License:
+ *	 GPL v3 or above
+ *
+ * Website:
+ * 	http://www.simpleinvoices.org
  */
+
+use SimpleInvoices\Deprecate\Email;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -53,17 +55,16 @@ if ($_GET['stage'] == 2 ) {
 	#$attachment = file_get_contents('./tmp/cache/statement_'.$biller_id.'_'.$customer_id.'_'.$start_date.'_'.$end_date.'.pdf');
 	$attachment = 'statement_'.$biller_id.'_'.$customer_id.'_'.$start_date.'_'.$end_date.'.pdf';
 
-	$email = new email();
-	$email -> format = 'statement';
-	$email -> notes = $_POST['email_notes'];
-	$email -> from = $_POST['email_from'];
-	$email -> from_friendly = $biller['name'];
-	$email -> to = $_POST['email_to'];
-	$email -> bcc = $_POST['email_bcc'];
-	$email -> subject = $_POST['email_subject'];
-	$email -> attachment = $attachment;
-	$message = $email -> send ();
-
+	$email = new Email();
+	$email->format = 'statement';
+	$email->notes = $_POST['email_notes'];
+	$email->from = $_POST['email_from'];
+	$email->from_friendly = $biller['name'];
+	$email->to = $_POST['email_to'];
+	$email->bcc = $_POST['email_bcc'];
+	$email->subject = $_POST['email_subject'];
+	$email->attachment = $attachment;
+	$message = $email->send ();
 }
 
 //stage 3 = assemble email and send
@@ -71,12 +72,11 @@ else if ($_GET['stage'] == 3 ) {
 	$message = "How did you get here :)";
 }
 
-$smarty -> assign('message', $message);
-$smarty -> assign('biller',$biller);
-$smarty -> assign('customer',$customer);
-$smarty -> assign('invoice',$invoice);
-$smarty -> assign('preferences',$preference);
+$smarty->assign('message', $message);
+$smarty->assign('biller',$biller);
+$smarty->assign('customer',$customer);
+$smarty->assign('invoice',$invoice);
+$smarty->assign('preferences',$preference);
 
-$smarty -> assign('pageActive', 'report');
-$smarty -> assign('active_tab', '#home');
-?>
+$smarty->assign('pageActive', 'report');
+$smarty->assign('active_tab', '#home');

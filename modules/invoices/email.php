@@ -11,6 +11,7 @@
  */
 
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Email;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -44,16 +45,16 @@ if ($_GET['stage'] == 2 ) {
 
 	#$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
 
-	$email = new email();
-	$email -> format = 'invoice';
-	$email -> notes = $_POST['email_notes'];
-	$email -> from = $_POST['email_from'];
-	$email -> from_friendly = $biller['name'];
-	$email -> to = $_POST['email_to'];
-	$email -> bcc = $_POST['email_bcc'];
-	$email -> subject = $_POST['email_subject'];
-	$email -> attachment = $pdf_file_name;
-	$message = $email -> send ();
+	$email = new Email();
+	$email->format = 'invoice';
+	$email->notes = $_POST['email_notes'];
+	$email->from = $_POST['email_from'];
+	$email->from_friendly = $biller['name'];
+	$email->to = $_POST['email_to'];
+	$email->bcc = $_POST['email_bcc'];
+	$email->subject = $_POST['email_subject'];
+	$email->attachment = $pdf_file_name;
+	$message = $email->send ();
 
 }
 
@@ -62,12 +63,11 @@ else if ($_GET['stage'] == 3 ) {
 	$message = "How did you get here :)";
 }
 
-$smarty -> assign('message', $message);
-$smarty -> assign('biller',$biller);
-$smarty -> assign('customer',$customer);
-$smarty -> assign('invoice',$invoice);
-$smarty -> assign('preferences',$preference);
+$smarty->assign('message', $message);
+$smarty->assign('biller',$biller);
+$smarty->assign('customer',$customer);
+$smarty->assign('invoice',$invoice);
+$smarty->assign('preferences',$preference);
 
-$smarty -> assign('pageActive', 'invoice');
-$smarty -> assign('active_tab', '#money');
-?>
+$smarty->assign('pageActive', 'invoice');
+$smarty->assign('active_tab', '#money');

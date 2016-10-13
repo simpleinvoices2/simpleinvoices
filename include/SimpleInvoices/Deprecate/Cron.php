@@ -1,6 +1,7 @@
 <?php
 namespace SimpleInvoices\Deprecate;
 
+use SimpleInvoices\Deprecate\Email\Body as EmailBody;
 //use SimpleInvoices\Deprecate\Invoice;
 
 class Cron {
@@ -373,29 +374,29 @@ class Cron {
                             $export -> execute();
 
                             #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
-                            $email = new email();
-                            $email -> domain_id = $domain_id;
-                            $email -> format = 'cron_invoice';
+                            $email = new Email();
+                            $email->domain_id = $domain_id;
+                            $email->format = 'cron_invoice';
 
-                                $email_body = new email_body();
-                                $email_body->email_type = 'cron_invoice';
-                                $email_body->customer_name = $customer['name'];
-                                $email_body->invoice_name = $invoice['index_name'];
-                                $email_body->biller_name = $biller['name'];
+                            $email_body = new EmailBody();
+                            $email_body->email_type = 'cron_invoice';
+                            $email_body->customer_name = $customer['name'];
+                            $email_body->invoice_name = $invoice['index_name'];
+                            $email_body->biller_name = $biller['name'];
                             
-                            $email -> notes = $email_body->create();
-                            $email -> from = $biller['email'];
-                            $email -> from_friendly = $biller['name'];
-							$email -> to = $this->getEmailSendAddresses($value, $customer['email'], $biller['email']);
-                            $email -> invoice_name = $invoice['index_name'];
-                            $email -> subject = $email->set_subject();
-                            $email -> attachment = $pdf_file_name_invoice;
+                            $email->notes = $email_body->create();
+                            $email->from = $biller['email'];
+                            $email->from_friendly = $biller['name'];
+							$email->to = $this->getEmailSendAddresses($value, $customer['email'], $biller['email']);
+                            $email->invoice_name = $invoice['index_name'];
+                            $email->subject = $email->set_subject();
+                            $email->attachment = $pdf_file_name_invoice;
                             $return['email_message'] = $email -> send ();
 
                         }
 
                         //Check that all details are OK before doing the eway payment
-                        $eway_check = new eway();
+                        $eway_check = new Eway();
                         $eway_check->domain_id  = $domain_id;
                         $eway_check->invoice    = $invoice;
                         $eway_check->customer   = $customer;
@@ -408,7 +409,7 @@ class Cron {
                         {
                             
                             // input customerID,  method (REAL_TIME, REAL_TIME_CVN, GEO_IP_ANTI_FRAUD) and liveGateway or not
-                            $eway = new eway();
+                            $eway = new Eway();
                             $eway->domain_id = $domain_id;
                             $eway->invoice   = $invoice;
                             $eway->biller    = $biller ;
@@ -437,23 +438,23 @@ class Cron {
                                     $export_rec -> execute();
 
                                     #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
-                                    $email_rec = new email();
+                                    $email_rec = new Email();
                                     $email_rec -> domain_id = $domain_id;
                                     $email_rec -> format = 'cron_invoice';
 
-                                        $email_body_rec = new email_body();
-                                        $email_body_rec->email_type = 'cron_invoice_receipt';
-                                        $email_body_rec->customer_name = $customer['name'];
-                                        $email_body_rec->invoice_name = $invoice['index_name'];
-                                        $email_body_rec->biller_name = $biller['name'];
+                                    $email_body_rec = new EmailBody();
+                                    $email_body_rec->email_type = 'cron_invoice_receipt';
+                                    $email_body_rec->customer_name = $customer['name'];
+                                    $email_body_rec->invoice_name = $invoice['index_name'];
+                                    $email_body_rec->biller_name = $biller['name'];
                                     
-                                    $email_rec -> notes = $email_body_rec->create();
-                                    $email_rec -> from = $biller['email'];
-                                    $email_rec -> from_friendly = $biller['name'];
-									$email_rec -> to = $this->getEmailSendAddresses($value, $customer['email'], $biller['email']);
-                                    $email_rec -> invoice_name = $invoice['index_name'];
-                                    $email_rec -> attachment = $pdf_file_name_invoice;
-                                    $email_rec -> subject = $email_rec->set_subject('invoice_eway_receipt');
+                                    $email_rec->notes = $email_body_rec->create();
+                                    $email_rec->from = $biller['email'];
+                                    $email_rec->from_friendly = $biller['name'];
+									$email_rec->to = $this->getEmailSendAddresses($value, $customer['email'], $biller['email']);
+                                    $email_rec->invoice_name = $invoice['index_name'];
+                                    $email_rec->attachment = $pdf_file_name_invoice;
+                                    $email_rec->subject = $email_rec->set_subject('invoice_eway_receipt');
                                     $return['email_message'] = $email_rec -> send ();
 
 
@@ -469,10 +470,10 @@ class Cron {
                                     $export -> id = $payment_id;
                                     $export -> execute();
 
-                                    $email = new email();
+                                    $email = new Email();
                                     $email -> format = 'cron_payment';
 
-                                        $email_body = new email_body();
+                                        $email_body = new EmailBody();
                                         $email_body->email_type = 'cron_payment';
                                         $email_body->customer_name = $customer['name'];
                                         $email_body->invoice_name = 'payment'.$payment_id;
@@ -502,32 +503,25 @@ class Cron {
                             } else {
                                 //do email to biller/admin - say error
 
-                                $email = new email();
-                                $email -> domain_id = $domain_id;
-                                $email -> format = 'cron_payment';
-                                $email -> from = $biller['email'];
-                                $email -> from_friendly = $biller['name'];
-                                $email -> to = $biller['email'];
-                                $email -> subject = "Payment failed for ".$invoice['index_name'];
+                                $email = new Email();
+                                $email->domain_id = $domain_id;
+                                $email->format = 'cron_payment';
+                                $email->from = $biller['email'];
+                                $email->from_friendly = $biller['name'];
+                                $email->to = $biller['email'];
+                                $email->subject = "Payment failed for ".$invoice['index_name'];
                                 $error_message ="Invoice:  ".$invoice['index_name']."<br /> Amount: ".$invoice['total']." <br />";
                                 foreach($eway->get_message() as $key => $value)
                                     $error_message .= "\n<br>\$ewayResponseFields[\"$key\"] = $value";
                                 $email -> notes = $error_message;
                                 $return['email_message'] = $email->send();
-
                             }
-
                         }
-
                     } else {
-
                         //cron not run for this cron_id
                         $return['cron_message_'.$value['cron_id']] = "Cron ID: ". $value['cron_id'] ." NOT RUN: Cron for ".$value['index_name']." with start date of ".$value['start_date'].", end date of ".$value['end_date']." where it runs each ".$value['recurrence']." ".$value['recurrence_type']." did not recur today :: Info diff=".$diff;
-
                     }
-
                 } else {		
-
                         //days diff is negative - whats going on
                         $return['cron_message_'.$value['cron_id']] = "Cron ID: ". $value['cron_id'] ." NOT RUN: - Not cheduled for today - Cron for ".$value['index_name']." with start date of ".$value['start_date'].", end date of ".$value['end_date']." where it runs each ".$value['recurrence']." ".$value['recurrence_type']." did not recur today :: Info diff=".$diff;
                 }
@@ -535,7 +529,6 @@ class Cron {
                 // cron has already been run for that cron_id today
                    $return['cron_message_'.$value['cron_id']] = "Cron ID: ".$value['cron_id']." - Cron has already been run for domain: ".$domain_id." for the date: ".$today." for invoice ".$value['invoice_id'];
                    $return['email_message'] = "";
-
             }
         }
 
@@ -559,7 +552,7 @@ class Cron {
     *
     */
     /*
-        $email = new email();
+        $email = new Email();
         $email -> format = 'cron';
         #$email -> notes = $return;
         $email -> from = "simpleinvoices@localhost";
@@ -570,8 +563,6 @@ class Cron {
         $email -> send ();
     */
 
-        return $return;
-        
+        return $return;   
     }
-
 }

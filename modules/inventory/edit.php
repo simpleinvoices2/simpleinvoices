@@ -1,12 +1,13 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Product;
+use SimpleInvoices\Deprecate\Inventory;
 
 if ($_POST['op'] =='edit' AND !empty($_POST['product_id']))
 {
     $saved = "false";
     
-    $inventory = new inventory();
+    $inventory = new Inventory();
     $inventory->id=$_GET['id'];
     $inventory->domain_id= $auth_session->domain_id;
     $inventory->product_id=$_POST['product_id'];
@@ -23,7 +24,7 @@ $invoices = new Invoice();
 $invoices->sort = 'id';
 $invoice_all = $invoices->select_all('count');
 
-$get_inventory = new inventory();
+$get_inventory = new Inventory();
 $get_inventory->id = $_GET['id'];
 $inventory = $get_inventory->select();
 

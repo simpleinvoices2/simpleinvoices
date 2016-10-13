@@ -1,9 +1,10 @@
 <?php
 use SimpleInvoices\Deprecate\Product;
+use SimpleInvoices\Deprecate\Inventory;
 
 if ($_POST['op'] =='add' AND !empty($_POST['product_id']))
 {
-    $inventory = new inventory();
+    $inventory = new Inventory();
     $inventory->domain_id= $auth_session->domain_id;
     $inventory->product_id=$_POST['product_id'];
     $inventory->quantity=$_POST['quantity'];

@@ -1,8 +1,10 @@
 <?php
+namespace SimpleInvoices\Deprecate;
+
 use SimpleInvoices\I18n\SiLocal;
 use SimpleInvoices\Deprecate\Product;
 
-class inventory {
+class Inventory {
 	
  	public $start_date;
  	public $domain_id;
@@ -177,33 +179,29 @@ class inventory {
         $inventory = new Product();
         $sth = $inventory->select_all('count');
 
-        $inventory_all = $sth->fetchAll(PDO::FETCH_ASSOC);
+        $inventory_all = $sth->fetchAll(\PDO::FETCH_ASSOC);
         
         $email="";
         foreach ($inventory_all as $row) 
         {
              if($row['quantity'] <= $row['reorder_level'])
              {
-
                 $message = "The quantity of Product: ".$row['description']." is ".SiLocal::number($row['quantity']).", which is equal to or below its reorder level of ".$row['reorder_level'];
                 $return['row_'.$row['id']]['message'] = $message;
                 $email_message .= $message . "<br />\n";
              }
-
         }
 
         //print_r($return);
         #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
-        $email = new email();
-        $email -> notes = $email_message;
-        $email -> from = $email->get_admin_email();
-        $email -> to = $email->get_admin_email();
-        #$email -> bcc = "justin@localhost";
-        $email -> subject = "Simple Invoices reorder level email";
-        $email -> send ();
-
-        return $return;
+        $email = new Email();
+        $email->notes = $email_message;
+        $email->from = $email->get_admin_email();
+        $email->to = $email->get_admin_email();
+        #$email->bcc = "justin@localhost";
+        $email->subject = "Simple Invoices reorder level email";
+        $email->send ();
         
+        return $return;
     }
-
 }

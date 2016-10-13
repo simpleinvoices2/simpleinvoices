@@ -1,5 +1,7 @@
 <?php
-class email_body {
+namespace SimpleInvoices\Deprecate\Email;
+
+class Body {
 
 	public $email_type;
 	

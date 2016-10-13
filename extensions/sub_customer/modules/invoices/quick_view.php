@@ -17,6 +17,7 @@
  */
 
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Eway;
 
 checkLogin();
 
@@ -37,7 +38,7 @@ $invoiceobj = new Invoice();
 $invoiceItems = $invoiceobj->getInvoiceItems($invoice_id);
 
 $sub_customer = getCustomer($invoice['custom_field1']);
-    $eway_check = new eway();
+    $eway_check = new Eway();
     $eway_check->invoice = $invoice;
     $eway_pre_check = $eway_check->pre_check();
 

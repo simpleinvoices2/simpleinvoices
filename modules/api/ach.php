@@ -1,6 +1,7 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Payment;
+use SimpleInvoices\Deprecate\Email;
 
 $logger->info('ACH API page called');
 if ($_POST['pg_response_code']=='A01') {
@@ -56,12 +57,12 @@ if ($_POST['pg_response_code']=='A01') {
 		$body .= " at ".date('g:i A')."\n\nDetails:\n";
 		$body .= $paypal_data;
 
-		$email = new email();
-		$email -> notes = $body;
-		$email -> to = $biller['email'];
-		$email -> from = "simpleinvoices@localhost.localdomain";
-		$email -> subject = 'PaymentsGateway.com -Instant Payment Notification - Recieved Payment';
-		$email -> send ();
+		$email = new Email();
+		$email->notes = $body;
+		$email->to = $biller['email'];
+		$email->from = "simpleinvoices@localhost.localdomain";
+		$email->subject = 'PaymentsGateway.com -Instant Payment Notification - Recieved Payment';
+		$email->send ();
         $xml_message = "+++++++++<br /><br />";
 		$xml_message .= "Thank you for the payment, the details have been recorded and ". $biller['name'] ." has been notified via email.";
         $xml_message .= "<br /><br />+++++++++<br />";
