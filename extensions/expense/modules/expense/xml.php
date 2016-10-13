@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
 
@@ -131,10 +132,10 @@ foreach ($customers as $row) {
 			<a class='index_table' title='$LANG[edit] ".$row['description']."' href='index.php?module=expense&view=details&id=".$row['id']."&action=edit'><img src='images/common/edit.png' height='16' border='-5px' padding='-4px' valign='bottom' /></a>
 		]]></cell>";		
 	
-	$xml .= "<cell><![CDATA[".siLocal::date($row['date'])."]]></cell>";		
-	$xml .= "<cell><![CDATA[".siLocal::number_trim($row['amount'])."]]></cell>";
-	$xml .= "<cell><![CDATA[".siLocal::number_trim($row['tax'])."]]></cell>";
-	$xml .= "<cell><![CDATA[".siLocal::number_trim($row['amount'] + $row['tax'])."]]></cell>";
+	$xml .= "<cell><![CDATA[".SiLocal::date($row['date'])."]]></cell>";		
+	$xml .= "<cell><![CDATA[".SiLocal::number_trim($row['amount'])."]]></cell>";
+	$xml .= "<cell><![CDATA[".SiLocal::number_trim($row['tax'])."]]></cell>";
+	$xml .= "<cell><![CDATA[".SiLocal::number_trim($row['amount'] + $row['tax'])."]]></cell>";
 	$xml .= "<cell><![CDATA[".$row['expense_account']."]]></cell>";
 	$xml .= "<cell><![CDATA[".$row['biller']."]]></cell>";
 	$xml .= "<cell><![CDATA[".$row['customer']."]]></cell>";

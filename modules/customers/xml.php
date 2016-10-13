@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
 
@@ -122,9 +123,9 @@ $count = $sth_count_rows->rowCount();
 		$xml .= "<cell><![CDATA[".$row['CID']."]]></cell>";
 		$xml .= "<cell><![CDATA[".$row['name']."]]></cell>";
 		$xml .= "<cell><![CDATA[".$row['department']."]]></cell>";
-		$xml .= "<cell><![CDATA[".siLocal::number($row['customer_total'])."]]></cell>";
-		$xml .= "<cell><![CDATA[".siLocal::number($row['paid'])."]]></cell>";
-		$xml .= "<cell><![CDATA[".siLocal::number($row['owing'])."]]></cell>";
+		$xml .= "<cell><![CDATA[".SiLocal::number($row['customer_total'])."]]></cell>";
+		$xml .= "<cell><![CDATA[".SiLocal::number($row['paid'])."]]></cell>";
+		$xml .= "<cell><![CDATA[".SiLocal::number($row['owing'])."]]></cell>";
 		if ($row['enabled']==$LANG['enabled']) {
 			$xml .= "<cell><![CDATA[<img src='images/common/tick.png' alt='".$row['enabled']."' title='".$row['enabled']."' />]]></cell>";				
 		}	

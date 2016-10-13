@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
 
@@ -132,8 +133,8 @@ $count = $sth_count_rows->rowCount();
 		$xml .= "<cell><![CDATA[".utf8_encode($row['name'])."]]></cell>";
 		$xml .= "<cell><![CDATA[<a class='index_table' title='quick view' href='index.php?module=invoices&view=quick_view&id=".utf8_encode($row['last_invoice'])."'>".utf8_encode($row['last_invoice'])."</a>]]></cell>";
 
-		$xml .= "<cell><![CDATA[".utf8_encode(siLocal::number($row['customer_total']))."]]></cell>";
-		$xml .= "<cell><![CDATA[".utf8_encode(siLocal::number($row['owing']))."]]></cell>";
+		$xml .= "<cell><![CDATA[".utf8_encode(SiLocal::number($row['customer_total']))."]]></cell>";
+		$xml .= "<cell><![CDATA[".utf8_encode(SiLocal::number($row['owing']))."]]></cell>";
 		$xml .= "<cell><![CDATA[".utf8_encode($row['enabled'])."]]></cell>";				
 		$xml .= "</row>";		
 	}

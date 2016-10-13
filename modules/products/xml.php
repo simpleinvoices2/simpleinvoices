@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
 
@@ -36,10 +37,10 @@ foreach ($products_all as $row) {
 	
 	$xml .= "<cell><![CDATA[".$row['id']."]]></cell>";
 	$xml .= "<cell><![CDATA[".$row['description']."]]></cell>";
-	$xml .= "<cell><![CDATA[".siLocal::number($row['unit_price'])."]]></cell>";
+	$xml .= "<cell><![CDATA[".SiLocal::number($row['unit_price'])."]]></cell>";
     if($defaults['inventory'] == '1')
     {
-      	$xml .= "<cell><![CDATA[".siLocal::number_trim($row['quantity'])."]]></cell>";
+      	$xml .= "<cell><![CDATA[".SiLocal::number_trim($row['quantity'])."]]></cell>";
     }
 
 	if ($row['enabled']==$LANG['enabled']) {

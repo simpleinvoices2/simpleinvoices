@@ -1,4 +1,6 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
+
 class invoice {
 	
     public $id;
@@ -182,7 +184,7 @@ class invoice {
         $invoice = $sth->fetch();
         
         $invoice['calc_date'] = date('Y-m-d', strtotime( $invoice['date'] ) );
-        $invoice['date'] = siLocal::date( $invoice['date'] );
+        $invoice['date'] = SiLocal::date( $invoice['date'] );
         $invoice['total'] = getInvoiceTotal($invoice['id'], $domain_id);
         $invoice['gross'] = $this->getInvoiceGross($invoice['id'], $this->domain_id);
         $invoice['paid'] = calc_invoice_paid($invoice['id'], $domain_id);

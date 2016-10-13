@@ -1,4 +1,6 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
+
 class inventory {
 	
  	public $start_date;
@@ -182,7 +184,7 @@ class inventory {
              if($row['quantity'] <= $row['reorder_level'])
              {
 
-                $message = "The quantity of Product: ".$row['description']." is ".siLocal::number($row['quantity']).", which is equal to or below its reorder level of ".$row['reorder_level'];
+                $message = "The quantity of Product: ".$row['description']." is ".SiLocal::number($row['quantity']).", which is equal to or below its reorder level of ".$row['reorder_level'];
                 $return['row_'.$row['id']]['message'] = $message;
                 $email_message .= $message . "<br />\n";
              }

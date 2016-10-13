@@ -4,6 +4,7 @@ namespace SimpleInvoices\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use SimpleInvoices\I18n\SiLocal;
 
 class SmartyFactory implements FactoryInterface
 {
@@ -40,11 +41,11 @@ class SmartyFactory implements FactoryInterface
         //add stripslash smarty function
         $smarty->register_modifier("unescape", "stripslashes");
         
-        $smarty->register_modifier("siLocal_number", array("siLocal", "number"));
-        $smarty->register_modifier("siLocal_number_clean", array("siLocal", "number_clean"));
-        $smarty->register_modifier("siLocal_number_trim", array("siLocal", "number_trim"));
-        $smarty->register_modifier("siLocal_number_formatted", array("siLocal", "number_formatted"));
-        $smarty->register_modifier("siLocal_date", array("siLocal", "date"));
+        $smarty->register_modifier("siLocal_number", [SiLocal::class, "number"]);
+        $smarty->register_modifier("siLocal_number_clean", [SiLocal::class, "number_clean"]);
+        $smarty->register_modifier("siLocal_number_trim", [SiLocal::class, "number_trim"]);
+        $smarty->register_modifier("siLocal_number_formatted", [SiLocal::class, "number_formatted"]);
+        $smarty->register_modifier("siLocal_date", [SiLocal::class, "date"]);
         $smarty->register_modifier('htmlsafe', 'htmlsafe');
         $smarty->register_modifier('urlsafe', 'urlsafe');
         $smarty->register_modifier('urlencode', 'urlencode');

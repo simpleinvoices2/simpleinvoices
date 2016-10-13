@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
 
@@ -157,10 +158,10 @@ $count = $resultCount[0];
 		$xml .= "<cell><![CDATA[".$row['index_name']."]]></cell>";		
 		$xml .= "<cell><![CDATA[".$row['cname']."]]></cell>";
 		$xml .= "<cell><![CDATA[".$row['bname']."]]></cell>";
-		$xml .= "<cell><![CDATA[".siLocal::number($row['ac_amount'])."]]></cell>";
+		$xml .= "<cell><![CDATA[".SiLocal::number($row['ac_amount'])."]]></cell>";
 		$xml .= "<cell><![CDATA[".$notes."]]></cell>";
 		$xml .= "<cell><![CDATA[".$row['description']."]]></cell>";
-		$xml .= "<cell><![CDATA[".siLocal::date($row['date'])."]]></cell>";
+		$xml .= "<cell><![CDATA[".SiLocal::date($row['date'])."]]></cell>";
 	
 		$xml .= "</row>";		
 	}

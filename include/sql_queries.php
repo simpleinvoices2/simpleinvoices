@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\I18n\SiLocal;
 
 if(LOGGING) {
 	//Logging connection to prevent mysql_insert_id problems. Need to be called before the second connect...
@@ -510,7 +511,7 @@ function getPayment($id, $domain_id='') {
 
 	$sth = dbQuery($sql, ':id', $id, ':domain_id', $domain_id);
 	$payment = $sth->fetch();
-	$payment['date'] = siLocal::date($payment['ac_date']);
+	$payment['date'] = SiLocal::date($payment['ac_date']);
 	return $payment;
 }
 
@@ -1134,7 +1135,7 @@ function getInvoice($id, $domain_id='')
 	$invoice = $sth->fetch();
 
 	$invoice['calc_date'] = date('Y-m-d', strtotime( $invoice['date'] ) );
-	$invoice['date'] = siLocal::date( $invoice['date'] );
+	$invoice['date'] = SiLocal::date( $invoice['date'] );
 	$invoice['total'] = getInvoiceTotal($invoice['id']);
 
 	$invoiceobj = new invoice();
@@ -1780,7 +1781,7 @@ function getInvoices(&$sth) {
 	if($invoice = $sth->fetch()) {
 
 		$invoice['calc_date'] = date( 'Y-m-d', strtotime( $invoice['date'] ) );
-		$invoice['date'] = siLocal::date($invoice['date']);
+		$invoice['date'] = SiLocal::date($invoice['date']);
 
 		#invoice total total - start
 		$invoice['total'] = getInvoiceTotal($invoice['id']);
@@ -1833,7 +1834,7 @@ function getCustomerInvoices($id, $domain_id='')
 	$invoices = null;
 	while ($invoice = $sth->fetch()) {
 		$invoice['calc_date'] = date( 'Y-m-d', strtotime( $invoice['date'] ) );
-		$invoice['date'] = siLocal::date( $invoice['date'] );
+		$invoice['date'] = SiLocal::date( $invoice['date'] );
 		$invoices[] = $invoice;
 	}
 	return $invoices;
