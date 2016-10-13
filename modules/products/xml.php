@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\I18n\SiLocal;
+use SimpleInvoices\Deprecate\Product;
 
 header("Content-type: text/xml");
 
@@ -12,7 +13,7 @@ $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 $defaults = getSystemDefaults();
 $smarty -> assign("defaults",$defaults);
 
-$products = new product();
+$products = new Product();
 $sth = $products->select_all('', $dir, $sort, $rp, $page);
 $sth_count_rows = $products->select_all('count',$dir, $sort, $rp, $page);
 

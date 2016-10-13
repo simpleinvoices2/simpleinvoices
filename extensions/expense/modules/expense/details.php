@@ -1,6 +1,7 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Biller;
+use SimpleInvoices\Deprecate\Product;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -12,7 +13,7 @@ $expenseobj = new expense();
 $customerobj = new customer();
 $billerobj = new Biller();
 $invoiceobj = new Invoice();
-$productobj = new product();
+$productobj = new Product();
 $expenseaccountobj = new expenseaccount();
 $expensetaxobj = new expensetax();
 

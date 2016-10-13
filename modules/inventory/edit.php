@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\Deprecate\Product;
 
 if ($_POST['op'] =='edit' AND !empty($_POST['product_id']))
 {
@@ -26,7 +27,7 @@ $get_inventory = new inventory();
 $get_inventory->id = $_GET['id'];
 $inventory = $get_inventory->select();
 
-$productobj  = new product();
+$productobj  = new Product();
 $product_all = $productobj->get_all();
 
 $smarty->assign('product_all',$product_all);

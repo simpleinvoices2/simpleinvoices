@@ -1,5 +1,6 @@
 <?php
 use SimpleInvoices\I18n\SiLocal;
+use SimpleInvoices\Deprecate\Product;
 
 class inventory {
 	
@@ -8,7 +9,7 @@ class inventory {
 
 	public function __construct()
 	{
-	    $auth_session    = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session    = new \Zend_Session_Namespace('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 
@@ -173,7 +174,7 @@ class inventory {
 	{
         //select qty and reorder level
 
-        $inventory = new product();
+        $inventory = new Product();
         $sth = $inventory->select_all('count');
 
         $inventory_all = $sth->fetchAll(PDO::FETCH_ASSOC);
