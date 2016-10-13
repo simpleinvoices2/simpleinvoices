@@ -12,7 +12,7 @@ class User
     /**
      * @deprecated
      */
-    function getUserRoles()
+    public static function getUserRoles()
     {
         //$sql = "select id, name from ".TB_PREFIX."user_role where name != 'biller' AND name != 'customer' order by id";
         $sql = "SELECT id, name FROM ".TB_PREFIX."user_role ORDER BY id";
@@ -26,7 +26,7 @@ class User
      * @param int $id
      * @return mixed
      */
-    function getUser($id)
+    public static function getUser($id)
     {
         global $LANG;
         
