@@ -35,20 +35,32 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'Smarty' => \SimpleInvoices\Service\SmartyFactory::class,
         'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class,
         'Request' => \SimpleInvoices\Service\RequestFactory::class,
-        \Zend\EventManager\EventManager::class => \SimpleInvoices\Service\EventManagerFactory::class
+        'Response' => \SimpleInvoices\Service\ResponseFactory::class,
+        'SimpleInvoices\EventManager' => \SimpleInvoices\Service\EventManagerFactory::class
     ],
 ]);
 
 // ... add the configuration to the service manager
-$serviceManager->setService('Config', $serviceManager);
+$serviceManager->setService('SimpleInvoices\Config', $serviceManager);
+
+/**
+ * Initialize the application and store it in the service manager.
+ */
+$application = new \SimpleInvoices\Mvc\Application($serviceManager, $serviceManager->get('SimpleInvoices\EventManager'));
+$serviceManager->setService('SimpleInvoices', $application);
 
 /**
  * Listeners for events
  */
-$eventManager = $serviceManager->get(\Zend\EventManager\EventManager::class);
+$eventManager = $serviceManager->get('SimpleInvoices\EventManager');
 $listeners = [];
 $listeners['dispatch_listener'] = new \SimpleInvoices\Mvc\DispatchListener();
 $listeners['dispatch_listener']->attach($eventManager);
+
+/**
+ * Bootstrap the application
+ */
+$application->bootstrap();
 
 /* 
  * Zend framework init - start

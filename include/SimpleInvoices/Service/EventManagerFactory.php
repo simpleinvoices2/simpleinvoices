@@ -42,7 +42,7 @@ class EventManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator, EventManager::class);
+        return $this($serviceLocator, 'SimpleInvoices\EventManager');
     }
     
     /**

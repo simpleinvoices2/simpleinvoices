@@ -29,7 +29,7 @@ class Renderer
         
         $this->serviceManager = $serviceManager;
         $this->smarty = $serviceManager->get('Smarty');
-        $this->config = $serviceManager->get('Config');
+        $this->config = $serviceManager->get('SimpleInvoices\Config');
         
         $this->setMenu($menu);
         
