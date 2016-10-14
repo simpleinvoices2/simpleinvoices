@@ -84,6 +84,14 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             $serviceManager->get($listener)->attach($events);
         }
         
+        // Bootstrap session
+        \Zend_Session::start();
+        $sessionContainer = new \Zend_Session_Namespace('Zend_Auth');
+        if (empty($sessionContainer->domain_id)) {
+            // set the default domain
+            $sessionContainer->domain_id = 1;
+        }
+        
         // Setup MVC Event
         $this->event = $event  = new MvcEvent();
         $event->setName(MvcEvent::EVENT_BOOTSTRAP);

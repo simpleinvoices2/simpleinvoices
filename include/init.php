@@ -67,14 +67,18 @@ $autoloader->setFallbackAutoloader(true);
  */
 $application->bootstrap();
 
-//session_start();
-Zend_Session::start();
+/**
+ * Backward compatibility
+ * 
+ * These are things that have changed but still not fully 
+ * refactored.
+ */
 $auth_session = new Zend_Session_Namespace('Zend_Auth');
-if (empty($auth_session->domain_id)) {
-    // set the default domain
-    $auth_session->domain_id = 1;
-}
+$smarty       = $serviceManager->get('Smarty');
 
+/**
+ * Old stuff follows...
+ */
 
 //start use of zend_cache   
 $frontendOptions = array(
@@ -95,7 +99,6 @@ $frontendOptions = array(
 
 #ini_set('display_errors',true);
 
-require_once("smarty/Smarty.class.php");
 require_once("library/paypal/paypal.class.php");
 
 require_once('./library/HTMLPurifier/HTMLPurifier.standalone.php');
@@ -153,10 +156,6 @@ Zend_Date::setOptions(array('cache' => $cache)); // Active aussi pour Zend_Local
 /*
  * Zend Framework cache section - end
  */
-
-//$smarty = new Smarty();
-$smarty = $serviceManager->get('Smarty');
-
 
 //cache directory. Have to be writeable (chmod 777)
 //$smarty->compile_dir = "tmp/cache";
