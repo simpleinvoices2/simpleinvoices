@@ -216,7 +216,7 @@ class DispatchListener extends AbstractListenerAggregate
         /*
          * If no extension php file for requested file load the normal php file if it exists
          */
-        if ( ($extensionPHPFile == 0) &&  $my_path = GetCustomPath($module . '/' . $view, 'module') ) {
+        if ( ($extensionPHPFile == 0) &&  ($my_path = $this->getCustomPath($module . '/' . $view, 'module')) ) {
             include($my_path);
         }
         

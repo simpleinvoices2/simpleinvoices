@@ -30,36 +30,6 @@ require_once './vendor/autoload.php';
 
 
 require_once("./include/init.php");
-
-
-/*
-	GetCustomPath: override template or module with custom one if it exists, else return default path if it exists
-	---------------------------------------------
-	@name: name or dir/name of the module or template (without extension)
-	@mode: template or module
-*/
-
-function GetCustomPath($name,$mode='template'){
-	$my_custom_path="./custom/";
-	$use_custom=1;
-	if($mode=='template'){
-		if($use_custom and file_exists("{$my_custom_path}default_template/{$name}.tpl")){
-			$out=".{$my_custom_path}default_template/{$name}.tpl";
-		}
-		elseif(file_exists("./templates/default/{$name}.tpl")){
-			$out="../templates/default/{$name}.tpl";
-		}
-	}
-	if($mode=='module'){
-		if($use_custom and file_exists("{$my_custom_path}modules/{$name}.php")){
-			$out="{$my_custom_path}modules/{$name}.php";
-		}
-		elseif(file_exists("./modules/{$name}.php")){
-			$out="./modules/{$name}.php";
-		}
-	}
-	return $out;
-}
 	
 
 foreach($config->extension as $extension)
