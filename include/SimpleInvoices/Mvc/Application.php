@@ -14,6 +14,13 @@ use Zend\Stdlib\ResponseInterface;
 class Application implements ApplicationInterface, EventManagerAwareInterface
 {
     /**
+     * Default application event listeners
+     *
+     * @var array
+     */
+    protected $defaultListeners = [];
+    
+    /**
      * MVC event token
      * @var MvcEvent
      */
@@ -45,6 +52,14 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $this->setEventManager($events ?: $serviceManager->get('EventManager'));
         $this->request        = $request ?: $serviceManager->get('Request');
         $this->response       = $response ?: $serviceManager->get('Response');
+        
+        /**
+         * Default listeners
+         */
+        if (!$serviceManager->has('DispatchListener')) {
+            $this->serviceManager->setService('DispatchListener', new DispatchListener());
+        }
+        $this->defaultListeners[] = 'DispatchListener';
     }
     
     /**
@@ -59,7 +74,15 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
      */
     public function bootstrap(array $listeners = [])
     {
-        $events = $this->events;
+        $events         = $this->events;
+        $serviceManager = $this->serviceManager;
+        
+        // Setup default listeners
+        $listeners = array_unique(array_merge($this->defaultListeners, $listeners));
+        
+        foreach ($listeners as $listener) {
+            $serviceManager->get($listener)->attach($events);
+        }
         
         // Setup MVC Event
         $this->event = $event  = new MvcEvent();

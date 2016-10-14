@@ -336,7 +336,7 @@ if ( ($extensionPHPFile == 0) &&  $my_path = GetCustomPath($module . '/' . $view
  * trigger the 'dispatch' event.
  */
 if (!$eventManager instanceof EventManagerInterface) {
-    $eventManager = $serviceManager->get(EventManager::class);
+    $eventManager = $serviceManager->get('SimpleInvoices\EventManager');
 }
     
 $event = new MvcEvent();

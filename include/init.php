@@ -50,20 +50,8 @@ $application = new \SimpleInvoices\Mvc\Application($serviceManager, $serviceMana
 $serviceManager->setService('SimpleInvoices', $application);
 
 /**
- * Listeners for events
- */
-$eventManager = $serviceManager->get('SimpleInvoices\EventManager');
-$listeners = [];
-$listeners['dispatch_listener'] = new \SimpleInvoices\Mvc\DispatchListener();
-$listeners['dispatch_listener']->attach($eventManager);
-
-/**
- * Bootstrap the application
- */
-$application->bootstrap();
-
-/* 
- * Zend framework init - start
+ * Before bootstrapping the application we need ZF1 autoloader
+ * in order for non-ported code to work.
  */
 set_include_path(get_include_path() . PATH_SEPARATOR . "./library/");
 set_include_path(get_include_path() . PATH_SEPARATOR . "./library/pdf");
@@ -73,6 +61,11 @@ require_once 'Zend/Loader/Autoloader.php';
 
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
+
+/**
+ * Bootstrap the application
+ */
+$application->bootstrap();
 
 //session_start();
 Zend_Session::start();
