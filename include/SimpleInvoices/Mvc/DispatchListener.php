@@ -68,6 +68,7 @@ class DispatchListener extends AbstractListenerAggregate
         /**
          * Backward compatibility
          */
+        global $LANG;
         $services     = $e->getApplication()->getServiceManager();
         $smarty       = $services->get('Smarty');
         $auth_session = new \Zend_Session_Namespace('Zend_Auth');

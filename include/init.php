@@ -39,11 +39,12 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'SimpleInvoices\EventManager' => \SimpleInvoices\Service\EventManagerFactory::class,
         'SimpleInvoices\Router' => \SimpleInvoices\Service\RouterFactory::class,
         'SimpleInvoices\Logger' => \SimpleInvoices\Service\LoggerFactory::class,
+        'SimpleInvoices\SqlQueries' => \SimpleInvoices\Service\SqlQueriesFactory::class,
     ],
 ]);
 
 // ... add the configuration to the service manager
-$serviceManager->setService('SimpleInvoices\Config', $serviceManager);
+$serviceManager->setService('SimpleInvoices\Config', $config);
 
 /**
  * Initialize the application and store it in the service manager.

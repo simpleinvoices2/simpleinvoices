@@ -3,92 +3,16 @@ use SimpleInvoices\I18n\SiLocal;
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Index;
 use SimpleInvoices\Deprecate\Db;
+use SimpleInvoices\Deprecate\SqlQueries;
 
-if(LOGGING) {
-	//Logging connection to prevent mysql_insert_id problems. Need to be called before the second connect...
-	$log_dbh = db_connector();
-}
+/**
+ * @var SqlQueries
+ */
+$sqlQueries = $serviceManager->get('SimpleInvoices\SqlQueries');
 
-$dbh = db_connector();
-
-/*
- * TODO - remove this code - mysql 5 only
-if ($db_server == 'mysql') {
-	//SC: May not really be 5...
-	$mysql = 5;
-}
-*/
-
-// Cannot redfine LOGGING (withour PHP PECL runkit extension) since already true in define.php
-// Ref: http://php.net/manual/en/function.runkit-method-redefine.php
-// Hence take from system_defaults into new variable
-// Initialise so that while it is being evaluated, it prevents logging
-$can_log = false;
-$can_chk_log = (LOGGING && (isset($auth_session->id) && $auth_session->id > 0) && getDefaultLoggingStatus());
-$can_log = $can_chk_log;
-unset($can_chk_log);
-
-function db_connector() {
-
-	global $config;
-	/*
-	* strip the pdo_ section from the adapter
-	*/
-	$pdoAdapter = substr($config->database->adapter, 4);
-
-	if(!defined('PDO::MYSQL_ATTR_INIT_COMMAND') AND $pdoAdapter == "mysql" AND $config->database->adapter->utf8 == true)
-	{
-        simpleInvoicesError("PDO::mysql_attr");
-	}
-
-	try
-	{
-
-		switch ($pdoAdapter)
-		{
-
-		    case "pgsql":
-		    	$connlink = new PDO(
-					$pdoAdapter.':host='.$config->database->params->host.';	dbname='.$config->database->params->dbname,	$config->database->params->username, $config->database->params->password
-				);
-		    	break;
-
-		    case "sqlite":
-		    	$connlink = new PDO(
-					$pdoAdapter.':host='.$config->database->params->host.';	dbname='.$config->database->params->dbname,	$config->database->params->username, $config->database->params->password
-				);
-				break;
-
-		    case "mysql":
-                switch ($config->database->utf8)
-                {
-                    case true:
-
-        			   	$connlink = new PDO(
-        					'mysql:host='.$config->database->params->host.'; port='.$config->database->params->port.'; dbname='.$config->database->params->dbname, $config->database->params->username, $config->database->params->password,  array( PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8;")
-        				);
-		        		break;
-
-        		    case false:
-		            default:
-        		    	$connlink = new PDO(
-        					$pdoAdapter.':host='.$config->database->params->host.'; port='.$config->database->params->port.'; dbname='.$config->database->params->dbname,	$config->database->params->username, $config->database->params->password
-		        		);
-    				break;
-                }
-    	    	break;
-
-		}
-
-	}
-	catch( PDOException $exception )
-	{
-		simpleInvoicesError("dbConnection",$exception->getMessage());
-		die($exception->getMessage());
-	}
-
-	return $connlink;
-}
+$log_dbh = $sqlQueries->getLogDbHandle();
+$dbh     = $sqlQueries->getDbHandle();
+$can_log = $sqlQueries->canLog();
 
 function mysqlQuery($sqlQuery) {
 	dbQuery($sqlQuery);
