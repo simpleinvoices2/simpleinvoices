@@ -333,20 +333,7 @@ if ( ($extensionPHPFile == 0) &&  $my_path = GetCustomPath($module . '/' . $view
  */
 
 /**
- * trigger the 'dispatch' event.
+ * Run the application
  */
-if (!$eventManager instanceof EventManagerInterface) {
-    $eventManager = $serviceManager->get('SimpleInvoices\EventManager');
-}
-    
-$event = new MvcEvent();
-$event->setName(MvcEvent::EVENT_DISPATCH);
-$event->setRequest( $serviceManager->get('Request') );
-$eventManager->triggerEvent($event);
-
-/**
- * Render the output
- */
-$renderer = new \SimpleInvoices\Smarty\Renderer($serviceManager);
-$renderer->render();
+$application->run();
 

@@ -179,6 +179,29 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
     }
     
     /**
+     * Run the application
+     *
+     * @return self
+     */
+    public function run()
+    {
+        $events = $this->events;
+        $event  = $this->getMvcEvent();
+        
+        /**
+         * trigger the 'dispatch' event.
+         */
+        $event->setName(MvcEvent::EVENT_DISPATCH);
+        $events->triggerEvent($event);
+     
+        /**
+         * Render the output
+         */
+        $renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
+        $renderer->render();
+    }
+    
+    /**
      * Inject an EventManager instance
      *
      * @param  EventManagerInterface $eventManager
