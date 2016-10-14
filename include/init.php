@@ -40,6 +40,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'SimpleInvoices\Router' => \SimpleInvoices\Service\RouterFactory::class,
         'SimpleInvoices\Logger' => \SimpleInvoices\Service\LoggerFactory::class,
         'SimpleInvoices\SqlQueries' => \SimpleInvoices\Service\SqlQueriesFactory::class,
+        'SimpleInvoices\Database\Adapter' => \SimpleInvoices\Service\DatabaseFactory::class,
     ],
 ]);
 
