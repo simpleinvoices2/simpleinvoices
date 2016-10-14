@@ -74,6 +74,12 @@ class DispatchListener extends AbstractListenerAggregate
         $auth_session = new \Zend_Session_Namespace('Zend_Auth');
         $logger       = $services->get('SimpleInvoices\Logger');
         
+        /**
+         * Not really backward compatibility but new functionality
+         * until it is fully refactored
+         */
+        $sqlQueries = $services->get('SimpleInvoices\SqlQueries');
+        
         // =============================================================================================
         //                               S T A R T   D I S P A T C H I N G
         // =============================================================================================

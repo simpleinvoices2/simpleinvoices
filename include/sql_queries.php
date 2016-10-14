@@ -30,38 +30,20 @@ function mysqlQuery($sqlQuery) {
  */
 
 function dbQuery($sqlQuery) {
-	global $dbh;
-	$argc = func_num_args();
-	$binds = func_get_args();
-	$sth = false;
-	// PDO SQL Preparation
-	$sth = $dbh->prepare($sqlQuery);
-	if ($argc > 1) {
-		array_shift($binds);
-		for ($i = 0; $i < count($binds); $i++) {
-			$sth->bindValue($binds[$i], $binds[++$i]);
-		}
-	}
-	/*
-	// PDO Execution
-	if($sth && $sth->execute()) {
-		//dbLogger($sqlQuery);
-	} else {
-		echo "Dude, what happened to your query?:<br /><br /> ".htmlsafe($sqlQuery)."<br />".htmlsafe(end($sth->errorInfo()));
-	// Earlier implementation did not return the $sth on error
-	}
-// $sth now has the PDO object or false on error.
-	*/
-	try {
-		$sth->execute();
-		dbLogger($sqlQuery);
-	} catch(Exception $e){
-		echo $e->getMessage();
-		echo "dbQuery: Dude, what happened to your query?:<br /><br /> ".htmlsafe($sqlQuery)."<br />".htmlsafe(end($sth->errorInfo()));
-	}
-
-	return $sth;
-	//$sth = null;
+    global $sqlQueries;
+    
+    $argc = func_num_args();
+    $binds = func_get_args();
+    $params = [];
+    
+    if ($argc > 1) {
+        array_shift($binds);
+        for ($i = 0; $i < count($binds); $i++) {
+            $params[$binds[$i]] = $binds[++$i];
+        }
+    }
+    
+    return $sqlQueries->dbQuery($sqlQuery, $params);
 }
 
 // Used for logging all queries
@@ -2737,43 +2719,11 @@ function maxInvoice($domain_id='')
 };
 
 //in this file are functions for all sql queries
-function checkTableExists($table = "" ) {
-
-	//$db = \SimpleInvoices\Deprecate\Db::getInstance()();
-	//var_dump($db);
-	$table == "" ? TB_PREFIX."biller" : $table;
-
-  //  echo $table;
-	global $LANG;
-	global $dbh;
-	global $config;
-	switch ($config->database->adapter) 
-	{
-
-		case "pdo_pgsql":
-			$sql = 'SELECT 1 FROM pg_tables WHERE tablename = '.$table.' LIMIT 1';
-			break;
-
-		case "pdo_sqlite":
-			$sql = 'SELECT * FROM '.$table.'LIMIT 1';
-			break;
-		case "pdo_mysql":
-		default:
-		//mysql
-			//$sql = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES where table_name = :table LIMIT 1";
-			$sql = "SHOW TABLES LIKE '".$table."'";
-			break;
-	}
-
-	//$sth = $dbh->prepare($sql);
-	$sth = dbQuery($sql);
-	if ($sth->fetchAll())
-	{
-		return true;
-	} else {
-		return false;
-	}
-
+function checkTableExists($table = null) 
+{
+    global $sqlQueries;
+    
+    return $sqlQueries->checkTableExists($table);
 }
 
 function checkFieldExists($table,$field) {

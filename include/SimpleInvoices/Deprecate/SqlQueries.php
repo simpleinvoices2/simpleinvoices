@@ -19,9 +19,12 @@ class SqlQueries
     
     protected $canLog = false;
     
+    protected $config;
     
     public function __construct($config)
     {
+        $this->config = $config;
+        
         $auth_session = new \Zend_Session_Namespace('Zend_Auth');
         
         if(LOGGING) {
@@ -41,6 +44,42 @@ class SqlQueries
     public function canLog()
     {
         return $this->canLog;
+    }
+    
+    /**
+     * Chack a table exists.
+     * 
+     * @param string $table
+     * @return boolean
+     */
+    function checkTableExists($table = null) 
+    {
+        $table == empty($table) ? TB_PREFIX."biller" : $table;
+    
+        //  echo $table;
+        switch ($this->config->database->adapter)
+        {
+            case "pdo_pgsql":
+                $sql = 'SELECT 1 FROM pg_tables WHERE tablename = ' . $table . ' LIMIT 1';
+                break;
+            case "pdo_sqlite":
+                $sql = 'SELECT * FROM ' . $table . ' LIMIT 1';
+                break;
+            case "pdo_mysql":
+            default:
+                //mysql
+                //$sql = "SELECT 1 FROM INFORMATION_SCHEMA.TABLES where table_name = :table LIMIT 1";
+                $sql = "SHOW TABLES LIKE '".$table."'";
+                break;
+        }
+    
+        //$sth = $dbh->prepare($sql);
+        $sth = $this->dbQuery($sql);
+        if ($sth->fetchAll()) {
+            return true;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -83,24 +122,11 @@ class SqlQueries
         }
     }
     
-    public function dbQuery($sqlQuery) 
+    public function dbQuery($sqlQuery, array $params = []) 
     {    
-        $argc  = func_num_args();
-        $binds = func_get_args();
-        $sth   = false;
-        
-        // PDO SQL Preparation
-        $sth   = $this->dbh->prepare($sqlQuery);
-        
-        if ($argc > 1) {
-            array_shift($binds);
-            for ($i = 0; $i < count($binds); $i++) {
-                $sth->bindValue($binds[$i], $binds[++$i]);
-            }
-        }
-     
+        $sth = $this->dbh->prepare($sqlQuery);
         try {
-            $sth->execute();
+            $sth->execute($params);
             $this->dbLogger($sqlQuery);
         } catch(Exception $e){
             echo $e->getMessage();
@@ -136,7 +162,7 @@ class SqlQueries
         }
         
         $sql = "SELECT value FROM ".TB_PREFIX."system_defaults s WHERE ( s.name = :param AND s.domain_id = :domain_id)";
-        $sth = $this->dbQuery($sql, ':param', $param, ':domain_id', $domain_id);
+        $sth = $this->dbQuery($sql, [':param' => $param, ':domain_id' => $domain_id]);
         $array = $sth->fetch();
         $paramval = (($bool) ? ($array['value'] == 1 ? $LANG['enabled'] : $LANG['disabled']) : $array['value']);
         return $paramval;
