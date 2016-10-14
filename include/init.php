@@ -36,7 +36,8 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class,
         'Request' => \SimpleInvoices\Service\RequestFactory::class,
         'Response' => \SimpleInvoices\Service\ResponseFactory::class,
-        'SimpleInvoices\EventManager' => \SimpleInvoices\Service\EventManagerFactory::class
+        'SimpleInvoices\EventManager' => \SimpleInvoices\Service\EventManagerFactory::class,
+        'SimpleInvoices\Router' => \SimpleInvoices\Service\RouterFactory::class,
     ],
 ]);
 
@@ -68,11 +69,22 @@ $autoloader->setFallbackAutoloader(true);
 $application->bootstrap();
 
 /**
+ * TODO: Really it should be $application->run() but since code has not been
+ *       completelly refactored we need to split the run method in half :( 
+ */
+$application->runFirst();
+
+/**
  * Backward compatibility
  * 
  * These are things that have changed but still not fully 
  * refactored.
  */
+$routeMatch = $application->getMvcEvent()->getRouteMatch();
+$module = $routeMatch->getParam('module', null);
+$view   = $routeMatch->getParam('view', null);
+$action = $routeMatch->getParam('action', null);
+
 $auth_session = new Zend_Session_Namespace('Zend_Auth');
 $smarty       = $serviceManager->get('Smarty');
 

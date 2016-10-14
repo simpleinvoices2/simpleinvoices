@@ -13,6 +13,8 @@ use Zend\Stdlib\ResponseInterface;
  */
 class Application implements ApplicationInterface, EventManagerAwareInterface
 {
+    const ERROR_ROUTER_NO_MATCH            = 'error-router-no-match';
+    
     /**
      * Default application event listeners
      *
@@ -56,6 +58,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         /**
          * Default listeners
          */
+        if (!$serviceManager->has('RouteListener')) {
+            $this->serviceManager->setService('RouteListener', new RouteListener());
+        }
+        $this->defaultListeners[] = 'RouteListener';
+        
         if (!$serviceManager->has('DispatchListener')) {
             $this->serviceManager->setService('DispatchListener', new DispatchListener());
         }
@@ -99,12 +106,39 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $event->setApplication($this);
         $event->setRequest($this->request);
         $event->setResponse($this->response);
-        //$event->setRouter($serviceManager->get('Router'));
+        $event->setRouter($serviceManager->get('SimpleInvoices\Router'));
         
         // Trigger bootstrap events
         $events->triggerEvent($event);
         
         return $this;
+    }
+    
+    /**
+     * Complete the request
+     *
+     * Triggers "render" and "finish" events, and returns response from
+     * event object.
+     *
+     * @param  MvcEvent $event
+     * @return Application
+     */
+    protected function completeRequest(MvcEvent $event)
+    {
+        echo "You should not be here!<br />";
+        echo "Something must of gone really bad if you arrived to this page.";
+        die();
+        // TODO: This is what it should do!
+        // ================================
+        //$events = $this->events;
+        //$event->setTarget($this);
+        //$event->setName(MvcEvent::EVENT_RENDER);
+        //$event->stopPropagation(false); // Clear before triggering
+        //$events->triggerEvent($event);
+        //$event->setName(MvcEvent::EVENT_FINISH);
+        //$event->stopPropagation(false); // Clear before triggering
+        //$events->triggerEvent($event);
+        //return $this;
     }
     
     /**
@@ -142,7 +176,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             $event->setApplication( $this );
             $event->setRequest($this->request);
             $event->setResponse($this->response);
-            
+            $event->setRouter( $this->serviceManager->get('SimpleInvoices\Router') );
             $this->event = $event;
         }
         return $this->event;
@@ -199,6 +233,51 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
          */
         $renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
         $renderer->render();
+    }
+    
+    /**
+     * While refactoring code we need another method but all this
+     * code should be inside the Application::run() method.
+     * 
+     * TODO: Move this code to the start or Application::run() when possible.
+     */
+    public function runFirst()
+    {
+        $events = $this->events;
+        $event  = $this->event;
+        
+        // Define callback used to determine whether or not to short-circuit
+        $shortCircuit = function ($r) use ($event) {
+            if ($r instanceof ResponseInterface) {
+                return true;
+            }
+            if ($event->getError()) {
+                return true;
+            }
+            return false;
+        };
+        
+        // Trigger route event
+        $event->setName(MvcEvent::EVENT_ROUTE);
+        $event->stopPropagation(false); // Clear before triggering
+        $result = $events->triggerEventUntil($shortCircuit, $event);
+        if ($result->stopped()) {
+            $response = $result->last();
+            if ($response instanceof ResponseInterface) {
+                $event->setName(MvcEvent::EVENT_FINISH);
+                $event->setTarget($this);
+                $event->setResponse($response);
+                $event->stopPropagation(false); // Clear before triggering
+                $events->triggerEvent($event);
+                $this->response = $response;
+                return $this;
+            }
+        }
+        
+        if ($event->getError()) {
+            return $this->completeRequest($event);
+        }
+        
     }
     
     /**

@@ -28,22 +28,6 @@ require_once './vendor/autoload.php';
  * The include configs and requirements stuff section - start
  */
 
-/**
- * Escapes a filename
- *
- * @param string $str The string to escape
- * @return string The escaped string
- */
-function filenameEscape($str)
-{
-    // Returns an escaped value.
-    $safe_str = preg_replace('/[^a-z0-9\-_\.]/i','_',$str);
-    return $safe_str;
-}
-
-$module = isset($_GET['module']) ? filenameEscape($_GET['module'])  : null;
-$view   = isset($_GET['view'])   ? filenameEscape($_GET['view'])    : null;
-$action = isset($_GET['case'])   ? filenameEscape($_GET['case'])    : null;
 
 require_once("./include/init.php");
 

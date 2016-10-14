@@ -9,6 +9,8 @@ class MvcEvent extends Event
 {
     const EVENT_BOOTSTRAP      = 'bootstrap';
     const EVENT_DISPATCH       = 'dispatch';
+    const EVENT_DISPATCH_ERROR = 'dispatch.error';
+    const EVENT_ROUTE          = 'route';
     
     /**
      * @var Application
@@ -26,6 +28,16 @@ class MvcEvent extends Event
     protected $response;
     
     /**
+     * @var null|Router\RouteMatch
+     */
+    protected $routeMatch;
+    
+    /**
+     * @var Router\Router
+     */
+    protected $router;
+    
+    /**
      * Get application instance
      *
      * @return ApplicationInterface
@@ -33,6 +45,16 @@ class MvcEvent extends Event
     public function getApplication()
     {
         return $this->application;
+    }
+    
+    /**
+     * Retrieve the error message, if any
+     *
+     * @return string
+     */
+    public function getError()
+    {
+        return $this->getParam('error', '');
     }
     
     /**
@@ -56,6 +78,36 @@ class MvcEvent extends Event
     }
     
     /**
+     * Get route match
+     *
+     * @return null|Router\RouteMatch
+     */
+    public function getRouteMatch()
+    {
+        return $this->routeMatch;
+    }
+    
+    /**
+     * Get router
+     *
+     * @return Router\Router
+     */
+    public function getRouter()
+    {
+        return $this->router;
+    }
+    
+    /**
+     * Does the event represent an error response?
+     *
+     * @return bool
+     */
+    public function isError()
+    {
+        return (bool) $this->getParam('error', false);
+    }
+    
+    /**
      * Set application instance
      *
      * @param  ApplicationInterface $application
@@ -65,6 +117,18 @@ class MvcEvent extends Event
     {
         $this->setParam('application', $application);
         $this->application = $application;
+        return $this;
+    }
+    
+    /**
+     * Set the error message (indicating error in handling request)
+     *
+     * @param  string $message
+     * @return MvcEvent
+     */
+    public function setError($message)
+    {
+        $this->setParam('error', $message);
         return $this;
     }
     
@@ -91,6 +155,32 @@ class MvcEvent extends Event
     {
         $this->setParam('response', $response);
         $this->response = $response;
+        return $this;
+    }
+    
+    /**
+     * Set route match
+     *
+     * @param Router\RouteMatch $matches
+     * @return MvcEvent
+     */
+    public function setRouteMatch(Router\RouteMatch $matches)
+    {
+        $this->setParam('route-match', $matches);
+        $this->routeMatch = $matches;
+        return $this;
+    }
+    
+    /**
+     * Set router
+     *
+     * @param Router\Router $router
+     * @return MvcEvent
+     */
+    public function setRouter(Router\Router $router)
+    {
+        $this->setParam('router', $router);
+        $this->router = $router;
         return $this;
     }
 }
