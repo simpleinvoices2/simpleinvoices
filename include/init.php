@@ -38,6 +38,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'Response' => \SimpleInvoices\Service\ResponseFactory::class,
         'SimpleInvoices\EventManager' => \SimpleInvoices\Service\EventManagerFactory::class,
         'SimpleInvoices\Router' => \SimpleInvoices\Service\RouterFactory::class,
+        'SimpleInvoices\Logger' => \SimpleInvoices\Service\LoggerFactory::class,
     ],
 ]);
 
@@ -123,23 +124,10 @@ if (!is_writable('./tmp')) {
    simpleInvoicesError('notWriteable','directory','./tmp');
 }
 
-/*
- * log file - start
+/**
+ * Logger
  */
-$logFile = "./tmp/log/si.log";
-if (!is_file($logFile))
-{
-	$createLogFile = fopen($logFile, 'w') or die(simpleInvoicesError('notWriteable','folder','tmp/log'));
-	fclose($createLogFile);
-}
-if (!is_writable($logFile)) {
-	
-   simpleInvoicesError('notWriteable','file',$logFile);
-}
-
-$writer = new Zend\Log\Writer\Stream($logFile);
-$logger = new Zend\Log\Logger;
-$logger->addWriter($writer);
+$logger = $serviceManager->get('SimpleInvoices\Logger');
 
 /*
  * log file - end
