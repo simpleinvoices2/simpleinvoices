@@ -4,7 +4,6 @@ namespace SimpleInvoices\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Http\Response as HttpResponse;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 
