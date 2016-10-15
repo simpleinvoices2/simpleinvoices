@@ -64,9 +64,19 @@ class Router implements RouteInterface
         
         /** 
          * Backward compatibility
+         * 
+         * Some parts of the code get direct access to the $_GET variable
+         * this shouldn't happen as it could be leading to cross-directory 
+         * vulnerabilities. But, since as this happens I simple change
+         * the $_GET variable to keep things cleaner.
          */
         $_GET['module'] = $params['module'];
         $_GET['view']   = $params['view'];
+        if (!empty($params['action'])) {
+            $_GET['case'] = $params['action'];
+        } else {
+            unset($_GET['case']);
+        }
 
         return new RouteMatch($params);
     }
