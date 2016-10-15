@@ -115,7 +115,6 @@ class Renderer
         $template = $this->__templateResolver->resolve($this->moduleName . '/' . $this->viewName);
         if ($template) {
             $path = dirname($template);
-            error_log($path);
             $this->smarty->assign('path', $path);
             $this->smarty->{$this->output}($template);
         }
