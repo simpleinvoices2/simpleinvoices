@@ -31,17 +31,17 @@ class Renderer
     
     public function __construct(ServiceLocatorInterface $serviceManager)
     {
-        global $menu; // TODO: Get rid of this!
-        
         $this->serviceManager = $serviceManager;
         $this->smarty = $serviceManager->get('Smarty');
         $this->config = $serviceManager->get('SimpleInvoices\Config');
         
-        $this->setMenu($menu);
+        $application = $serviceManager->get('SimpleInvoices');
+        $event       = $application->getMvcEvent();
+        $routeMatch  = $event->getRouteMatch();
         
-        $this->moduleName = isset($_GET['module']) ? $this->filenameEscape($_GET['module'])  : null;
-        $this->viewName   = isset($_GET['view'])   ? $this->filenameEscape($_GET['view'])    : null;
-        $this->actionName = isset($_GET['case'])   ? $this->filenameEscape($_GET['case'])    : null;
+        $this->moduleName = $routeMatch->getParam('module');
+        $this->viewName   = $routeMatch->getParam('view');
+        $this->actionName = $routeMatch->getParam('action');
         
         $this->early_exit = [
             "auth_login",
@@ -54,47 +54,6 @@ class Renderer
             "payments_print",
             "documentation_view",
         ];
-    }
-    
-    /**
-     * Escapes a filename
-     *
-     * @param string $str The string to escape
-     * @return string The escaped string
-     */
-    protected function filenameEscape($str)
-    {
-        // Returns an escaped value.
-        $safe_str = preg_replace('/[^a-z0-9\-_\.]/i','_',$str);
-        return $safe_str;
-    }
-    
-    /*
-     GetCustomPath: override template or module with custom one if it exists, else return default path if it exists
-     ---------------------------------------------
-     @name: name or dir/name of the module or template (without extension)
-     @mode: template or module
-     */
-    protected function getCustomPath($name, $mode='template'){
-        $my_custom_path="./custom/";
-        $use_custom=1;
-        if($mode=='template'){
-            if($use_custom and file_exists("{$my_custom_path}default_template/{$name}.tpl")){
-                $out=".{$my_custom_path}default_template/{$name}.tpl";
-            }
-            elseif(file_exists("./templates/default/{$name}.tpl")){
-                $out="../templates/default/{$name}.tpl";
-            }
-        }
-        if($mode=='module'){
-            if($use_custom and file_exists("{$my_custom_path}modules/{$name}.php")){
-                $out="{$my_custom_path}modules/{$name}.php";
-            }
-            elseif(file_exists("./modules/{$name}.php")){
-                $out="./modules/{$name}.php";
-            }
-        }
-        return $out;
     }
     
     public function render()
@@ -156,6 +115,7 @@ class Renderer
         $template = $this->__templateResolver->resolve($this->moduleName . '/' . $this->viewName);
         if ($template) {
             $path = dirname($template);
+            error_log($path);
             $this->smarty->assign('path', $path);
             $this->smarty->{$this->output}($template);
         }

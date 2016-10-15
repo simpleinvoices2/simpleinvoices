@@ -11,11 +11,14 @@ class MvcEvent extends Event
     const EVENT_DISPATCH       = 'dispatch';
     const EVENT_DISPATCH_ERROR = 'dispatch.error';
     const EVENT_ROUTE          = 'route';
+    const EVENT_RENDER         = 'render';
     
     /**
      * @var Application
      */
     protected $application;
+    
+    protected $menuVisibility = true;
     
     /**
      * @var RequestInterface
@@ -55,6 +58,11 @@ class MvcEvent extends Event
     public function getError()
     {
         return $this->getParam('error', '');
+    }
+    
+    public function getMenuVisibility()
+    {
+        return $this->menuVisibility;
     }
     
     /**
@@ -129,6 +137,12 @@ class MvcEvent extends Event
     public function setError($message)
     {
         $this->setParam('error', $message);
+        return $this;
+    }
+    
+    public function setMenuVisibility($visible)
+    {
+        $this->menuVisibility = $visible;
         return $this;
     }
     

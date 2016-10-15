@@ -7,6 +7,8 @@
  *	 GPL v3 or above
  */
 
+global $zendDb;
+
 $menu = false;
 
 // we must never forget to start the session

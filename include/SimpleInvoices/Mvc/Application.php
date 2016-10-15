@@ -68,6 +68,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             $this->serviceManager->setService('DispatchListener', new DispatchListener());
         }
         $this->defaultListeners[] = 'DispatchListener';
+        
+        if (!$serviceManager->has('RenderListener')) {
+            $this->serviceManager->setService('RenderListener', new RenderListener());
+        }
+        $this->defaultListeners[] = 'RenderListener';
     }
     
     /**
@@ -232,9 +237,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         /**
          * Render the output
          */
-        $renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
-        $renderer->setResolver( $this->serviceManager->get(TemplatePathStack::class) );
-        $renderer->render();
+        $event->setName(MvcEvent::EVENT_RENDER);
+        $events->triggerEvent($event);
+        //$renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
+        //$renderer->setResolver( $this->serviceManager->get(TemplatePathStack::class) );
+        //$renderer->render();
     }
     
     /**

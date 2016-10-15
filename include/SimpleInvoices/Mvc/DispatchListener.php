@@ -73,6 +73,7 @@ class DispatchListener extends AbstractListenerAggregate
         $smarty       = $services->get('Smarty');
         $auth_session = new \Zend_Session_Namespace('Zend_Auth');
         $logger       = $services->get('SimpleInvoices\Logger');
+        $menu         = $e->getMenuVisibility();
         
         /**
          * Not really backward compatibility but new functionality
@@ -232,5 +233,11 @@ class DispatchListener extends AbstractListenerAggregate
          * ----------------------------------------- END ------------------------------------------------
          * ==============================================================================================
          */
+        
+
+        /**
+         * Backward compatibility
+         */
+        $e->setMenuVisibility($menu);
     }
 }

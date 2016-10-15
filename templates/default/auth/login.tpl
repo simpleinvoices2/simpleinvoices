@@ -1,6 +1,6 @@
 {* preload the headers (for faster browsing) *}
 
-{include file=$path|cat:'../header.tpl'}
+{include file=$path|cat:'/../header.tpl'}
 
 <div class="si_wrap">
 
