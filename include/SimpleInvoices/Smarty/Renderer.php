@@ -116,8 +116,17 @@ class Renderer
             exit(0);
         }
         
-        $this->renderJavascript();
-        $this->renderMenu();
+        $template = $this->__templateResolver->resolve('jquery/post_load_jquery');
+        if ($template) {
+            $this->smarty->{$this->output}($template);
+        }
+        
+        if ($this->menu) {
+            $template = $this->__templateResolver->resolve('menu');
+            if ($template) {
+                $this->smarty->{$this->output}($template);
+            }
+        }
         
         if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) ) {
             $template = $this->__templateResolver->resolve('main');
@@ -143,67 +152,6 @@ class Renderer
                 $this->smarty->{$this->output}($template);
             }
         }
-    }
-    
-    /**
-     * If extension is enabled load its post load javascript files	- start
-     * By Post load - i mean post of the .php so that it can used info from the .php in the javascript
-     * Note: this system is probably slow - if you got a better method for handling extensions let me know
-     */
-    public function renderJavascript()
-    {
-        $extensionPostLoadJquery = 0;
-        foreach($this->config->extension as $extension)
-        {
-            /*
-             * If extension is enabled then continue and include the requested file for that extension if it exists
-             */
-            if($extension->enabled == "1")
-            {
-                if(file_exists("./extensions/$extension->name/include/jquery/$extension->name.post_load.jquery.ext.js.tpl")) {
-                    $this->smarty->{$this->output}("../extensions/$extension->name/include/jquery/$extension->name.post_load.jquery.ext.js.tpl");
-                }
-            }
-        }
-        
-        /*
-         * If no extension php file for requested file load the normal php file if it exists
-         * Don't load it in the authentication module. It's not needed! Generates wrong HTML code.
-         */
-        if (($extensionPostLoadJquery == 0) && ($this->moduleName !='auth'))
-        {
-            $this->smarty->{$this->output}("../public/assets/jquery/post_load.jquery.ext.js.tpl");
-        }
-    }
-    
-    public function renderMenu()
-    {
-        if($this->menu)
-        {
-            $extensionMenu = 0;
-            foreach($this->config->extension as $extension)
-            {
-                /*
-                 * If extension is enabled then continue and include the requested file for that extension if it exists
-                 */
-                if($extension->enabled == "1")
-                {
-                    if(file_exists("./extensions/$extension->name/templates/default/menu.tpl"))
-                    {
-                        $this->smarty->{$this->output}("../extensions/$extension->name/templates/default/menu.tpl");
-                        $extensionMenu++;
-                    }
-                }
-            }
-            
-            /*
-             * If no extension php file for requested file load the normal php file if it exists
-             */
-            if ($extensionMenu == "0")
-            {
-                $this->smarty->{$this->output}($this->getCustomPath('menu'));
-            }
-        }    
     }
     
     /**
