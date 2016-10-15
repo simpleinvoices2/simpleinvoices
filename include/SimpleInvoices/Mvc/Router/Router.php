@@ -5,6 +5,20 @@ use Zend\Stdlib\RequestInterface as Request;
 
 class Router implements RouteInterface
 {
+    protected $defaults = [];
+    
+    public function __construct($defaults = [])
+    {
+        if (empty($defaults)) {
+            $defaults = [
+                'module' => 'index',
+                'view'   => 'index',
+                'action' => null,
+            ];
+        }
+        
+        $this->defaults = $defaults;
+    }
     /**
      * Escapes a filename
      *
@@ -34,20 +48,27 @@ class Router implements RouteInterface
             return null;
         }
         
-        $module = $this->filenameEscape($request->getQuery('module', null));
-        $view   = $this->filenameEscape($request->getQuery('view', null));
-        $action = $this->filenameEscape($request->getQuery('case', null));
+        $params = [];
+        
+        $params['module'] = $this->filenameEscape($request->getQuery('module', null));
+        $params['view']   = $this->filenameEscape($request->getQuery('view', null));
+        $params['action'] = $this->filenameEscape($request->getQuery('case', null));
 
-        $tempModule = trim($module);
-        if (empty($tempModule)) {
-            return null;
+        if (null === $params['module']) {
+            $params['module'] = $this->defaults['module'];
         }
         
-        return new RouteMatch([
-            'module' => $module,
-            'view'   => $view,
-            'action' => $action,
-        ]);
+        if (null === $params['view']) {
+            $params['view'] = $this->defaults['view'];
+        }
+        
+        /** 
+         * Backward compatibility
+         */
+        $_GET['module'] = $params['module'];
+        $_GET['view']   = $params['view'];
+
+        return new RouteMatch($params);
     }
     
     /**

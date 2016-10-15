@@ -67,6 +67,6 @@ class DatabaseFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator, 'Request');
+        return $this($serviceLocator, 'SimpleInvoices\Database\Adapter');
     }
 }
