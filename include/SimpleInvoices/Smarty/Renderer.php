@@ -103,6 +103,22 @@ class Renderer
             $this->output = "fetch";
         }
         
+        // TODO: We should load extension jQuery files in a nicer way
+        $extension_jquery_files = "";
+        foreach($this->config->extension as $extension) {
+            /*
+             * If extension is enabled then continue and include the requested file for that extension if it exists
+             */
+            if($extension->enabled == "1")
+            {
+                if(file_exists("./extensions/$extension->name/include/jquery/$extension->name.jquery.ext.js")) {
+                    $extension_jquery_files .= "<script type=\"text/javascript\" src=\"./extensions/$extension->name/include/jquery/$extension->name.jquery.ext.js\"></script>";
+                }
+            }
+        }
+        $this->smarty->assign('extension_jquery_files', $extension_jquery_files);
+        // End of extension jQuery files
+        
         if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) ) {
             $template = $this->__templateResolver->resolve('header');
             if ($template) {
