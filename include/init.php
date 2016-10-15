@@ -42,6 +42,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'SimpleInvoices\SqlQueries' => \SimpleInvoices\Service\SqlQueriesFactory::class,
         'SimpleInvoices\Database\Adapter' => \SimpleInvoices\Service\DatabaseFactory::class,
         \SimpleInvoices\SystemDefault\SystemDefaultManager::class => \SimpleInvoices\Service\SystemDefaultManagerFactory::class,
+        \SimpleInvoices\View\Resolver\TemplatePathStack::class => \SimpleInvoices\Service\ViewTemplatePathStackFactory::class,
     ],
 ]);
 

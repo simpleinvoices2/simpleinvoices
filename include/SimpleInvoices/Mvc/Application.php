@@ -6,6 +6,7 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
+use SimpleInvoices\View\Resolver\TemplatePathStack;
 
 /**
  * Provides a class to store the application wide
@@ -232,6 +233,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
          * Render the output
          */
         $renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
+        $renderer->setResolver( $this->serviceManager->get(TemplatePathStack::class) );
         $renderer->render();
     }
     

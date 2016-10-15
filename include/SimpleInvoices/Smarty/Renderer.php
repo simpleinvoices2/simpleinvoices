@@ -2,9 +2,15 @@
 namespace SimpleInvoices\Smarty;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
+use SimpleInvoices\View\Resolver\ResolverInterface;
 
 class Renderer
 {
+    /**
+     * @var ResolverInterface
+     */
+    protected $__templateResolver;
+    
     protected $early_exit = [];
     
     protected $output = "display";
@@ -97,7 +103,12 @@ class Renderer
             $this->output = "fetch";
         }
         
-        $this->renderHeader();
+        if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) ) {
+            $template = $this->__templateResolver->resolve('header');
+            if ($template) {
+                $this->smarty->{$this->output}($template);
+            }
+        }
         
         // HERE was the dispatch code!!!
         
@@ -107,37 +118,29 @@ class Renderer
         
         $this->renderJavascript();
         $this->renderMenu();
-        $this->renderMain();
-        $this->renderPageSection();
-        $this->renderFooter();
-    }
-    
-    public function renderHeader()
-    {
-        if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) )
-        {
-            $extensionHeader = 0;
-            foreach($this->config->extension as $extension)
-            {
-                /*
-                 * If extension is enabled then continue and include the requested file for that extension if it exists
-                 */
-                if($extension->enabled == "1")
-                {
-                    if(file_exists("./extensions/$extension->name/templates/default/header.tpl"))
-                    {
-                        $this->smarty->{$this->output}("../extensions/$extension->name/templates/default/header.tpl");       
-                        $extensionHeader++;
-                    }
-                }
-            }
         
-            /*
-             * If no extension php file for requested file load the normal template file if it exists
-             */
-            if($extensionHeader == 0)
-            {
-                $this->smarty->{$this->output}($this->getCustomPath('header'));
+        if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) ) {
+            $template = $this->__templateResolver->resolve('main');
+            if ($template) {
+                $this->smarty->{$this->output}($template);
+            }
+        }
+        
+        //$this->renderPageSection();
+        // --- page section: start
+        $template = $this->__templateResolver->resolve($this->moduleName . '/' . $this->viewName);
+        if ($template) {
+            $path = dirname($template);
+            $this->smarty->assign('path', $path);
+            $this->smarty->{$this->output}($template);
+        }
+        
+        // --- page section: end
+        
+        if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) ) {
+            $template = $this->__templateResolver->resolve('footer');
+            if ($template) {
+                $this->smarty->{$this->output}($template);
             }
         }
     }
@@ -203,113 +206,6 @@ class Renderer
         }    
     }
     
-    public function renderMain()
-    {
-        if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) )
-        {
-            $extensionMain = 0;
-            foreach($this->config->extension as $extension)
-            {
-                /*
-                 * If extension is enabled then continue and include the requested file for that extension if it exists
-                 */
-                if($extension->enabled == "1")
-                {
-                    if(file_exists("./extensions/$extension->name/templates/default/main.tpl"))
-                    {
-                        $this->smarty->{$this->output}("../extensions/$extension->name/templates/default/main.tpl");
-                        $extensionMain++;
-                    }
-                }
-            }
-        
-            /*
-             * If no extension php file for requested file load the normal php file if it exists
-             */
-            if($extensionMain == "0")
-            {
-                $this->smarty->{$this->output}($this->getCustomPath('main'));
-            }
-        }
-    }
-    
-    public function renderPageSection()
-    {
-        /*
-         * If no extensions template is applicable then show the default one
-         * use the $extensionTemplates variable to count the number of applicable extensions template
-         * --if = 0 after checking all extensions then show default
-         */
-        $extensionTemplates = 0;
-        $my_tpl_path = '';
-        foreach($this->config->extension as $extension)
-        {
-            /*
-             * If extension is enabled then continue and include the requested file for that extension if it exists
-             */
-            if($extension->enabled == "1")
-            {
-                if(file_exists("./extensions/$extension->name/templates/default/" . $this->moduleName . "/" . $this->viewName . ".tpl"))
-                {
-                    $path 		= "../extensions/$extension->name/templates/default/" . $this->moduleName . "/";
-                    $my_tpl_path="../extensions/{$extension->name}/templates/default/" . $this->moduleName . "/" . $this->viewName . ".tpl";
-                    $extensionTemplates++;
-                }
-            }
-        }
-        
-        /*
-         * If no application templates found then show default template
-         * TODO Note: if more than one extension has got a template for the requested file than thats trouble :(
-         * - we really need a better extensions system
-         */  
-        if( $extensionTemplates == 0 )
-        {
-            if ($my_tpl_path = $this->getCustomPath($this->moduleName . '/' . $this->viewName)) {
-                $path = dirname($my_tpl_path) . '/';
-                $extensionTemplates++;
-            }
-        }
-        
-        $this->smarty->assign("path", $path);
-        $this->smarty->{$this->output}($my_tpl_path);
-        
-        // If no smarty template - add message - onyl uncomment for dev - commented out for release
-        if ($extensionTemplates == 0 )
-        {
-            error_log("NOTEMPLATE!!!");
-        }
-    }
-    
-    public function renderFooter()
-    {
-        if( !in_array($this->moduleName . "_" . $this->viewName, $this->early_exit) )
-        {
-            $extensionFooter = 0;
-            foreach($this->config->extension as $extension)
-            {
-                /*
-                 * If extension is enabled then continue and include the requested file for that extension if it exists
-                 */
-                if($extension->enabled == "1")
-                {
-                    if(file_exists("./extensions/$extension->name/templates/default/footer.tpl"))
-                    {
-                        $this->smarty->{$this->output}("../extensions/$extension->name/templates/default/footer.tpl");
-                        $extensionFooter++;
-                    }
-                }
-            }
-            
-            /*
-             * If no extension php file for requested file load the normal php file if it exists
-             */
-            if($extensionFooter == 0) {
-                $this->smarty->{$this->output}($this->getCustomPath('footer'));
-            }
-        }   
-    }
-    
     /**
      * Sets the menu as visible or hidden.
      * 
@@ -318,6 +214,18 @@ class Renderer
     public function setMenu($enabled)
     {
         $this->menu = $enabled;
+        return $this;
+    }
+    
+    /**
+     * Set the resolver used to map a template name to a resource the renderer may consume.
+     *
+     * @param  ResolverInterface $resolver
+     * @return RendererInterface
+     */
+    public function setResolver(ResolverInterface $resolver)
+    {
+        $this->__templateResolver = $resolver;
         return $this;
     }
 }
