@@ -91,7 +91,7 @@ $module = $routeMatch->getParam('module', null);
 $view   = $routeMatch->getParam('view', null);
 $action = $routeMatch->getParam('action', null);
 
-$auth_session = new \Zend\Session\Container('Zend_Auth');
+$auth_session = new \Zend\Session\Container('SI_AUTH');
 $smarty       = $serviceManager->get('Smarty');
 
 /**

@@ -7,7 +7,7 @@ class text_ui_invoice extends invoice
     {
         // $domain_id is a parent class member
         if (empty($domain_id)) {
-            $auth_session = new \Zend\Session\Container('Zend_Auth');
+            $auth_session = new \Zend\Session\Container('SI_AUTH');
             $domain_id    = $auth_session->domain_id;
         }
         

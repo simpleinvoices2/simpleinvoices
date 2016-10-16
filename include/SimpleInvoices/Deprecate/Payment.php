@@ -12,7 +12,7 @@ class Payment
 
 	public function __construct()
 	{
-	    $auth_session    = new \Zend\Session\Container('Zend_Auth');
+	    $auth_session    = new \Zend\Session\Container('SI_AUTH');
 		$this->domain_id = $auth_session->domain_id;
 	}
 

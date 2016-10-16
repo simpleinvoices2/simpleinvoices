@@ -171,7 +171,7 @@ class Email
     public function get_admin_email()
     {
         if (empty($this->domain_id)) {
-            $auth_session = new \Zend\Session\Container('Zend_Auth');
+            $auth_session = new \Zend\Session\Container('SI_AUTH');
             $domain_id    = $auth_session->domain_id;
         } else {
             $domain_id = $this->domain_id;

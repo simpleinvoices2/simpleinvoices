@@ -12,7 +12,7 @@ function sql($type='', $dir, $sort, $rp, $page )
 	global $config;
 	global $LANG;
 
-	$auth_session = new \Zend\Session\Container('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('SI_AUTH');
 	
 	$domain_id = $auth_session->domain_id;
 	$valid_search_fields = array('id', 'name');

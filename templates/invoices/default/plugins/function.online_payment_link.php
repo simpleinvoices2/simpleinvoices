@@ -8,7 +8,7 @@ function smarty_function_online_payment_link($params, &$smarty)
     global $siUrl;
     
     if (empty($params['domain_id'])) {
-        $auth_session = new \Zend\Session\Container('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('SI_AUTH');
         $domain_id    = $auth_session->domain_id;
     } else {
         $domain_id = $params['domain_id'];
