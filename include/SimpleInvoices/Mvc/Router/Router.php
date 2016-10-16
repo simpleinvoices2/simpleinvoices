@@ -62,6 +62,14 @@ class Router implements RouteInterface
             $params['view'] = $this->defaults['view'];
         }
         
+        //
+        // TODO: Fix this... SimpleInvoices uses 'case' and 'action' as action 
+        //
+        $action = $this->filenameEscape($request->getQuery('action', null));
+        if (!empty($action)) {
+            $params['action'] = $action;
+        }
+        
         /** 
          * Backward compatibility
          * 

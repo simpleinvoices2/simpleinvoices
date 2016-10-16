@@ -8,6 +8,7 @@ use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
 use SimpleInvoices\View\Resolver\TemplatePathStack;
 use Zend\Session\SessionManager;
+use Zend\Session\Container as SessionContainer;
 
 /**
  * Provides a class to store the application wide
@@ -16,6 +17,7 @@ use Zend\Session\SessionManager;
 class Application implements ApplicationInterface, EventManagerAwareInterface
 {
     const ERROR_ROUTER_NO_MATCH            = 'error-router-no-match';
+    const ERROR_NOT_AUTHORIZED             = 'error-not-authorized';
     
     /**
      * Default application event listeners
@@ -74,6 +76,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             $this->serviceManager->setService('RenderListener', new RenderListener());
         }
         $this->defaultListeners[] = 'RenderListener';
+        
+        if (!$serviceManager->has('AuthorizationListener')) {
+            $this->serviceManager->setService('AuthorizationListener', new AuthorizationListener());
+        }
+        $this->defaultListeners[] = 'AuthorizationListener';
     }
     
     /**
@@ -101,10 +108,34 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         // Bootstrap session
         $session = $this->serviceManager->get(SessionManager::class);
         $session->start();
-        $sessionContainer = new \Zend\Session\Container('SI_AUTH');
+        $sessionContainer = new SessionContainer('SI_AUTH');
         if (empty($sessionContainer->domain_id)) {
             // set the default domain
             $sessionContainer->domain_id = 1;
+        }
+        
+        //if user logged into Simple Invoices with auth off then auth turned on - id via fake_auth and kill session
+        if ($this->getConfig()->authentication->enabled) {
+            if ($sessionContainer->fake_auth) {
+                $session->destroy([
+                    'clear_storage'      => true,
+                    'send_expire_cookie' => true,
+                ]);
+                header('Location: .');
+            }
+        } else {
+            /*
+             * If auth not on - use default domain and user id of 1
+             * 
+             * chuck the user details sans password into the Zend_auth session
+             */
+            $sessionContainer->id = "1";
+            $sessionContainer->domain_id = "1";
+            $sessionContainer->email = "demo@simpleinvoices.org";
+            //fake_auth is identifier to say that user logged in with auth off
+            $sessionContainer->fake_auth = "1";
+            //No Customer login as logins disabled
+            $sessionContainer->user_id = "0";
         }
         
         // Setup MVC Event
@@ -289,6 +320,36 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             return $this->completeRequest($event);
         }
         
+        // If authentication is enabled
+        if ($this->getConfig()->authentication->enabled) {
+            // =========================================
+            // -------------   S T A R T   -------------
+            // API calls don't use the auth module
+            $sessionContainer = new SessionContainer('SI_AUTH');
+            $module = $event->getRouteMatch()->getParam('module');
+            if ($module != 'api'){
+                if (!isset($sessionContainer->id)){
+                    if  ($module !== "auth") {
+                        header('Location: index.php?module=auth&view=login');
+                        exit;
+                    }
+                }
+            }
+            // ---------------   E N D   ---------------
+            //==========================================
+            
+            // Trigger authorization event
+            $event->setName(MvcEvent::EVENT_AUTHORIZATION);
+            $event->stopPropagation(false); // Clear before triggering
+            $result = $events->triggerEvent($event);
+            
+            if (!$result->last()) {
+                header('HTTP/1.0 403 Forbidden');
+                // $checkPermission == "denied" ? exit($LANG['denied_page']) :"" ;
+                echo "You are not allowed to view this page";
+                exit(1);
+            }
+        }
     }
     
     /**
