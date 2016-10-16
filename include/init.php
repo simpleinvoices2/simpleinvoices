@@ -90,7 +90,7 @@ $module = $routeMatch->getParam('module', null);
 $view   = $routeMatch->getParam('view', null);
 $action = $routeMatch->getParam('action', null);
 
-$auth_session = new Zend_Session_Namespace('Zend_Auth');
+$auth_session = new \Zend\Session\Container('Zend_Auth');
 $smarty       = $serviceManager->get('Smarty');
 
 /**

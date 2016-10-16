@@ -18,7 +18,7 @@ class Index
     public static function next($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
         if (empty($domain_id)) {
-            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend\Session\Container('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         }
 
@@ -48,7 +48,7 @@ class Index
     public static function increment($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
         if (empty($domain_id)) {
-            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend\Session\Container('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         }
         
@@ -81,7 +81,7 @@ class Index
     public static function rewind($node, $sub_node=0, $domain_id='', $sub_node_2=0)
     {
         if (empty($domain_id)) {
-            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend\Session\Container('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         }
         

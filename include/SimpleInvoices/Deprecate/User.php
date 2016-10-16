@@ -30,7 +30,7 @@ class User
     {
         global $LANG;
         
-        $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         
         $sql = "SELECT 
                     u.*, 

@@ -6,7 +6,7 @@ checkLogin();
 function getExtensions() {
 	global $LANG;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
 	$domain_id = $auth_session->domain_id;
 	

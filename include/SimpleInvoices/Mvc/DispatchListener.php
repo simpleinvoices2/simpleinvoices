@@ -71,7 +71,7 @@ class DispatchListener extends AbstractListenerAggregate
         global $LANG;
         $services     = $e->getApplication()->getServiceManager();
         $smarty       = $services->get('Smarty');
-        $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $logger       = $services->get('SimpleInvoices\Logger');
         $menu         = $e->getMenuVisibility();
         

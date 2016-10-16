@@ -11,7 +11,7 @@ class Log {
 
 	public function __construct()
 	{
-	    $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 		$this->domain_id = $auth_session->domain_id;
 	}
 

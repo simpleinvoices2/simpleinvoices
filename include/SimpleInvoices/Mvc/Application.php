@@ -99,7 +99,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         
         // Bootstrap session
         \Zend_Session::start();
-        $sessionContainer = new \Zend_Session_Namespace('Zend_Auth');
+        $sessionContainer = new \Zend\Session\Container('Zend_Auth');
         if (empty($sessionContainer->domain_id)) {
             // set the default domain
             $sessionContainer->domain_id = 1;

@@ -124,7 +124,7 @@ function lastInsertId() {
 function _invoice_check_fk($biller, $customer, $type, $preference) {
 	global $dbh;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
 	$domain_id = $auth_session->domain_id;
 
@@ -158,7 +158,7 @@ function _invoice_check_fk($biller, $customer, $type, $preference) {
 function _invoice_items_check_fk($invoice, $product, $tax, $update) {
 	global $dbh;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
 	$domain_id = $auth_session->domain_id;
 
@@ -184,7 +184,7 @@ function _invoice_items_check_fk($invoice, $product, $tax, $update) {
 function getGenericRecord($table, $id, $domain_id='', $id_field='id') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -233,7 +233,7 @@ function getPreferences($domain_id='')
 	global $LANG;
 	
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -261,7 +261,7 @@ function getActiveTaxes($domain_id='') {
 	global $db_server;
 	
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -289,7 +289,7 @@ function getActiveTaxes($domain_id='') {
 function getActivePreferences($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
     
@@ -304,7 +304,7 @@ function getCustomFieldLabels($domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -327,7 +327,7 @@ function getBillers($domain_id='') {
 	global $LANG;
 	
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -354,7 +354,7 @@ function getActiveBillers($domain_id='')
 	global $db_server;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 	
@@ -381,7 +381,7 @@ function getPaymentType($id, $domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -397,7 +397,7 @@ function getPayment($id, $domain_id='') {
 	global $config;
 	
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -427,7 +427,7 @@ function getPayment($id, $domain_id='') {
 function getInvoicePayments($id, $domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -458,7 +458,7 @@ function getInvoicePayments($id, $domain_id='')
 function getCustomerPayments($id, $domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -489,7 +489,7 @@ function getCustomerPayments($id, $domain_id='')
 function getPayments($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -519,7 +519,7 @@ function getPayments($domain_id='')
 function progressPayments($sth, $domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
     
@@ -545,7 +545,7 @@ function getPaymentTypes($domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -572,7 +572,7 @@ function getActivePaymentTypes($domain_id='')
 	global $db_server;
 	
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -601,7 +601,7 @@ function getProduct($id, $domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -623,7 +623,7 @@ function getProduct($id, $domain_id='')
 function insertProductComplete($enabled=1,$visible=1,$description, $unit_price, $custom_field1 = NULL, $custom_field2, $custom_field3, $custom_field4, $notes, $domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -671,7 +671,7 @@ function insertProduct($enabled=1,$visible=1, $domain_id='')
     global $logger;
 
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -764,7 +764,7 @@ function insertProduct($enabled=1,$visible=1, $domain_id='')
 function updateProduct($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
     
@@ -831,7 +831,7 @@ function getProducts($domain_id='')
 	global $db_server;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -860,7 +860,7 @@ function getProducts($domain_id='')
 function getActiveProducts($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -875,7 +875,7 @@ function getTaxes($domain_id='')
 	global $LANG;
 	
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -901,7 +901,7 @@ function getDefaultGeneric($param, $bool=true, $domain_id='') {
 	global $LANG;
 	
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	} else {
         $domain_id = $domain_id;
@@ -917,7 +917,7 @@ function getDefaultGeneric($param, $bool=true, $domain_id='') {
 function getDefaultCustomer($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -929,7 +929,7 @@ function getDefaultCustomer($domain_id='')
 function getDefaultPaymentType($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -941,7 +941,7 @@ function getDefaultPaymentType($domain_id='')
 function getDefaultPreference($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -953,7 +953,7 @@ function getDefaultPreference($domain_id='')
 function getDefaultBiller($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
     
@@ -965,7 +965,7 @@ function getDefaultBiller($domain_id='')
 function getDefaultTax($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1007,7 +1007,7 @@ function getInvoiceTotal($invoice_id, $domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -1020,7 +1020,7 @@ function getInvoiceTotal($invoice_id, $domain_id='')
 function setInvoiceStatus($invoice, $status, $domain_id='')
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1033,7 +1033,7 @@ function getInvoice($id, $domain_id='')
 	global $config;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -1073,7 +1073,7 @@ Purpose: to show a nice summary of total $ for tax for an invoice
 function numberOfTaxesForInvoice($invoice_id, $domain_id='')
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1105,7 +1105,7 @@ Purpose: to show a nice summary of total $ for tax for an invoice
 function taxesGroupedForInvoice($invoice_id, $domain_id='')
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1140,7 +1140,7 @@ Purpose: to show a nice summary of total $ for tax for an invoice item - used fo
 function taxesGroupedForInvoiceItem($invoice_item_id, $domain_id='')
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1167,7 +1167,7 @@ function taxesGroupedForInvoiceItem($invoice_item_id, $domain_id='')
 function setStatusExtension($extension_id, $status=2, $domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1189,7 +1189,7 @@ function setStatusExtension($extension_id, $status=2, $domain_id='')
 function getExtensionID($extension_name = "none", $domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1204,7 +1204,7 @@ function getExtensionID($extension_name = "none", $domain_id='')
 function getSystemDefaults($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     } else {
         $domain_id = $domain_id;
@@ -1280,7 +1280,7 @@ function getSystemDefaults($domain_id='')
 
 function updateDefault($name,$value,$extension_name="core") 
 {
-    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    $auth_session = new \Zend\Session\Container('Zend_Auth');
     
 	$domain_id = $auth_session->domain_id;
 
@@ -1322,7 +1322,7 @@ function getInvoiceType($id) {
 function insertBiller() {
 	global $db_server;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
 	$domain_id = $auth_session->domain_id;
 
@@ -1427,7 +1427,7 @@ function insertBiller() {
 
 function updateBiller() 
 {
-    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    $auth_session = new \Zend\Session\Container('Zend_Auth');
     
 	$domain_id = $auth_session->domain_id;
 
@@ -1494,7 +1494,7 @@ function updateBiller()
 function updateCustomer() {
 	global $config;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
 	$domain_id = $auth_session->domain_id;
 
@@ -1600,7 +1600,7 @@ function updateCustomer() {
 function insertCustomer() {
     global $config;
     
-    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    $auth_session = new \Zend\Session\Container('Zend_Auth');
     
 	$domain_id = $auth_session->domain_id;
 
@@ -1664,7 +1664,7 @@ function searchCustomers($search) {
 //TODO remove this function - note used anymore
 	global $db_server;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
 	$domain_id = $auth_session->domain_id;
 
@@ -1712,7 +1712,7 @@ function getCustomerInvoices($id, $domain_id='')
 	global $config;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -1755,7 +1755,7 @@ function getCustomers($domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -1798,7 +1798,7 @@ function getActiveCustomers($domain_id='')
 	global $db_server;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -1815,7 +1815,7 @@ function getActiveCustomers($domain_id='')
 function getTopDebtor($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1854,7 +1854,7 @@ function getTopDebtor($domain_id='')
 function getTopCustomer($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1893,7 +1893,7 @@ function getTopCustomer($domain_id='')
 function getTopBiller($domain_id='') 
 {
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -1928,7 +1928,7 @@ function insertTaxRate($domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -1954,7 +1954,7 @@ function updateTaxRate($domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2000,7 +2000,7 @@ function insertInvoice($type, $domain_id='')
 	global $db_server;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2108,7 +2108,7 @@ function updateInvoice($invoice_id, $domain_id='')
     global $db_server;
  
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -2173,7 +2173,7 @@ function insertInvoiceItem($invoice_id,$quantity,$product_id,$line_number,$line_
 	global $LANG;
     
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2271,7 +2271,7 @@ function getTaxesPerLineItem($line_item_tax_id, $quantity, $unit_price, $domain_
 	global $logger;
     
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2320,7 +2320,7 @@ function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $qua
 	global $logger;
     
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2395,7 +2395,7 @@ function updateInvoiceItem($id, $quantity, $product_id, $line_number, $line_item
 	global $db_server;
  
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2526,7 +2526,7 @@ function searchBillerAndCustomerInvoice($biller, $customer, $domain_id='')
 	global $db_server;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2557,7 +2557,7 @@ function searchInvoiceByDate($startdate, $enddate, $domain_id='')
 {
     //TODO remove this function - not used
     if (empty($domain_id)) {
-        $auth_session = new Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         $domain_id    = $auth_session->domain_id;
     }
 
@@ -2598,7 +2598,7 @@ function delete($module, $idField, $id, $domain_id='')
 	global $logger;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -2705,7 +2705,7 @@ function maxInvoice($domain_id='')
 	global $LANG;
  
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -3179,7 +3179,7 @@ function convertInitCustomFields() {
 	/* check if any value set -> keeps all data for sure */
 	global $dbh;
 	
-	$auth_session = new Zend_Session_Namespace('Zend_Auth');
+	$auth_session = new \Zend\Session\Container('Zend_Auth');
 	
     $domain_id = $auth_session->domain_id;
 
@@ -3280,7 +3280,7 @@ function get_custom_field_label($field, $domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -3305,7 +3305,7 @@ function calc_invoice_paid($inv_idField, $domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -3325,7 +3325,7 @@ function calc_customer_total($customer_id, $domain_id='', $isReal=false)
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -3359,7 +3359,7 @@ function calc_customer_paid($customer_id, $domain_id='', $isReal=false)
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -3401,7 +3401,7 @@ function calc_invoice_tax($invoice_id, $domain_id='')
 	global $LANG;
 
 	if (empty($domain_id)) {
-	    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+	    $auth_session = new \Zend\Session\Container('Zend_Auth');
 	    $domain_id    = $auth_session->domain_id;
 	}
 
@@ -3435,7 +3435,7 @@ function calc_invoice_tax($invoice_id, $domain_id='')
 
 function show_custom_field($custom_field,$custom_field_value,$permission,$css_class_tr,$css_class1,$css_class2,$td_col_span,$seperator) 
 {
-    $auth_session = new Zend_Session_Namespace('Zend_Auth');
+    $auth_session = new \Zend\Session\Container('Zend_Auth');
     
 	$domain_id = $auth_session->domain_id;
 

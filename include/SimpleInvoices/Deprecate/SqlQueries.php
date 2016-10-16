@@ -25,7 +25,7 @@ class SqlQueries
     {
         $this->config = $config;
         
-        $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         
         if(LOGGING) {
             //Logging connection to prevent mysql_insert_id problems. Need to be called before the second connect...
@@ -90,7 +90,7 @@ class SqlQueries
     public function dbLogger($sqlQuery) 
     {
         // For PDO it gives only the skeleton sql before merging with data
-        $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+        $auth_session = new \Zend\Session\Container('Zend_Auth');
         
         $userid = $auth_session->id;
         if($this->canLog && (preg_match('/^\s*select/iD', $sqlQuery) == 0) && (preg_match('/^\s*show\s*tables\s*like/iD',$sqlQuery) == 0)) {
@@ -155,7 +155,7 @@ class SqlQueries
         global $LANG;
         
         if (empty($domain_id)) {
-            $auth_session = new \Zend_Session_Namespace('Zend_Auth');
+            $auth_session = new \Zend\Session\Container('Zend_Auth');
             $domain_id    = $auth_session->domain_id;
         } else {
             $domain_id = $domain_id;
