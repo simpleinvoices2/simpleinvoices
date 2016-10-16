@@ -21,32 +21,21 @@ $session->start();
 
 $errorMessage = '';
 
+$authenticationService = $services->get(\SimpleInvoices\Authentication\AuthenticationService::class);
+
 if (!empty($_POST['user']) && !empty($_POST['pass'])) 
 {
-    // Configure the instance with with setter methods
-    $authAdapter = new Zend_Auth_Adapter_DbTable($zendDb);
-
     $PatchesDone = getNumberOfDoneSQLPatches();
 
-    //sql patch 161 changes user table name - need to accomodate
-    $user_table = ($PatchesDone < "161") ? "users" : "user";
-    $user_email = ($PatchesDone < "184") ? "user_email" : "email";
-    $user_password = ($PatchesDone < "184") ? "user_password" : "password";
-
-    $authAdapter->setTableName(TB_PREFIX.$user_table)
-                 ->setIdentityColumn($user_email)
-                 ->setCredentialColumn($user_password)
-                 ->setCredentialTreatment('MD5(?)');
-
     $userEmail = $_POST['user'];
-    $password = $_POST['pass'];
+    $password  = $_POST['pass'];
 
     // Set the input credential values (e.g., from a login form)
-    $authAdapter->setIdentity($userEmail)
-                ->setCredential($password);
+    $authenticationService->getAdapter()->setIdentity($userEmail)
+                                        ->setCredential($password);
     
     // Perform the authentication query, saving the result
-    $result = $authAdapter->authenticate();
+    $result = $authenticationService->authenticate();
     
     if ($result->isValid()) {
         $session->start();
