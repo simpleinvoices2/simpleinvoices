@@ -73,12 +73,13 @@ class AuthorizationListener extends AbstractListenerAggregate
         }
             
         //basic customer page check
+        // TODO: I think this is screwed up $sessionContainer->user_id return 0 lthough the user id is 1
         if( ($sessionContainer->role_name =='customer') && ($module == 'customers') ) {
-            $id = $request->getQuery('id', null);
+            $id = $event->getRequest()->getQuery('id', null);
             if (!is_numeric($id)) {
                 $isAllowed = false;
             }
-                
+            
             $id = (int) $id;
             if ($id !== $sessionContainer->user_id) {
                 $isAllowed = false;
