@@ -5,6 +5,7 @@
     "license": "GPLv3",
     "require": {
         "php": "^5.6 || ^7.0",
+        "zendframework/zendframework1": "1.12.20",
         "container-interop/container-interop": "^1.1.0",
         "zendframework/zend-stdlib": "^3.1.0",
         "zendframework/zend-eventmanager": "^3.0.1",
