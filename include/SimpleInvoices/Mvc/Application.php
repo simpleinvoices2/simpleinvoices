@@ -338,10 +338,19 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             // ---------------   E N D   ---------------
             //==========================================
             
+            // Define callback used to determine whether or not to short-circuit
+            $shortCircuitAuthorization = function ($r) use ($event) {
+                if (!$r) {
+                    // If returned false exit right away as access is forbiden
+                    return true;
+                }
+                return false;
+            };
+            
             // Trigger authorization event
             $event->setName(MvcEvent::EVENT_AUTHORIZATION);
             $event->stopPropagation(false); // Clear before triggering
-            $result = $events->triggerEvent($event);
+            $result = $events->triggerEventUntil($shortCircuitAuthorization, $event);
             
             if (!$result->last()) {
                 header('HTTP/1.0 403 Forbidden');
