@@ -43,6 +43,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'SimpleInvoices\Database\Adapter' => \SimpleInvoices\Service\DatabaseFactory::class,
         \SimpleInvoices\SystemDefault\SystemDefaultManager::class => \SimpleInvoices\Service\SystemDefaultManagerFactory::class,
         \SimpleInvoices\View\Resolver\TemplatePathStack::class => \SimpleInvoices\Service\ViewTemplatePathStackFactory::class,
+        \Zend\Session\SessionManager::class => \SimpleInvoices\Service\SessionManagerFactory::class,
     ],
 ]);
 
@@ -245,8 +246,12 @@ checkConnection();
 //if user logged into Simple Invoices with auth off then auth turned on - id via fake_auth and kill session
 if ( ($config->authentication->enabled == 1 ) AND ($auth_session->fake_auth =="1" ) )
 {
-    Zend_Session::start();
-    Zend_Session::destroy(true);
+    $session = $serviceManager->get(\Zend\Session\SessionManager::class);
+    $session->start();
+    $session->destroy([
+        'clear_storage'      => true,
+        'send_expire_cookie' => true,
+    ]);
     header('Location: .');
 }
 

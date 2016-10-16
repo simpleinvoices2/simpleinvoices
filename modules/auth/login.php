@@ -15,7 +15,9 @@ $menu = false;
 // so config.php works ok without using index.php define browse
 define("BROWSE","browse");
 
-Zend_Session::start();
+// TODO: Really not needed as it should be initialized in bootstrap
+$session = $services->get(\Zend\Session\SessionManager::class);
+$session->start();
 
 $errorMessage = '';
 
@@ -47,7 +49,7 @@ if (!empty($_POST['user']) && !empty($_POST['pass']))
     $result = $authAdapter->authenticate();
     
     if ($result->isValid()) {
-        Zend_Session::start();
+        $session->start();
 
         /*
          * grab user data  from the database

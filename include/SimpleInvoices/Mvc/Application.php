@@ -7,6 +7,7 @@ use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
 use SimpleInvoices\View\Resolver\TemplatePathStack;
+use Zend\Session\SessionManager;
 
 /**
  * Provides a class to store the application wide
@@ -98,7 +99,8 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         }
         
         // Bootstrap session
-        \Zend_Session::start();
+        $session = $this->serviceManager->get(SessionManager::class);
+        $session->start();
         $sessionContainer = new \Zend\Session\Container('Zend_Auth');
         if (empty($sessionContainer->domain_id)) {
             // set the default domain
