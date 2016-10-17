@@ -1,7 +1,6 @@
 <?php
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Payment;
-use SimpleInvoices\Deprecate\Email;
 use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
 use Zend\Mail\Message;
 

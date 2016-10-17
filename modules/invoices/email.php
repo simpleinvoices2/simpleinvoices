@@ -11,7 +11,6 @@
  */
 
 use SimpleInvoices\Deprecate\Invoice;
-use SimpleInvoices\Deprecate\Email;
 use SimpleInvoices\Deprecate\Export;
 use Zend\Mail\Message;
 use Zend\Mime\Message as MimeMessage;

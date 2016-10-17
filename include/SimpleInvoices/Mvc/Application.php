@@ -127,7 +127,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             /*
              * If auth not on - use default domain and user id of 1
              * 
-             * chuck the user details sans password into the Zend_auth session
+             * chuck the user details sans password into the SI_AUTH session
              */
             $sessionContainer->id = "1";
             $sessionContainer->domain_id = "1";
