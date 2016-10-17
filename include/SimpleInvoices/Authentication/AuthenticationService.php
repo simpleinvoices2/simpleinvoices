@@ -6,6 +6,7 @@ use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Authentication\Storage\StorageInterface;
 use Zend\Authentication\Adapter\AdapterInterface;
+use Zend\Session\Container;
 //use Zend\EventManager\EventManagerInterface;
 //use Zend\Authentication\Adapter\AdapterInterface;
 //use Zend\Authentication\AuthenticationService;
@@ -17,6 +18,8 @@ class AuthenticationService extends BaseAuthenticationService
      * @var EventManagerInterface
      */
     protected $events;
+    
+    protected $patchesDone;
     
     /**
      * Constructor
@@ -32,6 +35,8 @@ class AuthenticationService extends BaseAuthenticationService
         if (null !== $events) {
             $this->setEventManager($events);
         }
+        
+        $this->patchesDone = getNumberOfDoneSQLPatches();
     }
     
     /**
@@ -58,7 +63,49 @@ class AuthenticationService extends BaseAuthenticationService
         $event->setAdapter($adapter);
         $events->triggerEvent($event);
         
-        $result = parent::authenticate($adapter);
+        $result = $adapter->authenticate();
+
+        /**
+         * ZF-7546 - prevent multiple successive calls from storing inconsistent results
+         * Ensure storage has clean state
+         */
+        if ($this->hasIdentity()) {
+            $this->clearIdentity();
+        }
+
+        if ($result->isValid()) {
+            $sessionContainer = new Container('SI_AUTH');
+            $data = $adapter->getResultRowObject();
+            
+            if ($this->patchesDone < 147) {
+                $sessionContainer->id =  $data->user_id;
+                $sessionContainer->email = $data->user_email;
+                // Fake them
+                $sessionContainer->role_name = 'administrator';
+                $sessionContainer->domain_id = 0;
+            } elseif ($this->patchesDone < 184) {
+                $sessionContainer->id =  $data->user_id;
+                $sessionContainer->email = $data->user_email;
+                $sessionContainer->role_name = $data->role_name;
+                $sessionContainer->domain_id = $data->user_domain_id;
+                // Customer/biller ID
+                $sessionContainer->user_id = 0;
+            } elseif ($this->patchesDone < 292) {
+                $sessionContainer->id =  $data->id;
+                $sessionContainer->email = $data->email;
+                $sessionContainer->role_name = $data->role_name;
+                $sessionContainer->domain_id = $data->user_domain_id;
+                // Customer/biller ID
+                $sessionContainer->user_id = 0;
+            } else {
+                $sessionContainer->id =  $data->id;
+                $sessionContainer->email = $data->email;
+                $sessionContainer->role_name = $data->role_name;
+                $sessionContainer->domain_id = $data->user_domain_id;
+                // Customer/biller ID
+                $sessionContainer->user_id = $data->user_id;
+            }
+        }
         
         // Trigger authentication post event
         $event = new AuthenticationEvent();

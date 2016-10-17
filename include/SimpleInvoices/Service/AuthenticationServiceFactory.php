@@ -7,6 +7,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use SimpleInvoices\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter;
 use Zend\Authentication\Storage\Session;
+use Zend\Db\Sql\Select;
 
 class AuthenticationServiceFactory implements FactoryInterface
 {
@@ -22,7 +23,7 @@ class AuthenticationServiceFactory implements FactoryInterface
     {
         $eventManager = $container->get('SimpleInvoices\EventManager');
         $zendDb       = $container->get('SimpleInvoices\Database\Adapter');
-        $storage      = new Session('SI_AUTH');
+        $storage      = new Session('SI_AUTH', 'id');
         $adapter      = new CredentialTreatmentAdapter($zendDb);
         
         // =============================================
@@ -39,6 +40,28 @@ class AuthenticationServiceFactory implements FactoryInterface
                 ->setIdentityColumn($user_email)
                 ->setCredentialColumn($user_password)
                 ->setCredentialTreatment('MD5(?)');
+        
+        // Modify the select here
+        $select = $adapter->getDbSelect();
+        
+        if ($PatchesDone >= 147) {
+            if($PatchesDone < 184) {
+                $select->join(
+                    TB_PREFIX . 'user_role', 
+                    TB_PREFIX . $user_table . '.USER_role_id = ' . TB_PREFIX . 'user_role.id', 
+                    ['role_name' => 'name'], 
+                    Select::JOIN_LEFT
+                );
+            } else {
+                $select->join(
+                    TB_PREFIX . 'user_role', 
+                    TB_PREFIX . $user_table . '.role_id = ' . TB_PREFIX . 'user_role.id', 
+                    ['role_name' => 'name'], 
+                    Select::JOIN_LEFT
+                );
+                $select->where(['enabled' => 1]);
+            }
+        }
         
         // ------------------   E N D   ----------------
         // =============================================
