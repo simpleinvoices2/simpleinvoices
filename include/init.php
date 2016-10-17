@@ -99,19 +99,6 @@ $smarty       = $serviceManager->get('Smarty');
  * Old stuff follows...
  */
 
-//start use of zend_cache   
-$frontendOptions = array(
-    'lifetime' => 7200, // cache lifetime of 2 hours
-    'automatic_serialization' => true
-);
-                   
-
-/* 
- * Zend framework init - end
- */
-
-
-
 /* 
  * Smarty inint - start
  */
@@ -143,25 +130,7 @@ if (!is_writable('./tmp/cache')) {
     
    simpleInvoicesError('notWriteable','file','./tmp/cache');
 }
-/*
- * Zend Framework cache section - start
- * -- must come after the tmp dir writeable check
- */
-$backendOptions = array(
-    'cache_dir' => './tmp/' // Directory where to put the cache files
-);
-                                   
-// getting a Zend_Cache_Core object
-$cache = Zend_Cache::factory('Core',
-                             'File',
-                             $frontendOptions,
-                             $backendOptions);
 
-//required for some servers
-Zend_Date::setOptions(array('cache' => $cache)); // Active aussi pour Zend_Locale
-/*
- * Zend Framework cache section - end
- */
 
 //cache directory. Have to be writeable (chmod 777)
 //$smarty->compile_dir = "tmp/cache";
