@@ -119,6 +119,24 @@ class AuthenticationService extends BaseAuthenticationService
     }
     
     /**
+     * Clears the identity from persistent storage
+     *
+     * @return void
+     */
+    public function clearIdentity()
+    {
+        $this->getStorage()->clear();
+        
+        $sessionContainer = new Container('SI_AUTH');
+        
+        unset($sessionContainer->id);
+        unset($sessionContainer->email);
+        unset($sessionContainer->role_name);
+        unset($sessionContainer->domain_id);
+        unset($sessionContainer->user_id);
+    }
+    
+    /**
      * Retrieve the event manager
      *
      * Lazy-loads an EventManager instance if none registered.
