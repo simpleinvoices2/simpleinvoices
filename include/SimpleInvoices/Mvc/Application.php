@@ -133,9 +133,14 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             $sessionContainer->domain_id = "1";
             $sessionContainer->email = "demo@simpleinvoices.org";
             //fake_auth is identifier to say that user logged in with auth off
-            $sessionContainer->fake_auth = "1";
+            $sessionContainer->fake_auth = true;
             //No Customer login as logins disabled
             $sessionContainer->user_id = "0";
+        }
+        
+        if (!isset($sessionContainer->fake_auth)) {
+            // TODO: Check the user is enabled.
+            //       Don't use session as I want to close his connections as soon as it is disabled
         }
         
         // Setup MVC Event
