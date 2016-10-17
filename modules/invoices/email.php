@@ -13,6 +13,10 @@
 use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Email;
 use SimpleInvoices\Deprecate\Export;
+use Zend\Mail\Message;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mime\Mime;
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -46,17 +50,46 @@ if ($_GET['stage'] == 2 ) {
 
 	#$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
 
-	$email = new Email();
-	$email->format = 'invoice';
-	$email->notes = $_POST['email_notes'];
-	$email->from = $_POST['email_from'];
-	$email->from_friendly = $biller['name'];
-	$email->to = $_POST['email_to'];
-	$email->bcc = $_POST['email_bcc'];
-	$email->subject = $_POST['email_subject'];
-	$email->attachment = $pdf_file_name;
-	$message = $email->send ();
-
+	$mimeMessage = new MimeMessage();
+	
+	$htmlPart       = new MimePart($_POST['email_notes']);
+	$htmlPart->type = 'text/html';
+	$textPart       = new MimePart($_POST['email_notes']);
+	$textPart->type = 'text/plain';
+	$mimeMessage->setParts([$textPart, $htmlPart]);
+	
+	$contentPart = new MimePart($mimeMessage->generateMessage());
+	$contentPart->type = 'multipart/alternative;' . PHP_EOL . ' boundary="' . $mimeMessage->getMime()->boundary() . '"';
+	
+	$attachment = new MimePart(fopen('./tmp/cache/' . $pdf_file_name, 'r'));
+	$attachment->setFileName($pdf_file_name);
+	$attachment->type = 'application/pdf';
+	$attachment->encoding    = Mime::ENCODING_BASE64;
+	$attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+	
+	$body = new MimeMessage();
+	$body->setParts(array($contentPart, $attachment));
+	
+	$mailMessage = new Message();
+	$mailMessage->setFrom($_POST['email_from'], $biller['name']);
+	$mailMessage->addTo($_POST['email_to']);
+	if (!empty($_POST['email_bcc'])) {
+	   $mailMessage->setBcc($_POST['email_bcc']);
+	}
+	$mailMessage->setSubject($_POST['email_subject']);
+	$mailMessage->setBody($body);
+	$mailMessage->setEncoding('utf-8');
+		
+	
+	$services->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
+	
+	// TODO: Make it more elegant and use a template with translation
+	//       Also make sure it has been sent, no check right now
+	$message  = '<html>';
+	$message .= '<meta http-equiv="refresh" content="2;URL=index.php?module=invoices&amp;view=manage">';
+	$message .= '<body><p>' . $pdf_file_name . ' has been emailed.</p></body>';
+	$message .= '</html>';
+	die($message);
 }
 
 //stage 3 = assemble email and send
@@ -65,10 +98,9 @@ else if ($_GET['stage'] == 3 ) {
 }
 
 $smarty->assign('message', $message);
-$smarty->assign('biller',$biller);
-$smarty->assign('customer',$customer);
-$smarty->assign('invoice',$invoice);
-$smarty->assign('preferences',$preference);
-
+$smarty->assign('biller', $biller);
+$smarty->assign('customer', $customer);
+$smarty->assign('invoice', $invoice);
+$smarty->assign('preferences', $preference);
 $smarty->assign('pageActive', 'invoice');
 $smarty->assign('active_tab', '#money');

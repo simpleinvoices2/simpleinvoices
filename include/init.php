@@ -45,6 +45,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         \SimpleInvoices\View\Resolver\TemplatePathStack::class => \SimpleInvoices\Service\ViewTemplatePathStackFactory::class,
         \Zend\Session\SessionManager::class => \SimpleInvoices\Service\SessionManagerFactory::class,
         \SimpleInvoices\Authentication\AuthenticationService::class => \SimpleInvoices\Service\AuthenticationServiceFactory::class,
+        'SimpleInvoices\Mail\TransportInterface' => \SimpleInvoices\Service\MailTransportFactory::class,
     ],
 ]);
 
