@@ -79,7 +79,6 @@ if ($_GET['stage'] == 2 ) {
 	$mailMessage->setSubject($_POST['email_subject']);
 	$mailMessage->setBody($body);
 	$mailMessage->setEncoding('utf-8');
-		
 	
 	$services->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
 	

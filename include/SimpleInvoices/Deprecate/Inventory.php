@@ -3,6 +3,7 @@ namespace SimpleInvoices\Deprecate;
 
 use SimpleInvoices\I18n\SiLocal;
 use SimpleInvoices\Deprecate\Product;
+use Zend\Mail\Message;
 
 class Inventory {
 	
@@ -174,6 +175,8 @@ class Inventory {
 
 	public function check_reorder_level()
 	{
+	    global $serviceManager;
+	    
         //select qty and reorder level
 
         $inventory = new Product();
@@ -194,13 +197,15 @@ class Inventory {
 
         //print_r($return);
         #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
-        $email = new Email();
-        $email->notes = $email_message;
-        $email->from = $email->get_admin_email();
-        $email->to = $email->get_admin_email();
-        #$email->bcc = "justin@localhost";
-        $email->subject = "Simple Invoices reorder level email";
-        $email->send ();
+        
+        $mailMessage = new Message();
+        $mailMessage->setFrom('simpleinvoices@localhost.localdomain');
+        $mailMessage->addTo( getAdminEmail() );
+        $mailMessage->setSubject('Simple Invoices reorder level email');
+        $mailMessage->setBody($email_message);
+        $mailMessage->setEncoding('utf-8');
+        
+        $serviceManager->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
         
         return $return;
     }

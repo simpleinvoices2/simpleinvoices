@@ -3,6 +3,7 @@ use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Payment;
 use SimpleInvoices\Deprecate\Email;
 use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
+use Zend\Mail\Message;
 
 $p = new paypal_class;             // initiate an instance of the class
 #$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';   // testing paypal url
@@ -87,12 +88,14 @@ if ($p->validate_ipn()) {
 		$body .= " at ".date('g:i A')."\n\nDetails:\n";
 		$body .= $paypal_data;
 
-		$email = new Email();
-		$email->notes = $body;
-		$email->to = $biller['email'];
-		$email->from = "simpleinvoices@localhost.localdomain";
-		$email->subject = 'Instant Payment Notification - Recieved Payment';
-		$email->send ();
+		$mailMessage = new Message();
+		$mailMessage->setFrom('simpleinvoices@localhost.localdomain');
+		$mailMessage->addTo($biller['email']);
+		$mailMessage->setSubject('Instant Payment Notification - Recieved Payment');
+		$mailMessage->setBody($body);
+		$mailMessage->setEncoding('utf-8');
+		
+		$services->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
 
 		$xml_message['data'] .= $body;
 	}

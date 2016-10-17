@@ -3,6 +3,7 @@ namespace SimpleInvoices\Deprecate;
 
 use SimpleInvoices\Deprecate\Email\Body as EmailBody;
 //use SimpleInvoices\Deprecate\Invoice;
+use Zend\Mail\Message;
 
 class Cron {
 	
@@ -232,6 +233,7 @@ class Cron {
 	public function run()
 	{
         global $db;
+        global $serviceManager;
 
         $today = date('Y-m-d');
         $cron = new Cron();
@@ -374,6 +376,7 @@ class Cron {
                             $export -> execute();
 
                             #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
+                            /*
                             $email = new Email();
                             $email->domain_id = $domain_id;
                             $email->format = 'cron_invoice';
@@ -392,6 +395,7 @@ class Cron {
                             $email->subject = $email->set_subject();
                             $email->attachment = $pdf_file_name_invoice;
                             $return['email_message'] = $email -> send ();
+                            */
 
                         }
 
@@ -438,6 +442,7 @@ class Cron {
                                     $export_rec -> execute();
 
                                     #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
+                                    /*
                                     $email_rec = new Email();
                                     $email_rec -> domain_id = $domain_id;
                                     $email_rec -> format = 'cron_invoice';
@@ -456,65 +461,25 @@ class Cron {
                                     $email_rec->attachment = $pdf_file_name_invoice;
                                     $email_rec->subject = $email_rec->set_subject('invoice_eway_receipt');
                                     $return['email_message'] = $email_rec -> send ();
-
-
-                                    /*
-                                    * If you want a receipt as PDF being emailed to the customer
-                                    * uncomment the code below
-                                    */
-                                    /*
-                                    $export = new Export();
-                                    $export -> format = "pdf";
-                                    $export -> file_location = 'file';
-                                    $export -> module = 'payment';
-                                    $export -> id = $payment_id;
-                                    $export -> execute();
-
-                                    $email = new Email();
-                                    $email -> format = 'cron_payment';
-
-                                        $email_body = new EmailBody();
-                                        $email_body->email_type = 'cron_payment';
-                                        $email_body->customer_name = $customer['name'];
-                                        $email_body->invoice_name = 'payment'.$payment_id;
-                                        $email_body->biller_name = $biller['name'];
-                                    
-                                    $email -> notes = $email_body->create();
-                                    $email -> from = $biller['email'];
-                                    $email -> from_friendly = $biller['name'];
-                                    if($value['email_customer'] == "1")
-                                    {
-                                        $email -> to = $customer['email'];
-                                    }
-                                    if($value['email_biller'] == "1" AND $value['email_customer'] == "1")
-                                    {
-                                        $email -> to = $customer['email'].";".$biller['email'];
-                                    }
-                                    if($value['email_biller'] == "1" AND $value['email_customer'] == "0")
-                                    {
-                                        $email -> to = $customer['email'];
-                                    }
-                                    $email -> subject = $pdf_file_name_receipt." from ".$biller['name'];
-                                    $email -> attachment = $pdf_file_name_receipt;
-                                    $return['email_message'] = $email->send();
                                     */
                                 }
 
                             } else {
-                                //do email to biller/admin - say error
-
-                                $email = new Email();
-                                $email->domain_id = $domain_id;
-                                $email->format = 'cron_payment';
-                                $email->from = $biller['email'];
-                                $email->from_friendly = $biller['name'];
-                                $email->to = $biller['email'];
-                                $email->subject = "Payment failed for ".$invoice['index_name'];
                                 $error_message ="Invoice:  ".$invoice['index_name']."<br /> Amount: ".$invoice['total']." <br />";
                                 foreach($eway->get_message() as $key => $value)
                                     $error_message .= "\n<br>\$ewayResponseFields[\"$key\"] = $value";
-                                $email -> notes = $error_message;
-                                $return['email_message'] = $email->send();
+                                //do email to biller/admin - say error
+
+                                $mailMessage = new Message();
+                                $mailMessage->setFrom($biller['email'], $biller['name']);
+                                $mailMessage->addTo( $biller['email'] );
+                                $mailMessage->setSubject('Payment failed for ' . $invoice['index_name']);
+                                $mailMessage->setBody($error_message);
+                                $mailMessage->setEncoding('utf-8');
+        
+                                $serviceManager->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
+        
+                                $return['email_message'] = '<br /> Cron payment error email sent.';
                             }
                         }
                     } else {
@@ -546,22 +511,6 @@ class Cron {
             $cron_log->domain_id = $domain_id;
             $cron_log->insert();
         */
-
-    /*
-    * If you want to get an email once cron has been run edit the below details
-    *
-    */
-    /*
-        $email = new Email();
-        $email -> format = 'cron';
-        #$email -> notes = $return;
-        $email -> from = "simpleinvoices@localhost";
-        $email -> from_friendly = "Simple Invoices - Cron";
-        $email -> to = "simpleinvoices@localhost";
-        #$email -> bcc = $_POST['email_bcc'];
-        $email -> subject = "Cron for Simple Invoices has been run for today:";
-        $email -> send ();
-    */
 
         return $return;   
     }

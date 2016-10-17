@@ -3492,3 +3492,21 @@ EOD;
 
 // end of db query functions moved from functions.php on 2013-10-28
 
+function getAdminEmail()
+{
+    $auth_session = new \Zend\Session\Container('SI_AUTH');
+    $domain_id    = $auth_session->domain_id;
+    
+    $sql = "SELECT u.email
+				FROM ".TB_PREFIX."user u
+					LEFT JOIN ".TB_PREFIX."user_role r
+						ON (u.role_id = r.id)
+				WHERE r.name = 'administrator'
+					AND domain_id = :domain_id
+				LIMIT 1
+	";
+    
+    $sth  = dbQuery($sql,':domain_id',$domain_id);
+
+    return $sth->fetchColumn();
+}

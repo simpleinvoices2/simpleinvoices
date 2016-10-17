@@ -3,6 +3,7 @@ use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Payment;
 use SimpleInvoices\Deprecate\Email;
 use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
+use Zend\Mail\Message;
 
 $logger->info('ACH API page called');
 if ($_POST['pg_response_code']=='A01') {
@@ -58,12 +59,15 @@ if ($_POST['pg_response_code']=='A01') {
 		$body .= " at ".date('g:i A')."\n\nDetails:\n";
 		$body .= $paypal_data;
 
-		$email = new Email();
-		$email->notes = $body;
-		$email->to = $biller['email'];
-		$email->from = "simpleinvoices@localhost.localdomain";
-		$email->subject = 'PaymentsGateway.com -Instant Payment Notification - Recieved Payment';
-		$email->send ();
+		$mailMessage = new Message();
+		$mailMessage->setFrom('simpleinvoices@localhost.localdomain');
+		$mailMessage->addTo($biller['email']);
+		$mailMessage->setSubject('PaymentsGateway.com -Instant Payment Notification - Recieved Payment');
+		$mailMessage->setBody($body);
+		$mailMessage->setEncoding('utf-8');
+		
+		$services->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
+		
         $xml_message = "+++++++++<br /><br />";
 		$xml_message .= "Thank you for the payment, the details have been recorded and ". $biller['name'] ." has been notified via email.";
         $xml_message .= "<br /><br />+++++++++<br />";
