@@ -4,6 +4,9 @@ namespace SimpleInvoices\Deprecate;
 use SimpleInvoices\Deprecate\Email\Body as EmailBody;
 //use SimpleInvoices\Deprecate\Invoice;
 use Zend\Mail\Message;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
+use Zend\Mime\Mime;
 
 class Cron {
 	
@@ -376,27 +379,42 @@ class Cron {
                             $export -> execute();
 
                             #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
-                            /*
-                            $email = new Email();
-                            $email->domain_id = $domain_id;
-                            $email->format = 'cron_invoice';
-
                             $email_body = new EmailBody();
                             $email_body->email_type = 'cron_invoice';
                             $email_body->customer_name = $customer['name'];
                             $email_body->invoice_name = $invoice['index_name'];
                             $email_body->biller_name = $biller['name'];
                             
-                            $email->notes = $email_body->create();
-                            $email->from = $biller['email'];
-                            $email->from_friendly = $biller['name'];
-							$email->to = $this->getEmailSendAddresses($value, $customer['email'], $biller['email']);
-                            $email->invoice_name = $invoice['index_name'];
-                            $email->subject = $email->set_subject();
-                            $email->attachment = $pdf_file_name_invoice;
-                            $return['email_message'] = $email -> send ();
-                            */
-
+                            $mimeMessage = new MimeMessage();
+                            
+                            $htmlPart       = new MimePart(  $email_body_rec->create() );
+                            $htmlPart->type = 'text/html';
+                            $textPart       = new MimePart(  $email_body_rec->create() );
+                            $textPart->type = 'text/plain';
+                            $mimeMessage->setParts([$textPart, $htmlPart]);
+                            
+                            $contentPart = new MimePart($mimeMessage->generateMessage());
+                            $contentPart->type = 'multipart/alternative;' . PHP_EOL . ' boundary="' . $mimeMessage->getMime()->boundary() . '"';
+                            
+                            $attachment = new MimePart(fopen('./tmp/cache/' . $pdf_file_name_invoice, 'r'));
+                            $attachment->setFileName($pdf_file_name_invoice);
+                            $attachment->type = 'application/pdf';
+                            $attachment->encoding    = Mime::ENCODING_BASE64;
+                            $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+                            
+                            $body = new MimeMessage();
+                            $body->setParts(array($contentPart, $attachment));
+                            
+                            $mailMessage = new Message();
+                            $mailMessage->setFrom($biller['email'], $biller['name']);
+                            $mailMessage->addTo( $this->getEmailSendAddresses($value, $customer['email'], $biller['email']) );
+                            $mailMessage->setSubject(pdf_file_name_invoice . ' from ' . $biller['name']);
+                            $mailMessage->setBody($body);
+                            $mailMessage->setEncoding('utf-8');
+                            
+                            $services->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
+                            
+                            $return['email_message'] = $pdf_file_name_invoice . ' has been emailed';                            
                         }
 
                         //Check that all details are OK before doing the eway payment
@@ -442,26 +460,42 @@ class Cron {
                                     $export_rec -> execute();
 
                                     #$attachment = file_get_contents('./tmp/cache/' . $pdf_file_name);
-                                    /*
-                                    $email_rec = new Email();
-                                    $email_rec -> domain_id = $domain_id;
-                                    $email_rec -> format = 'cron_invoice';
-
                                     $email_body_rec = new EmailBody();
                                     $email_body_rec->email_type = 'cron_invoice_receipt';
                                     $email_body_rec->customer_name = $customer['name'];
                                     $email_body_rec->invoice_name = $invoice['index_name'];
                                     $email_body_rec->biller_name = $biller['name'];
                                     
-                                    $email_rec->notes = $email_body_rec->create();
-                                    $email_rec->from = $biller['email'];
-                                    $email_rec->from_friendly = $biller['name'];
-									$email_rec->to = $this->getEmailSendAddresses($value, $customer['email'], $biller['email']);
-                                    $email_rec->invoice_name = $invoice['index_name'];
-                                    $email_rec->attachment = $pdf_file_name_invoice;
-                                    $email_rec->subject = $email_rec->set_subject('invoice_eway_receipt');
-                                    $return['email_message'] = $email_rec -> send ();
-                                    */
+                                    $mimeMessage = new MimeMessage();
+                                    
+                                    $htmlPart       = new MimePart(  $email_body_rec->create() );
+                                    $htmlPart->type = 'text/html';
+                                    $textPart       = new MimePart(  $email_body_rec->create() );
+                                    $textPart->type = 'text/plain';
+                                    $mimeMessage->setParts([$textPart, $htmlPart]);
+                                    
+                                    $contentPart = new MimePart($mimeMessage->generateMessage());
+                                    $contentPart->type = 'multipart/alternative;' . PHP_EOL . ' boundary="' . $mimeMessage->getMime()->boundary() . '"';
+                                    
+                                    $attachment = new MimePart(fopen('./tmp/cache/' . $pdf_file_name_invoice, 'r'));
+                                    $attachment->setFileName($pdf_file_name_invoice);
+                                    $attachment->type = 'application/pdf';
+                                    $attachment->encoding    = Mime::ENCODING_BASE64;
+                                    $attachment->disposition = Mime::DISPOSITION_ATTACHMENT;
+                                    
+                                    $body = new MimeMessage();
+                                    $body->setParts(array($contentPart, $attachment));
+                                    
+                                    $mailMessage = new Message();
+                                    $mailMessage->setFrom($biller['email'], $biller['name']);
+                                    $mailMessage->addTo( $this->getEmailSendAddresses($value, $customer['email'], $biller['email']) );
+                                    $mailMessage->setSubject($invoice['index_name'] . ' secure credit card payment successful');
+                                    $mailMessage->setBody($body);
+                                    $mailMessage->setEncoding('utf-8');
+                                    
+                                    $services->get('SimpleInvoices\Mail\TransportInterface')->send($mailMessage);
+                                    
+                                    $return['email_message'] = '<br />Cron email for invoice receipt ' . $pdf_file_name_invoice;
                                 }
 
                             } else {
