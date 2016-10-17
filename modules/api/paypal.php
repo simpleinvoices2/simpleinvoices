@@ -4,6 +4,8 @@ use SimpleInvoices\Deprecate\Payment;
 use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
 use Zend\Mail\Message;
 
+require_once("library/paypal/paypal.class.php");
+
 $p = new paypal_class;             // initiate an instance of the class
 #$p->paypal_url = 'https://www.sandbox.paypal.com/cgi-bin/webscr';   // testing paypal url
 $p->paypal_url = 'https://www.paypal.com/cgi-bin/webscr';     // paypal url

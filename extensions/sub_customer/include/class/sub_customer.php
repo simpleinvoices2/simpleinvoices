@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\Security\Encryption;
 
 class sub_customer
 {
@@ -31,7 +32,7 @@ class sub_customer
              :custom_field3, :custom_field4, :enabled
             )";
         //cc
-        $enc = new encryption();
+        $enc = new Encryption();
         $key = $config->encryption->default->key;	
         $encrypted_credit_card_number = $enc->encrypt($key, $credit_card_number);
 
@@ -103,7 +104,7 @@ class sub_customer
         {
             $credit_card_number = $_POST['credit_card_number_new'];
             //cc
-            $enc = new encryption();
+            $enc = new Encryption();
             $key = $config->encryption->default->key;	
             $encrypted_credit_card_number = $enc->encrypt($key, $credit_card_number);
 

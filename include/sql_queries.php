@@ -4,6 +4,7 @@ use SimpleInvoices\Deprecate\Invoice;
 use SimpleInvoices\Deprecate\Index;
 use SimpleInvoices\Deprecate\Db;
 use SimpleInvoices\Deprecate\SqlQueries;
+use SimpleInvoices\Security\Encryption;
 
 /**
  * @var SqlQueries
@@ -1536,7 +1537,7 @@ function updateCustomer() {
 		$credit_card_number = $_POST['credit_card_number_new'];
         
         //cc
-        $enc = new encryption();
+        $enc = new Encryption();
         $key = $config->encryption->default->key;
         $encrypted_credit_card_number = $enc->encrypt($key, $credit_card_number);
 
@@ -1627,7 +1628,7 @@ function insertCustomer() {
 				:custom_field3, :custom_field4, :enabled
 			)";
 	//cc
-	$enc = new encryption();
+	$enc = new Encryption();
     $key = $config->encryption->default->key;
 	$encrypted_credit_card_number = $enc->encrypt($key, $credit_card_number);
 

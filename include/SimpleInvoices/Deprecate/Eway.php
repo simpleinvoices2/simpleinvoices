@@ -2,6 +2,7 @@
 namespace SimpleInvoices\Deprecate;
 
 use SimpleInvoices\Deprecate\Payment\Type as PaymentType;
+use SimpleInvoices\Security\Encryption;
 //use SimpleInvoices\Deprecate\Payment;
 
 class Eway 
@@ -80,7 +81,7 @@ class Eway
 		$eway_invoice_total = htmlsafe(trim($value));
         $logger->info("eway total: " . $eway_invoice_total);
 
-        $enc = new \encryption();
+        $enc = new Encryption();
         $key = $config->encryption->default->key;	
         $credit_card_number = $enc->decrypt($key, $this->customer['credit_card_number']);
 
