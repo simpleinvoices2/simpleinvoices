@@ -151,14 +151,6 @@ ini_set('display_errors', $config->phpSettings->display_errors);
 ini_set('log_errors', $config->phpSettings->log_errors); 
 ini_set('error_log', $config->phpSettings->error_log); 
 
-$zendDb = Zend_Db::factory($config->database->adapter, array(
-    'host'     => $config->database->params->host,
-    'username' => $config->database->params->username,
-    'password' => $config->database->params->password,
-    'dbname'   => $config->database->params->dbname,
-    'port'     => $config->database->params->port)
-);
-
 //include_once("./include/sql_patches.php");
 
 include_once("./include/class/db.php");

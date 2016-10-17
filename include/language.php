@@ -14,11 +14,11 @@
 unset($LANG);
 
 
-$tables = $zendDb->listTables(); //TEST: print db tables 
-
+$metadata = new \Zend\Db\Metadata\Metadata( $serviceManager->get('SimpleInvoices\Database\Adapter') );
+$tables = $metadata->getTableNames();
 
 /*if upgrading from old version then getDefaultLang wont work during install*/
-if(in_array(TB_PREFIX.'system_defaults',$tables))
+if(in_array(TB_PREFIX.'system_defaults', $tables))
 {
 	$language = getDefaultLanguage();
 } else {
