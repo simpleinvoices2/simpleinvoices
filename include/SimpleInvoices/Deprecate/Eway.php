@@ -74,6 +74,8 @@ class Eway
             $this->preference = getPreference($this->invoice['preference_id'], $this->domain_id);
         }
 
+        include_once('./library/ewaylib.php');
+        
         $eway = new \ewaylib($this->biller['eway_customer_id'],'REAL_TIME', false);
 
         //Eway only accepts amount in cents - so times 100

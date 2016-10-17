@@ -59,19 +59,6 @@ $application = new \SimpleInvoices\Mvc\Application($serviceManager, $serviceMana
 $serviceManager->setService('SimpleInvoices', $application);
 
 /**
- * Before bootstrapping the application we need ZF1 autoloader
- * in order for non-ported code to work.
- */
-set_include_path(get_include_path() . PATH_SEPARATOR . "./library/");
-set_include_path(get_include_path() . PATH_SEPARATOR . "./library/pdf");
-set_include_path(get_include_path() . PATH_SEPARATOR . "./include/");
-
-require_once 'Zend/Loader/Autoloader.php';
-
-$autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->setFallbackAutoloader(true);
-
-/**
  * Bootstrap the application
  */
 $application->bootstrap();
@@ -152,8 +139,6 @@ ini_set('error_log', $config->phpSettings->error_log);
 
 //include_once("./include/sql_patches.php");
 
-include_once("./include/class/db.php");
-include_once("./include/class/index.php");
 $db = \SimpleInvoices\Deprecate\Db::getInstance();
 
 include_once("./include/sql_queries.php");
@@ -237,16 +222,6 @@ if ($config->authentication->enabled == 1 )
     
     $checkPermission == "denied" ? exit($LANG['denied_page']) :"" ;
 }
-
-//switch ($module)
-//{
-//	case "export" :	
-//		$smarty_output = "fetch";
-//		break;
-//	default :
-//		$smarty_output = "display";
-//		break;
-//}
 
 //get the url - used for templates / pdf
 $siUrl = getURL();
