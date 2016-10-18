@@ -14,6 +14,11 @@ class PatchManager
      */
     protected $adapter;
     
+    /**
+     * Number of done SQL patches.
+     * 
+     * @var int
+     */
     protected $doneSQLPatchesNumber;
     
     /**
@@ -21,12 +26,28 @@ class PatchManager
      */
     protected $table;
 
-    public function __construct(AdapterInterface $adapter, $table)
+    /**
+     * Constructor
+     * 
+     * @param AdapterInterface $adapter The database adapter
+     * @param unknown          $table   The table name for SQL patches.
+     */
+    public function __construct(AdapterInterface $adapter, $table = null)
     {
         $this->adapter = $adapter;
-        $this->table   = $table;
+        if (null === $table) {
+            $this->table = TB_PREFIX . 'sql_patchmanager';
+        } else {
+            $this->table   = $table;
+        }
     }
-    
+
+    /**
+     * Get the number of done SQL patches.
+     * 
+     * @throws Exception\RuntimeException
+     * @return int
+     */
     public function getNumberOfDoneSQLPatches() 
     {
         if (null !== $this->doneSQLPatchesNumber) {

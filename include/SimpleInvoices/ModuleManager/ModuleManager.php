@@ -15,6 +15,12 @@ use Zend\Session\Container;
 
 class ModuleManager implements ModuleManagerInterface
 {
+    /**#@+
+     * Reference to Zend\Mvc\MvcEvent::EVENT_BOOTSTRAP
+     */
+    const EVENT_BOOTSTRAP = 'bootstrap';
+    /**#@-*/
+    
     /**
      * @var AdapterInterface
      */
@@ -30,9 +36,29 @@ class ModuleManager implements ModuleManagerInterface
      */
     protected $events;
     
+    /**
+     * The user domain identifier.
+     * 
+     * @var int
+     */
     protected $domainId;
     
-    protected $doneSQLPatches;
+    /**
+     * Number of done SQL patches.
+     * 
+     * @var int
+     */
+    protected $doneSQLPatches = 0;
+    
+    /**
+     * @var array An array of Module classes of loaded modules
+     */
+    protected $loadedModules = [];
+    
+    /**
+     * @var bool
+     */
+    protected $loadFinished;
     
     /**
      * modules
@@ -81,7 +107,7 @@ class ModuleManager implements ModuleManagerInterface
         }
         
         $this->doneSQLPatches = $doneSQLPatches;
-        $this->table          = $table;
+        $this->table          = $table;   
     }
     
     /**
@@ -176,6 +202,84 @@ class ModuleManager implements ModuleManagerInterface
     }
     
     /**
+     * Load a specific module by name.
+     *
+     * @param  string|array               $module
+     * @return mixed Module's Module class
+     */
+    public function loadModule($module)
+    {
+        $moduleName = $module;
+        if (is_array($module)) {
+            $moduleName = key($module);
+            $module     = current($module);
+        }
+        
+        if (isset($this->loadedModules[$moduleName])) {
+            return $this->loadedModules[$moduleName];
+        }
+        
+        /*
+         * Keep track of nested module loading using the $loadFinished
+         * property.
+         *
+         * Increment the value for each loadModule() call and then decrement
+         * once the loading process is complete.
+         *
+         * To load a module, we clone the event if we are inside a nested
+         * loadModule() call, and use the original event otherwise.
+         */
+        if (!isset($this->loadFinished)) {
+            $this->loadFinished = 0;
+        }
+        
+        $event = ($this->loadFinished > 0) ? clone $this->getEvent() : $this->getEvent();
+        $event->setModuleName($moduleName);
+        
+        $this->loadFinished++;
+        
+        $module = $this->loadModuleByName($event);
+        
+        $event->setModule($module);
+        $event->setName(ModuleEvent::EVENT_LOAD_MODULE);
+        
+        $this->loadedModules[$moduleName] = $module;
+        $this->getEventManager()->triggerEvent($event);
+        
+        $this->loadFinished--;
+        
+        return $module;
+    }
+    
+    /**
+     * Load a module with the name
+     * @param  ModuleEvent $event
+     * @return mixed                            module instance
+     * @throws Exception\RuntimeException
+     */
+    protected function loadModuleByName(ModuleEvent $event)
+    {
+        // We are using a resolver to allow further customization.
+        // for example, if the main module folder is NOT writable by
+        // a users but he wants to upload a module he could define
+        // a custom module path for his setup.
+        $event->setName(ModuleEvent::EVENT_LOAD_MODULE_RESOLVE);
+        $result = $this->getEventManager()->triggerEventUntil(function ($r) {
+            return (is_object($r));
+        }, $event);
+        
+        $module = $result->last();
+        if (!is_object($module)) {
+            throw new Exception\RuntimeException(sprintf(
+                'Module (%s) could not be initialized.',
+                $event->getModuleName()
+            ));
+        }
+        
+        return $module;
+    }
+    
+    /**
      * Load the provided modules.
      *
      * @triggers loadModules
@@ -191,6 +295,15 @@ class ModuleManager implements ModuleManagerInterface
         $events = $this->getEventManager();
         $event  = $this->getEvent();
         $event->setName(ModuleEvent::EVENT_LOAD_MODULES);
+        $events->triggerEvent($event);
+        
+        /**
+         * Having a dedicated .post event abstracts the complexity of priorities from the user.
+         * Users can attach to the .post event and be sure that important
+         * things like config merging are complete without having to worry if
+         * they set a low enough priority.
+         */
+        $event->setName(ModuleEvent::EVENT_LOAD_MODULES_POST);
         $events->triggerEvent($event);
         
         return $this;
@@ -210,7 +323,7 @@ class ModuleManager implements ModuleManagerInterface
         foreach ($this->getModules() as $moduleName => $module) {
             // Only load enabled modules
             if ($module->isEnabled()) {
-                
+                $this->loadModule([$moduleName => $module]);
             }
         }
         

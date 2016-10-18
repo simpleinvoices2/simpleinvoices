@@ -5,6 +5,7 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\SharedEventManager;
 
 class EventManagerFactory implements FactoryInterface
 {
@@ -20,16 +21,12 @@ class EventManagerFactory implements FactoryInterface
     {
         if ($this->acceptsSharedManagerToConstructor()) {
             // zend-eventmanager v3
-            return new EventManager(
-                $container->has('SharedEventManager') ? $container->get('SharedEventManager') : null
-            );
+            return new EventManager( new SharedEventManager() );
         }
         
         // zend-eventmanager v2
         $events = new EventManager();
-        if ($container->has('SharedEventManager')) {
-            $events->setSharedManager($container->get('SharedEventManager'));
-        }
+        $events->setSharedManager($container->get('SharedEventManager'));
         
         return $events;
     }

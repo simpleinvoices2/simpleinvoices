@@ -3,7 +3,6 @@ namespace SimpleInvoices\Mvc;
 
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
-use Zend\Session\Container as SessionContainer;
 
 class RouteListener extends AbstractListenerAggregate
 {

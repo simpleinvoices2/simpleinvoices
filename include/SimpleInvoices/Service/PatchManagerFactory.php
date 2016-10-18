@@ -4,7 +4,6 @@ namespace SimpleInvoices\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use SimpleInvoices\PatchManager\PatchManager;
 
 class PatchManagerFactory implements FactoryInterface

@@ -6,6 +6,8 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use SimpleInvoices\ModuleManager\ModuleManagerInterface;
 use SimpleInvoices\ModuleManager\ModuleManager;
+use SimpleInvoices\ModuleManager\Listener\DefaultListenerAggregate;
+use SimpleInvoices\ModuleManager\ModuleEvent;
 
 class ModuleManagerFactory implements FactoryInterface
 {
@@ -22,8 +24,15 @@ class ModuleManagerFactory implements FactoryInterface
         $adapter        = $container->get('SimpleInvoices\Database\Adapter');
         $patchManager   = $container->get('SimpleInvoices\PatchManager');
         $doneSQLPatches = $patchManager->getNumberOfDoneSQLPatches();
+        $events         = $container->get('SimpleInvoices\EventManager');
         
-        return new ModuleManager($adapter, TB_PREFIX . 'extensions', $doneSQLPatches);
+        $defaultListeners = new DefaultListenerAggregate();
+        $defaultListeners->attach($events);
+        
+        $moduleEvent = new ModuleEvent();
+        $moduleEvent->setParam('ServiceManager', $container);
+        
+        return new ModuleManager($adapter, TB_PREFIX . 'extensions', $doneSQLPatches, null, $events);
     }
 
     /**

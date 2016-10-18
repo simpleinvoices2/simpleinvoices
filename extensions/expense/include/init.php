@@ -1,4 +1,7 @@
 <?php
 
+// No autoloader so they must be included
 
-set_include_path(get_include_path() . PATH_SEPARATOR . "./extensions/expense/include/class");
+include_once(__DIR__ . '/class/expense.php');
+include_once(__DIR__ . '/class/expenseaccount.php');
+include_once(__DIR__ . '/class/expensetax.php');
