@@ -43,7 +43,9 @@ class ModuleResolverListener
         }
         
         if (is_dir('./extensions/' . $moduleName)) {
-            return new DumbModule();
+            $module = new DumbModule();
+            $module->extensionPath = './extensions/' . $moduleName;
+            return $module;
         }
         
         return false;

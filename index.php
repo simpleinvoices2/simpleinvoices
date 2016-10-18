@@ -31,24 +31,9 @@ require_once './vendor/autoload.php';
 
 require_once("./include/init.php");
 	
-
-foreach($config->extension as $extension)
-{
-	/*
-	* If extension is enabled then continue and include the requested file for that extension if it exists
-	*/	
-	if($extension->enabled == "1")
-	{
-		//echo "Enabled:".$value['name']."<br><br>";
-		if(file_exists("./extensions/$extension->name/include/init.php"))
-		{
-			require_once("./extensions/$extension->name/include/init.php");
-		}
-	}
-}
 /*
-* The include configs and requirements stuff section - end
-*/
+ * The include configs and requirements stuff section - end
+ */
 
 $smarty->assign("config",$config); // to toggle the login / logout button visibility in the menu
 $smarty->assign("module",$module);
