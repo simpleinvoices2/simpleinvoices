@@ -49,8 +49,8 @@
 
 {/literal}
 	{if $config->debug->level == "All"}
-	<link rel="stylesheet" type="text/css" href="{$basePath}/library/blackbirdjs/blackbird.css" />	
-	<script type="text/javascript" src="{$basePath}/library/blackbirdjs/blackbird.js"></script>
+	<link rel="stylesheet" type="text/css" href="{$basePath}/public/assets/blackbirdjs/blackbird.css" />	
+	<script type="text/javascript" src="{$basePath}/public/assets/blackbirdjs/blackbird.js"></script>
 	{/if}
 {literal}
 	<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery.validationEngine.js"></script>
