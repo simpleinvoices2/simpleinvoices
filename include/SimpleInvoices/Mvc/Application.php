@@ -143,6 +143,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             //       Don't use session as I want to close his connections as soon as it is disabled
         }
         
+        // Initialize modules
+        $moduleManager = $serviceManager->get('SimpleInvoices\ModuleManager');
+        $moduleManager->loadModules();
+        
+        
         // Setup MVC Event
         $this->event = $event  = new MvcEvent();
         $event->setName(MvcEvent::EVENT_BOOTSTRAP);

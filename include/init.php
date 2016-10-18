@@ -46,6 +46,8 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         \Zend\Session\SessionManager::class => \SimpleInvoices\Service\SessionManagerFactory::class,
         \SimpleInvoices\Authentication\AuthenticationService::class => \SimpleInvoices\Service\AuthenticationServiceFactory::class,
         'SimpleInvoices\Mail\TransportInterface' => \SimpleInvoices\Service\MailTransportFactory::class,
+        'SimpleInvoices\ModuleManager' => \SimpleInvoices\Service\ModuleManagerFactory::class,
+        'SimpleInvoices\PatchManager' => \SimpleInvoices\Service\PatchManagerFactory::class,
     ],
 ]);
 
@@ -75,10 +77,11 @@ $application->runFirst();
  * These are things that have changed but still not fully 
  * refactored.
  */
-$routeMatch = $application->getMvcEvent()->getRouteMatch();
-$module = $routeMatch->getParam('module', null);
-$view   = $routeMatch->getParam('view', null);
-$action = $routeMatch->getParam('action', null);
+$routeMatch        = $application->getMvcEvent()->getRouteMatch();
+$module            = $routeMatch->getParam('module', null);
+$view              = $routeMatch->getParam('view', null);
+$action            = $routeMatch->getParam('action', null);
+$config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getModules();
 
 $auth_session = new \Zend\Session\Container('SI_AUTH');
 $smarty       = $serviceManager->get('Smarty');
@@ -146,36 +149,6 @@ $install_tables_exists = checkTableExists(TB_PREFIX."biller");
 if ($install_tables_exists == true)
 {
 	$install_data_exists = checkDataExists();
-}
-
-//TODO - add this as a function in sql_queries.php or a class file
-//if ( ($install_tables_exists != false) AND ($install_data_exists != false) )
-if ( $install_tables_exists != false )
-{
-	if (getNumberOfDoneSQLPatches() > "196")
-	{
-	    $sql="SELECT * from ".TB_PREFIX."extensions WHERE (domain_id = :domain_id OR domain_id =  0 ) ORDER BY domain_id ASC";
-	    $sth = dbQuery($sql,':domain_id', $auth_session->domain_id ) or die(htmlsafe(end($dbh->errorInfo())));
-
-	    while ( $this_extension = $sth->fetch() ) 
-	    { 
-	    	$DB_extensions[$this_extension['name']] = $this_extension; 
-	    }
-	    $config->extension = $DB_extensions;
-	}
-}
-
-// If no extension loaded, load Core
-if (! $config->extension)
-{
-	$extension_core = new \Zend\Config\Config(array('core'=>array(
-		'id'=>1,
-		'domain_id'=>1,
-		'name'=>'core',
-		'description'=>'Core part of Simple Invoices - always enabled',
-		'enabled'=>1
-	)));
-	$config->extension = $extension_core;
 }
 
 include_once('./include/language.php');
