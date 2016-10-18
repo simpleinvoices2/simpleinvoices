@@ -93,7 +93,6 @@ $smarty       = $serviceManager->get('Smarty');
 
 #ini_set('display_errors',true);
 
-require_once('./library/HTMLPurifier/HTMLPurifier.standalone.php');
 include_once('./include/functions.php');
 
 //ob_start('addCSRFProtection');

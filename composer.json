@@ -20,6 +20,7 @@
         "zendframework/zend-db": "^2.8.2",
         "zendframework/zend-authentication": "^2.5.3",
         "smarty/smarty": "v2.6.30",
+        "ezyang/htmlpurifier": "v4.8.0",
         "zendframework/zend-json": "^3.0.0"
     },
     "autoload": {
