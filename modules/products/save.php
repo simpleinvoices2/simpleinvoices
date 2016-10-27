@@ -12,7 +12,6 @@ $op = !empty( $_POST['op'] ) ? addslashes( $_POST['op'] ) : NULL;
 $saved = false;
 
 if (  $op === 'insert_product' ) {
-	
 	if($id = insertProduct()) {
  		$saved = true;
  		//saveCustomFieldValues($_POST['categorie'], lastInsertId());

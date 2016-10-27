@@ -127,12 +127,12 @@ class SqlQueries
         $sth = $this->dbh->prepare($sqlQuery);
         try {
             $sth->execute($params);
-            $this->dbLogger($sqlQuery);
-        } catch(Exception $e){
+            //$this->dbLogger($sqlQuery);
+        } catch(\Exception $e){
             echo $e->getMessage();
             echo "dbQuery: Dude, what happened to your query?:<br /><br /> ".htmlsafe($sqlQuery)."<br />".htmlsafe(end($sth->errorInfo()));
         }
-    
+        
         return $sth;
     }
     

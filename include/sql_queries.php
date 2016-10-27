@@ -700,7 +700,7 @@ function insertProduct($enabled=1,$visible=1, $domain_id='')
 	$logger->info('Attr array: '.var_export($attr,true));
 	$notes_as_description = ($_POST['notes_as_description'] == 'true' ? 'Y' : NULL) ;
     $show_description =  ($_POST['show_description'] == 'true' ? 'Y' : NULL) ;
-
+    
 	$sql = "INSERT into
 		".TB_PREFIX."products
 		(
@@ -741,24 +741,24 @@ function insertProduct($enabled=1,$visible=1, $domain_id='')
             :show_description
 		)";
 
-	return dbQuery($sql,
+	return  dbQuery($sql,
 		':domain_id',$domain_id,
 		':description', $_POST['description'],
 		':unit_price', $_POST['unit_price'],
 		':cost', $_POST['cost'],
-		':reorder_level', $_POST['reorder_level'],
+		':reorder_level', !empty($_POST['reorder_level']) ? (int) $_POST['reorder_level'] : null,
 		':custom_field1', $_POST['custom_field1'],
 		':custom_field2', $_POST['custom_field2'],
 		':custom_field3', $_POST['custom_field3'],
 		':custom_field4', $_POST['custom_field4'],
 		':notes', "".$_POST['notes'],
-		':default_tax_id', $_POST['default_tax_id'],
+		':default_tax_id', !empty($_POST['default_tax_id']) ? (int) $_POST['default_tax_id'] : null,
 		':enabled', $enabled,
 		':visible', $visible,
-		':attribute', json_encode($attr),
+		':attribute', serialize($attr),
 		':notes_as_description', $notes_as_description,
 		':show_description', $show_description
-		);
+	);
 }
 
 
