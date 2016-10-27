@@ -5,6 +5,8 @@ use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Adapter\Driver\Pdo\Connection;
+use Zend\Db\Adapter\Driver\Pdo\Pdo;
 
 class DatabaseFactory implements FactoryInterface
 {
@@ -57,6 +59,39 @@ class DatabaseFactory implements FactoryInterface
         }
         
         return new Adapter($adapterConfig);
+        
+        /*
+        // We shall do it by hand 
+        if (strcasecmp($pdoAdapter, 'mysql') === 0) {
+            if (isset($config->database->utf8)) {
+                $pdo = new \Pdo(
+                    $dsn,
+                    isset($config->database->params->username) ? $config->database->params->username : null,
+                    isset($config->database->params->password) ? $config->database->params->password : null,
+                    [
+                        \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+                    ]
+                );
+            } else {
+                $pdo = new \Pdo(
+                    $dsn,
+                    isset($config->database->params->username) ? $config->database->params->username : null,
+                    isset($config->database->params->password) ? $config->database->params->password : null
+                );
+            }
+            $pdo->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY , true);
+        } else {
+            $pdo = new \Pdo(
+                $dsn,
+                isset($config->database->params->username) ? $config->database->params->username : null,
+                isset($config->database->params->password) ? $config->database->params->password : null
+            );
+        }
+        
+        $connection = new Connection($pdo);
+        $driver     = new Pdo($connection);
+        return new Adapter($driver);
+        */
     }
 
     /**

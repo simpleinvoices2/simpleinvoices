@@ -310,6 +310,21 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
                 exit(0);
             }
         }
+        
+        if ($this->request->getQuery('module', null) !== 'install') {
+            $patchManager = $this->serviceManager->get('SimpleInvoices\PatchManager');
+            if ($patchManager->isActive() && ($patchManager->hasNewPatches())) {
+                if (($this->request->getQuery('module', null) !== 'options') || ($this->request->getQuery('view', null) !== 'database_sqlpatches')) {
+                    if ($this->request->getQuery('action', null) === 'run') {
+                        die("Run");
+                    } else {
+                        header("Location: " . $this->request->getBaseUrl() . '/index.php?module=options&view=database_sqlpatches');
+                        exit(0);
+                    }
+                }
+            }
+        }
+        
         // ---------------- INSTALLER END ----------------
         
         // Define callback used to determine whether or not to short-circuit

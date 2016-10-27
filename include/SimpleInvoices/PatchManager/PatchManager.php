@@ -7,6 +7,7 @@ use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\Metadata\Metadata;
+use Zend\Db\ResultSet\ResultSet;
 
 class PatchManager
 {
@@ -21,6 +22,8 @@ class PatchManager
      * @var int
      */
     protected $doneSQLPatchesNumber;
+    
+    protected $sqlPatchesCount = 0;
     
     /**
      * @var unknown
@@ -51,7 +54,111 @@ class PatchManager
             $this->isActive = true;
         }
     }
+    
+    protected function _applyPatch($ref, $patch)
+    {
+        try {
+            $result = $this->adapter->getDriver()->getConnection()->execute($patch['patch']);
+            //var_dump($result);die();
+        } catch (\PDOException $e) {
+            echo $ref . "\n\n<br />";
+            throw $e;
+            return false;
+        } catch (\Exception $e) {
+            echo $ref . "\n\n<br />";
+            throw $e;
+        }
 
+        $sql    = new Sql($this->adapter);
+        $insert = $sql->insert($this->table);
+        $insert->values([
+            'sql_patch_ref' => $ref,
+            'sql_patch'     => $patch['name'],
+            'sql_release'   => $patch['date'],
+            'sql_statement' => $patch['patch']
+        ]);
+        
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $result    = $statement->execute();
+        
+        if (($result instanceof ResultInterface) && ($result->getAffectedRows())) {
+            return $result->getAffectedRows();
+        }
+        
+        return 0;
+    }
+    
+    public function applyPatches()
+    {
+        if (!$this->isActive) {
+            return false;
+        }
+        
+        $patches        = $this->getPatches();
+        $appliedPatches = $this->getAppliedSQLPatches()->toArray();
+        
+        $this->adapter->getDriver()->getConnection()->beginTransaction();
+        
+        try {
+            foreach($patches as $patch) {
+                if ($ref === 0) {
+                    // Ignore patch 0
+                    continue;
+                }
+                
+                $found = false;
+                foreach ($appliedPatches as $p) {
+                    if ((int) $p['sql_patch_ref'] === (int) $patch['ref']) {
+                        $found = true;
+                        break;
+                    }
+                }
+            
+                if (!$found) {
+                    // Should apply the patch
+                    $result = $this->_applyPatch($ref, $patch);
+                    if ($result === 0) {
+                        $this->adapter->getDriver()->getConnection()->rollback();
+                        return false;
+                    }
+                }
+            }
+            
+            $this->adapter->getDriver()->getConnection()->commit();
+            
+            return true;
+        } catch (\Exception $e) {
+            $this->adapter->getDriver()->getConnection()->rollback();
+            throw $e;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Get the number of done SQL patches.
+     *
+     * @throws Exception\RuntimeException
+     * @return int
+     */
+    public function getAppliedSQLPatches()
+    {
+        if (!$this->isActive) {
+            return 0;
+        }
+    
+        $resultSet = new ResultSet();
+        $select    = new Select($this->table);
+        $sql       = new Sql($this->adapter);
+    
+        $statement = $sql->prepareStatementForSqlObject($select);
+        $result    = $statement->execute();
+    
+        $resultSet->initialize($result);
+        
+        return $resultSet;
+    }
+    
     /**
      * Get the number of done SQL patches.
      * 
@@ -89,5 +196,26 @@ class PatchManager
         
         throw new Exception\RuntimeException('Unable to get the number of done SQL patches.');
     }
-   
+    
+
+    public function hasNewPatches()
+    {
+        // -1 substracts patch #0
+        $patches = $this->getPatches();
+        if ($this->getNumberOfDoneSQLPatches() === count($patches)) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public function isActive()
+    {
+        return $this->isActive;
+    }
+    
+    public function getPatches()
+    {
+        return json_decode(file_get_contents('databases/mysql/patches.json'), true);
+    }
 }
