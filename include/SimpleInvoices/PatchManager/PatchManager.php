@@ -6,6 +6,7 @@ use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Adapter\Driver\ResultInterface;
+use Zend\Db\Metadata\Metadata;
 
 class PatchManager
 {
@@ -26,6 +27,8 @@ class PatchManager
      */
     protected $table;
 
+    protected $isActive = false;
+    
     /**
      * Constructor
      * 
@@ -40,6 +43,13 @@ class PatchManager
         } else {
             $this->table   = $table;
         }
+        
+        // Check for the table
+        $metadata = new Metadata($this->adapter);
+        $tables   = $metadata->getTableNames();
+        if (in_array($this->table, $tables)) {
+            $this->isActive = true;
+        }
     }
 
     /**
@@ -52,6 +62,10 @@ class PatchManager
     {
         if (null !== $this->doneSQLPatchesNumber) {
             return $this->doneSQLPatchesNumber;
+        }
+        
+        if (!$this->isActive) {
+            return 0;
         }
         
         $select = new Select($this->table);
@@ -75,4 +89,5 @@ class PatchManager
         
         throw new Exception\RuntimeException('Unable to get the number of done SQL patches.');
     }
+   
 }

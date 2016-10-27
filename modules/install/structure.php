@@ -11,5 +11,8 @@ if (checkTableExists() == false)
     $import->pattern_find = array('si_','DOMAIN-ID','LOCALE','LANGUAGE');
     $import->pattern_replace = array(TB_PREFIX,'1','en_GB','en_GB');
     //dbQuery($import->collate());
-    $db->query($import->collate());
+    //$db->query($import->collate());
+    
+    $dbAdapter = $services->get('SimpleInvoices\Database\Adapter');
+    $dbAdapter->query($import->collate(), \Zend\Db\Adapter\Adapter::QUERY_MODE_EXECUTE);
 }

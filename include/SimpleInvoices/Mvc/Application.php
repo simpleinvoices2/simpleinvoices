@@ -9,6 +9,8 @@ use Zend\Stdlib\ResponseInterface;
 use SimpleInvoices\View\Resolver\TemplatePathStack;
 use Zend\Session\SessionManager;
 use Zend\Session\Container as SessionContainer;
+use Zend\Db\Metadata\Metadata;
+use SimpleInvoices\Mvc\Router\RouteMatch;
 
 /**
  * Provides a class to store the application wide
@@ -297,6 +299,18 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
     {
         $events = $this->events;
         $event  = $this->event;
+        
+        // --------------- INSTALLER START ---------------
+        $metadata = new Metadata($this->serviceManager->get('SimpleInvoices\Database\Adapter'));
+        $tables   = $metadata->getTableNames();
+        if (!in_array(TB_PREFIX . 'customers', $tables)) {
+            // Redirect
+            if ($this->request->getQuery('module', null) !== 'install') {
+                header("Location: " . $this->request->getBaseUrl() . '/index.php?module=install&view=index');
+                exit(0);
+            }
+        }
+        // ---------------- INSTALLER END ----------------
         
         // Define callback used to determine whether or not to short-circuit
         $shortCircuit = function ($r) use ($event) {
