@@ -280,14 +280,17 @@ class Export
 	
 	
 	//assign the language and set the locale from the preference
-	// TODO: What a nasty assinment of $LANG!!
+	// TODO: What a nasty function!!!
 	function assignTemplateLanguage($preference)
 	{
-		//get and assign the language file from the preference table
-		if($pref_language=$preference['language'] and $LANG=getLanguageArray($pref_language) and is_array($LANG) and count($LANG) ){
-			global $smarty;
-			$smarty->assign('LANG', $LANG);
-		}
+	    global $smarty;
+	    global $serviceManager;
+	    
+	    if (isset($preference['language'])) {
+	        $messages = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $preference['language'])->getArrayCopy();
+	        $smarty->assign('LANG', $messages);
+	    }
+	    
 		//overide the config's locale with the one assigned from the preference table
 		if($pref_locale=$preference['locale'] and strlen($pref_locale) > 4 ){
 			global $config;

@@ -1,6 +1,5 @@
 <?php
 use SimpleInvoices\Deprecate\Import\Json;
-use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Adapter\Driver\ResultInterface;
 
 $menu = false;

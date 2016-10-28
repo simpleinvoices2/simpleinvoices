@@ -17,7 +17,24 @@ $preferences = getActivePreferences();
 $defaults = getSystemDefaults();
 $status = array(array('id'=>'0','status'=>$LANG['draft']), array('id'=>'1','status'=>$LANG['real']));
 
-$localelist = getLocaleList();
+// Locale list start
+$localelist = [];
+
+if ($handle = opendir(getcwd() . '/language')) {
+    while (false !== ($entry = readdir($handle))) {
+        // TODO: we will need to search for PO files
+        if (preg_match('/^[a-z]{2}_[A-Z]{2}\.php$/', $entry)) {
+            $locale = pathinfo(getcwd() . '/language/' . $entry, PATHINFO_FILENAME);
+            $localelist[$locale] = \Locale::canonicalize($locale);
+        }
+    }
+
+    closedir($handle);
+    
+    //ksort($languages);
+    asort($localelist);
+}
+// locale list end
 
 $smarty->assign('preference',$preference);
 $smarty->assign('defaults',$defaults);

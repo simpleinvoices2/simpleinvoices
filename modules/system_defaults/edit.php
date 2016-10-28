@@ -253,31 +253,57 @@ else if ($_GET["submit"] == "delete") {
 	$default = "delete";
 	$description = $LANG['delete'];
 	$value = dropDown($array, $defaults['delete']);
-}
-else if ($_GET['submit'] == "logging") {
-
+} else if ($_GET['submit'] == "logging") {
+    //
+    // Logging
+    //
 	$array = array(0 => $LANG['disabled'], 1=>$LANG['enabled']);
 	$default = "logging";
 	$description = $LANG['logging'];
 	$value = dropDown($array, $defaults[$default]);
-}
-
-else if($_GET['submit'] == "language") {
+} else if($_GET['submit'] == "language") {
+    //
+    // Language
+    //
 	$default = "language";
-	$languages = getLanguageList();
-	$lang = $systemDefaults->get('language', 'en_GB');
 	
-	usort($languages,"compareNameIndex");
+	// Language list start
+	$languages = [];
+	
+	if ($handle = opendir(getcwd() . '/language')) {
+	    while (false !== ($entry = readdir($handle))) {
+	        // TODO: we will need to search for PO files
+	        if (preg_match('/^[a-z]{2}_[A-Z]{2}\.php$/', $entry)) {
+	            $locale = pathinfo(getcwd() . '/language/' . $entry, PATHINFO_FILENAME);
+	            $localeDisplayName = \Locale::getDisplayName($locale, $locale);
+	            if ($localeDisplayName !== $locale) {
+    	            $languages[] = [
+    	                'locale'       => $locale,
+    	                'display_name' => $localeDisplayName,
+    	            ];
+	            }
+	        }
+	    }
+	
+	    closedir($handle);
+	    
+	    usort($languages, function($a, $b) {
+	        return strcasecmp($a['display_name'], $b['display_name']);
+	    });
+	}
+	// language list end
+	
+	$lang = $systemDefaults->get('language', 'en_GB');
 	
 	$description = $LANG[language];
 	//print_r($languages);
 	$value = "<select name='value'>";
 	foreach($languages as $language) {
 		$selected = "";
-		if($language->shortname == $lang) {
+		if($language['locale'] == $lang) {
 			$selected = " selected ";
 		}
-		$value .= "<option $selected value='".htmlsafe($language->shortname)."'>".htmlsafe("$language->name ($language->englishname) ($language->shortname)")."</option>";
+		$value .= "<option $selected value='".htmlsafe($language['locale'])."'>".htmlsafe($language['display_name'])."</option>";
 	}
 	$value .= "</select>";
 	

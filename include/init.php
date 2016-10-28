@@ -88,6 +88,9 @@ $config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getMo
 $auth_session = new \Zend\Session\Container('SI_AUTH');
 $smarty       = $serviceManager->get('Smarty');
 
+$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
+$LANG = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $systemDefaults->get('language', 'en_GB'))->getArrayCopy();
+
 // TODO: This supports old code, should find a better way
 $menu         = true;
 
@@ -149,11 +152,8 @@ ini_set('error_log', $config->phpSettings->error_log);
 $db = \SimpleInvoices\Deprecate\Db::getInstance();
 
 include_once("./include/sql_queries.php");
- 
-include_once('./include/language.php');
 
-$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
-$LANG = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $systemDefaults->get('language', 'en_GB'))->getArrayCopy();
+
 
 include_once('./include/manageCustomFields.php');
 include_once("./include/validation.php");
