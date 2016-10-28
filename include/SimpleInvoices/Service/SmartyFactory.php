@@ -26,7 +26,8 @@ class SmartyFactory implements FactoryInterface
         
         $smarty->debugging = false;
         
-        $smarty->compile_dir = "tmp/cache";
+        $smarty->compile_dir  = "tmp/cache";
+        $smarty->template_dir = "templates/default";
         
         // TODO: Probablly throw a exception
         //       Current code is in include/init.php

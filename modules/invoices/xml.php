@@ -1,6 +1,11 @@
 <?php
 use SimpleInvoices\I18n\SiLocal;
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\SystemDefault\SystemDefaultManager;
+
+global $serviceManager;
+
+$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
 
 header("Content-type: text/xml");
 
@@ -24,19 +29,18 @@ if($auth_session->role_name =='customer') {
 $invoice->query=isset($_REQUEST['query']) ? $_REQUEST['query'] : null;
 $invoice->qtype=isset($_REQUEST['qtype']) ? $_REQUEST['qtype'] : null;
 
-$large_dataset = getDefaultLargeDataset();
-if($large_dataset == $LANG['enabled'])
-{
+$large_dataset = (bool) $systemDefaults->get('large_dataset', false);
+if($large_dataset) {
   $sth = $invoice->select_all('large', $dir, $rp, $page, $having);
   $sth_count_rows = $invoice->count();
-  $invoice_count = $sth_count_rows->fetch(PDO::FETCH_ASSOC);
+  $invoice_count = $sth_count_rows->fetch(\PDO::FETCH_ASSOC);
   $invoice_count = $invoice_count['count'];
 } else {
   $sth = $invoice->select_all('', $dir, $rp, $page, $having);
   $sth_count_rows = $invoice->select_all('count',$dir, $rp, $page, $having);
   $invoice_count = $sth_count_rows->rowCount();
 }
-$invoices = $sth->fetchAll(PDO::FETCH_ASSOC);
+$invoices = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
 $xml ="";
 	$xml .= "<rows>";

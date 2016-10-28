@@ -994,42 +994,6 @@ function getDefaultTax($domain_id='')
 	return $sth->fetch();
 }
 
-function getDefaultDelete() {
-	return getDefaultGeneric('delete');
-}
-
-function getDefaultLogging() 
-{
-    global $serviceManager;
-    
-    $systemDefaults = $serviceManager->get(\SimpleInvoices\SystemDefault\SystemDefaultManager::class);
-    return $systemDefaults->get('logging', 0);
-}
-
-function getDefaultLoggingStatus() {
-	return (getDefaultGeneric('logging', false) == 1);
-}
-
-function getDefaultInventory() {
-	return getDefaultGeneric('inventory');
-}
-
-function getDefaultProductAttributes() {
-	return getDefaultGeneric('product_attributes');
-}
-
-function getDefaultLargeDataset() {
-	return getDefaultGeneric('large_dataset');
-}
-
-function getDefaultLanguage() 
-{
-	global $serviceManager;
-	
-    $systemDefaults = $serviceManager->get(\SimpleInvoices\SystemDefault\SystemDefaultManager::class);
-    return $systemDefaults->get('language', 'en_GB');
-}
-
 function getInvoiceTotal($invoice_id, $domain_id='') 
 {
 	global $LANG;

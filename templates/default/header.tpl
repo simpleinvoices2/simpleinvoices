@@ -41,8 +41,10 @@
 	<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery.livequery.pack.js"></script>
 {/literal}
     {$extension_jquery_files }
-	{include file='./public/assets/jquery/jquery.functions.js.tpl'}
-	{include file='./public/assets/jquery/jquery.conf.js.tpl'}
+    <!-- Start -->
+	{include file='jquery/jquery.functions.js.tpl'}
+	{include file='jquery/jquery.conf.js.tpl'}
+	<!-- END -->
 {literal}
 
 	<!--<script type="text/javascript" src="{/literal}{$basePath}{literal}/public/assets/jquery/jquery.conf.js.tpl"></script>-->

@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\SystemDefault\SystemDefaultManager;
 /*
  * Read language informations
  * 1. reads default-language file
@@ -13,23 +14,16 @@
 //print_r($result);
 unset($LANG);
 
-
-$metadata = new \Zend\Db\Metadata\Metadata( $serviceManager->get('SimpleInvoices\Database\Adapter') );
-$tables = $metadata->getTableNames();
-
-/*if upgrading from old version then getDefaultLang wont work during install*/
-if(in_array(TB_PREFIX.'system_defaults', $tables))
-{
-	$language = getDefaultLanguage();
-} else {
- 	$language = "en_GB";
-}  
-
-function getLanguageArray($lang='') 
+function getLanguageArray($lang = null) 
 {
 	global $serviceManager;
-
-	return $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', getDefaultLanguage())->getArrayCopy();
+    
+	if (empty($lang)) {
+	    $systemDefaults = $serviceManager->get(SystemDefaultManager::class);
+	    $lang           = $systemDefaults->get('language', 'en_GB');
+	}
+	
+	return $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $lang)->getArrayCopy();
 }
 
 function getLanguageList() {

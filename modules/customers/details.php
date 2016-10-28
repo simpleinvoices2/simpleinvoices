@@ -17,6 +17,11 @@
  */
 
 use SimpleInvoices\Deprecate\Invoice;
+use SimpleInvoices\SystemDefault\SystemDefaultManager;
+
+global $serviceManager;
+
+$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
@@ -58,14 +63,13 @@ $invoice_owing->having_and="real";
 $invoice_owing->query=$_REQUEST['query'];
 $invoice_owing->qtype=$_REQUEST['qtype'];
 
-$large_dataset = getDefaultLargeDataset();
-if($large_dataset == $LANG['enabled'])
-{
+$large_dataset = (bool) $systemDefaults->get('large_dataset', 0);
+if($large_dataset) {
   $sth = $invoice_owing->select_all('large_count', $dir, $rp, $page, $having);
 } else {
   $sth = $invoice_owing->select_all('', $dir, $rp, $page, $having);
-
 }
+
 $invoices_owing = $sth->fetchAll(PDO::FETCH_ASSOC);
 
 //$customFieldLabel = getCustomFieldLabels("biller");

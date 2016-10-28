@@ -1,6 +1,7 @@
 <?php
 namespace SimpleInvoices\Deprecate;
 
+use SimpleInvoices\SystemDefault\SystemDefaultManager;
 class SqlQueries
 {
     /**
@@ -168,8 +169,11 @@ class SqlQueries
         return $paramval;
     }
     
-    public function getDefaultLoggingStatus() {
-        return ($this->getDefaultGeneric('logging', false) == 1);
+    public function getDefaultLoggingStatus() 
+    {
+        global $serviceManager;
+        $systemDefaults = $serviceManager->get(SystemDefaultManager::class);
+        return (bool) $systemDefaults->get('logging', false);
     }
     
     /**

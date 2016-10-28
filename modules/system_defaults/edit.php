@@ -1,7 +1,14 @@
 <?php
+use SimpleInvoices\SystemDefault\SystemDefaultManager;
+
+global $serviceManager;
+
+$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
 
 //stop the direct browsing to this file - let index.php handle which files get displayed
 checkLogin();
+
+
 
 #system defaults query
 
@@ -258,7 +265,7 @@ else if ($_GET['submit'] == "logging") {
 else if($_GET['submit'] == "language") {
 	$default = "language";
 	$languages = getLanguageList();
-	$lang = getDefaultLanguage();
+	$lang = $systemDefaults->get('language', 'en_GB');
 	
 	usort($languages,"compareNameIndex");
 	

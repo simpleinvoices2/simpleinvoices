@@ -1,4 +1,5 @@
 <?php
+use SimpleInvoices\SystemDefault\SystemDefaultManager;
 /**
  * Composer autoloader
  */
@@ -151,7 +152,8 @@ include_once("./include/sql_queries.php");
  
 include_once('./include/language.php');
 
-$LANG = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', getDefaultLanguage())->getArrayCopy();
+$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
+$LANG = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $systemDefaults->get('language', 'en_GB'))->getArrayCopy();
 
 include_once('./include/manageCustomFields.php');
 include_once("./include/validation.php");
