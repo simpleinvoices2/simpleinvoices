@@ -98,6 +98,33 @@ function getLanguageList() {
 	return $languages;
 }
 
+function getLocaleList()
+{
+    $xmlFile = "info.xml";
+    $langPath = "lang/";
+    $folders = null;
+    
+    if($handle = opendir($langPath)) {
+        //TODO: catch ., .. and other bad folders
+        for($i=0;$file = readdir($handle);$i++) {
+            $folders[$i] = $file;
+        }
+        closedir($handle);
+    }
+    
+    $locales = [];
+    
+    foreach($folders as $folder) {
+        $file = $langPath.$folder."/".$xmlFile;
+        if(file_exists($file)) {
+            $values = simplexml_load_file($file);
+            $locales[(string) $values->shortname] = (string) $values->shortname;
+        }
+    }
+    
+    return $locales;
+}
+
 $LANG = getLanguageArray();
 //TODO: if (getenv("HTTP_ACCEPT_LANGUAGE") != available language) AND (config lang != en) ) {
 // then use config lang

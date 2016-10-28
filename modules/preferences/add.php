@@ -13,7 +13,7 @@ $smarty -> assign('save',$save);
 $defaults = getSystemDefaults();
 $preferences = getActivePreferences();
 
-$localelist = Zend_Locale::getLocaleList();
+$localelist = getLocaleList();
 
 $smarty->assign('preferences',$preferences);
 $smarty->assign('defaults',$defaults);

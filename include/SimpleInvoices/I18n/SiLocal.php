@@ -2,32 +2,28 @@
 namespace SimpleInvoices\I18n;
 
 /**
- * Wrapper class for Zend_Locale
+ * Wrapper class for some INTL methods
  */
 class SiLocal 
 {
     /**
-     * Wrapper function for Zend_Locale_Format::toNumber
+     * Wrapper function for INTL NumberFormatter
      * 
      * @param unknown $number
-     * @param string $precision
+     * @param int $precision
      * @param string $locale
      * @return unknown
      */
-    public static function number($number, $precision="", $locale="")
+    public static function number($number, $fractionDigits = null, $locale = null)
     {
         global $config;
         
-        $locale = ($locale == "") ? new \Zend_Locale($config->local->locale) : $locale;
-        $load_precision = $config->local->precision; 
+        $locale         = !empty($locale)         ? $locale               : $config->local->locale;
+        $fractionDigits = !empty($fractionDigits) ? (int) $fractionDigits : (int) $config->local->precision; 
         
-        $precision = ($precision == "") ? $load_precision : $precision;
-        $formatted_number = \Zend_Locale_Format::toNumber($number, array('precision' => $precision, 'locale' => $locale));
-        
-        //trim zeros from decimal point if enabled
-        //if ($config->local->trim_zeros == "y") { $formatted_number = rtrim(trim($formatted_number, '0'), '.'); }
-        
-        return $formatted_number;
+        $formatter = new \NumberFormatter($locale, \NumberFormatter::DECIMAL);
+        $formatter->setAttribute(\NumberFormatter::MIN_FRACTION_DIGITS, $fractionDigits);
+        return $formatter->format($number);
     }
     
     /**
@@ -73,44 +69,93 @@ class SiLocal
 	
     /**
      * Wrapper function for zend_date
-     * @param unknown $date
+     * @param \DateTime|string $date
      * @param string $length
      * @param string $locale
      */
-    public static function date($date,$length="",$locale="")
+    public static function date($date, $length = null, $locale = null)
     {
         global $config;
         
-        $locale = ($locale == "") ? new \Zend_Locale($config->local->locale) : $locale;
-        $length == "" ? $length = "medium" : $length = $length;
+        $locale = !empty($locale) ? $locale : $config->local->locale;
         
-        /*
-         * Length can be any of the Zend_Date lengths - FULL, LONG, MEDIUM, SHORT
-         */
-        $formatted_date = new \Zend_Date($date,'yyyy-MM-dd');
+        if (!$date instanceof \DateTime) {
+            if (is_string($date)) {
+                if (preg_match('/^([0-9]{4}-[0-9]{2}-[0-9]{2})/', $date, $match)) {
+                    $date = $match[1];
+                }
+            
+                $dateTime = \DateTime::createFromFormat('Y-m-d', $date);
+                if (!$dateTime) {
+                    // TODO: Maybe throw an exception
+                    return $date;
+                }
+                
+                $date = $dateTime;
+            } else {
+                // TODO: Other methods or throw an exception
+            }
+        }
         
+        // IntlDateFormatter::NONE - exclude this element from display
+        // IntlDateFormatter::SHORT - shortest format (22/07/2007)
+        // IntlDateFormatter::MEDIUM - abbreviated format (Jul 22, 2007)
+        // IntlDateFormatter::LONG - unabbreviated format (July 22, 2007)
+        // IntlDateFormatter::FULL - full date information
         switch ($length) {
             case "full":
-                return $formatted_date->get(\Zend_Date::DATE_FULL,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::FULL,     // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
                 break;
             case "long":
-                return $formatted_date->get(\Zend_Date::DATE_LONG,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::LONG,     // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
                 break;
             case "medium":
-                return $formatted_date->get(\Zend_Date::DATE_MEDIUM,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::MEDIUM,   // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
                 break;
             case "short":
-                return $formatted_date->get(\Zend_Date::DATE_SHORT,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::SHORT,    // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
                 break;
             case "month":
-                return $formatted_date->get(\Zend_Date::MONTH_NAME,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::FULL,     // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
+                $formatter->setPattern('MMMM');
                 break;
             case "month_short":
-                return $formatted_date->get(\Zend_Date::MONTH_NAME_SHORT,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::FULL,     // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
+                $formatter->setPattern('MMM');
                 break;
             default:
-                return $formatted_date->get(\Zend_Date::DATE_SHORT,$locale);
+                $formatter = new \IntlDateFormatter(
+                    $locale,
+                    \IntlDateFormatter::SHORT,    // Date type
+                    \IntlDateFormatter::NONE      // Time type
+                );
         }
+        
+        return $formatter->format($date);
 	}
     
 	/**

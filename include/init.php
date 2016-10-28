@@ -20,11 +20,9 @@ $reader = new \Zend\Config\Reader\Ini();
 if( is_file('./config/custom.config.php') ){
     $config = $reader->fromFile('./config/custom.config.php');
     $config = new \Zend\Config\Config($config['production'], true);
-    //Zend_Config_Ini('./config/custom.config.php', $environment,true);
 } else {
     $config = $reader->fromFile('./config/config.php');
     $config = new \Zend\Config\Config($config['production'], true);
-    //$config = new Zend_Config_Ini('./config/config.php', $environment,true);	//added 'true' to allow modifications from db
 }
 
 /**

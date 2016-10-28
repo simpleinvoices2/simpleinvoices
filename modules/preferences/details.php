@@ -16,7 +16,8 @@ $index_group = getPreference($preference['index_group']);
 $preferences = getActivePreferences();
 $defaults = getSystemDefaults();
 $status = array(array('id'=>'0','status'=>$LANG['draft']), array('id'=>'1','status'=>$LANG['real']));
-$localelist = Zend_Locale::getLocaleList();
+
+$localelist = getLocaleList();
 
 $smarty->assign('preference',$preference);
 $smarty->assign('defaults',$defaults);
@@ -29,4 +30,3 @@ $smarty -> assign('pageActive', 'preference');
 $subPageActive = $_GET['action'] =="view"  ? "preferences_view" : "preferences_edit" ;
 $smarty -> assign('subPageActive', $subPageActive);
 $smarty -> assign('active_tab', '#setting');
-?>

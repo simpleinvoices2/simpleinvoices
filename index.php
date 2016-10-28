@@ -23,6 +23,12 @@ define("BROWSE","browse");
  */
 require_once './vendor/autoload.php';
 
+/**
+ * Requirements
+ */
+if (!extension_loaded('intl')) { 
+    throw new \Exception("Simple Invoices requires PHP extension 'intl' (see http://www.php.net/intl).");
+}
 
 /*
  * The include configs and requirements stuff section - start
