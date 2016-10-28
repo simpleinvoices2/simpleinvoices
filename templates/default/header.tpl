@@ -42,8 +42,8 @@
 {/literal}
     {$extension_jquery_files }
     <!-- Start -->
-	{include file='jquery/jquery.functions.js.tpl'}
-	{include file='jquery/jquery.conf.js.tpl'}
+	{include file='default/jquery/jquery.functions.js.tpl'}
+	{include file='default/jquery/jquery.conf.js.tpl'}
 	<!-- END -->
 {literal}
 
