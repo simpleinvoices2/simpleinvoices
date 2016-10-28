@@ -898,21 +898,40 @@ function getTaxes($domain_id='')
 	return $taxes;
 }
 
-function getDefaultGeneric($param, $bool=true, $domain_id='') {
+/**
+ * Should be deprecated and use the service instead.
+ * 
+ * @param unknown $param
+ * @param string $bool
+ * @param unknown $domain_id
+ * @throws \RuntimeException
+ * @return mixed|unknown
+ */
+function getDefaultGeneric($param, $bool=true, $domain_id = null) 
+{
 	global $LANG;
+	global $serviceManager;
 	
-	if (empty($domain_id)) {
+	if (!empty($domain_id)) {
 	    $auth_session = new \Zend\Session\Container('SI_AUTH');
-	    $domain_id    = $auth_session->domain_id;
-	} else {
-        $domain_id = $domain_id;
+	    
+	    if ($auth_session->domain_id !== $domain_id) {
+	        throw new \RuntimeException('getDefaultGeneric(): Unable to transverse user domains.');
+	    }
 	}
-
-	$sql = "SELECT value FROM ".TB_PREFIX."system_defaults s WHERE ( s.name = :param AND s.domain_id = :domain_id)";
-	$sth = dbQuery($sql, ':param', $param, ':domain_id', $domain_id);
-	$array = $sth->fetch();
-	$paramval = (($bool) ? ($array['value']==1?$LANG['enabled']:$LANG['disabled']) : $array['value']);
-	return $paramval;
+	
+    $systemDefaults = $serviceManager->get(\SimpleInvoices\SystemDefault\SystemDefaultManager::class);
+    $value          = $systemDefaults->get($param, null);
+    
+    if ($bool) {
+        if ($value == 1) {
+            return $LANG['enabled'];
+        } else {
+            return $LANG['disabled'];
+        }
+    }
+    
+    return $value;
 }
 
 function getDefaultCustomer($domain_id='') 

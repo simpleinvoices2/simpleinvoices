@@ -10,7 +10,6 @@ use SimpleInvoices\View\Resolver\TemplatePathStack;
 use Zend\Session\SessionManager;
 use Zend\Session\Container as SessionContainer;
 use Zend\Db\Metadata\Metadata;
-use SimpleInvoices\Mvc\Router\RouteMatch;
 
 /**
  * Provides a class to store the application wide
@@ -149,6 +148,21 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $moduleManager = $serviceManager->get('SimpleInvoices\ModuleManager');
         $moduleManager->loadModules();
         
+        // TODO: This should go in the module manager but while we get it finished
+        //       we will load the translations for extension here
+        $translator = $this->serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class);
+        foreach($moduleManager->getModules() as $extension) {
+            /*
+             * If extension is enabled then continue and include the requested file for that extension if it exists
+             */
+            if($extension->enabled == "1") {
+                // TODO: this applies to expense and sub_customer. Make the appropiate files.
+                if(file_exists('./extensions/' . $extension->name . '/language'))
+                {
+                    $translator->addTranslationFilePattern('phparray', './extensions/' . $extension->name . '/language', '%s.php');
+                }
+            }
+        }
         
         // Setup MVC Event
         $this->event = $event  = new MvcEvent();
@@ -329,6 +343,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             if ($patchManager->isActive() && ($patchManager->hasNewPatches())) {
                 if (($this->request->getQuery('module', null) !== 'options') || ($this->request->getQuery('view', null) !== 'database_sqlpatches')) {
                     if ($this->request->getQuery('action', null) === 'run') {
+                        // TODO: Maybe I was debbuging since I don't understand why this die is here
                         die("Run");
                     } else {
                         header("Location: " . $this->request->getBaseUrl() . '/index.php?module=options&view=database_sqlpatches');

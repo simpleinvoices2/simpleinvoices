@@ -25,45 +25,11 @@ if(in_array(TB_PREFIX.'system_defaults', $tables))
  	$language = "en_GB";
 }  
 
-function getLanguageArray($lang='') {
-	global $config;
+function getLanguageArray($lang='') 
+{
+	global $serviceManager;
 
-	if($lang){
-		$language=$lang;
-	}
-	else{
-		global $language;
-	}
-
-	$langPath = "./lang/";
-	$langFile = "/lang.php";
-	//$getLanguage = getenv("HTTP_ACCEPT_LANGUAGE");
-	//$language = getDefaultLanguage();
-
-	//include english as default - so if the selected lang doesnt have the required lang then it still loads
-	include($langPath."en_GB".$langFile);
-
-	if(	file_exists($langPath.$language.$langFile) ){
-		include($langPath.$language.$langFile);
-	}
-
-
-	foreach($config->extension as $extension)
-	{
-		/*
-		* If extension is enabled then continue and include the requested file for that extension if it exists
-		*/	
-		if($extension->enabled == "1")
-		{
-			//echo "Enabled:".$value['name']."<br><br>";
-			if(file_exists("./extensions/$extension->name/lang/$language/lang.php"))
-			{
-				include_once("./extensions/$extension->name/lang/$language/lang.php");
-			}
-		}
-	}
-	
-	return $LANG;
+	return $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', getDefaultLanguage())->getArrayCopy();
 }
 
 function getLanguageList() {
@@ -124,9 +90,3 @@ function getLocaleList()
     
     return $locales;
 }
-
-$LANG = getLanguageArray();
-//TODO: if (getenv("HTTP_ACCEPT_LANGUAGE") != available language) AND (config lang != en) ) {
-// then use config lang
-// }
-//

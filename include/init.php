@@ -46,6 +46,9 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         'SimpleInvoices\Mail\TransportInterface' => \SimpleInvoices\Service\MailTransportFactory::class,
         'SimpleInvoices\ModuleManager' => \SimpleInvoices\Service\ModuleManagerFactory::class,
         'SimpleInvoices\PatchManager' => \SimpleInvoices\Service\PatchManagerFactory::class,
+        \Zend\I18n\Translator\TranslatorInterface::class => \SimpleInvoices\Service\TranslatorServiceFactory::class,
+        \Zend\I18n\Translator\LoaderPluginManager::class => \Zend\I18n\Translator\LoaderPluginManagerFactory::class,
+        \SimpleInvoices\SystemDefault\SystemDefaultManager::class => \SimpleInvoices\SystemDefault\Service\SystemDefaultManagerServiceFactory::class,
     ],
 ]);
 
@@ -148,6 +151,7 @@ include_once("./include/sql_queries.php");
  
 include_once('./include/language.php');
 
+$LANG = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', getDefaultLanguage())->getArrayCopy();
 
 include_once('./include/manageCustomFields.php');
 include_once("./include/validation.php");
