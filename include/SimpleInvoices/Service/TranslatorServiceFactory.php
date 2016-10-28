@@ -6,7 +6,6 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\I18n\Translator\Translator;
 use Zend\I18n\Translator\TranslatorInterface;
-use Zend\Db\Adapter\Driver\ResultInterface;
 use SimpleInvoices\SystemDefault\SystemDefaultManager;
 
 class TranslatorServiceFactory implements FactoryInterface
