@@ -998,8 +998,12 @@ function getDefaultDelete() {
 	return getDefaultGeneric('delete');
 }
 
-function getDefaultLogging() {
-	return getDefaultGeneric('logging');
+function getDefaultLogging() 
+{
+    global $serviceManager;
+    
+    $systemDefaults = $serviceManager->get(\SimpleInvoices\SystemDefault\SystemDefaultManager::class);
+    return $systemDefaults->get('logging', 0);
 }
 
 function getDefaultLoggingStatus() {
@@ -1018,8 +1022,12 @@ function getDefaultLargeDataset() {
 	return getDefaultGeneric('large_dataset');
 }
 
-function getDefaultLanguage() {
-	return getDefaultGeneric('language', false);
+function getDefaultLanguage() 
+{
+	global $serviceManager;
+	
+    $systemDefaults = $serviceManager->get(\SimpleInvoices\SystemDefault\SystemDefaultManager::class);
+    return $systemDefaults->get('language', 'en_GB');
 }
 
 function getInvoiceTotal($invoice_id, $domain_id='') 

@@ -43,14 +43,14 @@
 			</th>
 			<td>
 				<a href='index.php?module=system_defaults&amp;view=edit&amp;submit=delete'><img src="images/common/edit.png" title="{$LANG.edit}" alt="{$LANG.edit}" /></a></td>
-			<td>{$defaultDelete|htmlsafe}</td>
+			<td>{$defaultDelete|enabled_text}</td>
 		</tr>
 		<tr>
 			<th>{$LANG.logging} 
 				<a class="cluetip" href="#"	rel="index.php?module=documentation&amp;view=view&amp;page=help_logging" title="{$LANG.logging}"><img src="./images/common/help-small.png" alt="" /></a>
 			</th>
 			<td><a href='index.php?module=system_defaults&amp;view=edit&amp;submit=logging'><img src="images/common/edit.png" title="{$LANG.edit}" alt="{$LANG.edit}" /></a></td>
-			<td>{$defaultLogging|htmlsafe}</td>
+			<td>{$defaultLogging|enabled_text}</td>
 		</tr>
 		<tr>
 			<th>{$LANG.language}</th>
@@ -65,17 +65,17 @@
 		<tr>
 			<th>{$LANG.inventory}</th>
 			<td><a href='index.php?module=system_defaults&amp;view=edit&amp;submit=inventory'><img src="images/common/edit.png" title="{$LANG.edit}" alt="{$LANG.edit}" /></a></td>
-			<td>{$defaultInventory|htmlsafe}</td>
+			<td>{$defaultInventory|enabled_text}</td>
 		</tr>
 		<tr>
 			<th>{$LANG.product_attributes}</th>
 			<td><a href='index.php?module=system_defaults&amp;view=edit&amp;submit=product_attributes'><img src="images/common/edit.png" title="{$LANG.edit}" alt="{$LANG.edit}" /></a></td>
-			<td>{$defaultProductAttributes|htmlsafe}</td>
+			<td>{$defaultProductAttributes|enabled_text}</td>
 		</tr>
 		<tr>
 			<th>{$LANG.large_dataset}</th>
 			<td><a href='index.php?module=system_defaults&amp;view=edit&amp;submit=large_dataset'><img src="images/common/edit.png" title="{$LANG.edit}" alt="{$LANG.edit}" /></a></td>
-			<td>{$defaultLargeDataset|htmlsafe}</td>
+			<td>{$defaultLargeDataset|enabled_text}</td>
 		</tr>
 	</table>
 </div> 
