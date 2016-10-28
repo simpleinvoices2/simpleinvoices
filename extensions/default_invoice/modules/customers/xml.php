@@ -4,7 +4,6 @@ use SimpleInvoices\I18n\SiLocal;
 header("Content-type: text/xml");
 
 //global $auth_session;
-//global $dbh;
 
 $start = (isset($_POST['start'])) ? $_POST['start'] : "0" ;
 $dir = (isset($_POST['sortorder'])) ? $_POST['sortorder'] : "ASC" ;

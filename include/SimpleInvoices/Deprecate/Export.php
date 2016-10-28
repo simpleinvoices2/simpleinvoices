@@ -92,7 +92,8 @@ class Export
 	{
 		//echo "export - get data";
 		global $smarty;
-		global $siUrl;
+		
+		$siUrl =  getURL();
 		
 		switch ($this->module)
 		{

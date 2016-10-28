@@ -272,7 +272,6 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
     {
         // TODO: Remove this!
         global $LANG;
-        global $siUrl;
         
         $events = $this->events;
         $event  = $this->getMvcEvent();
@@ -281,10 +280,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $smarty->assign("config", $this->getConfig()); // to toggle the login / logout button visibility in the menu
         $smarty->assign("module", $event->getRouteMatch()->getParam('module', null));
         $smarty->assign("view", $event->getRouteMatch()->getParam('view', null));
-        $smarty->assign("siUrl", $siUrl);//used for template css
+        $smarty->assign("siUrl", getUrl());//used for template css
         $smarty->assign("LANG", $LANG);
         //For Making easy enabled pop-menus (see biller)
         $smarty->assign("enabled", array($LANG['disabled'], $LANG['enabled']));
+        $smarty->assign("defaults", getSystemDefaults());
         
         /**
          * trigger the 'dispatch' event.

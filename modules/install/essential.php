@@ -3,7 +3,7 @@ use SimpleInvoices\Deprecate\Import\Json;
 
 $menu = false;
 
-if ( (checkTableExists(TB_PREFIX."customers") == true) AND ($install_data_exists == false) )
+if ( (checkTableExists(TB_PREFIX."customers") == true) AND (checkDataExists() == false) )
 {
     //JSON import
     $importjson = new Json();

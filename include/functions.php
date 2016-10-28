@@ -213,15 +213,6 @@ function simpleInvoicesError($type, $info1 = "", $info2 = "")
 
 }
 
-function checkConnection() {
-	global $dbh;
-	global $db_server;
-	
-	if(!$dbh) {
-		simpleInvoicesError("dbConnection",$db_server,$dbh->errorInfo());
-	}
-}
-
 function getLangList() {
  $startdir = './lang/';
  $ignoredDirectory[] = '.';

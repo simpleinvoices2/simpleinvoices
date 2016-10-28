@@ -146,29 +146,8 @@ $db = \SimpleInvoices\Deprecate\Db::getInstance();
 
 include_once("./include/sql_queries.php");
  
-$install_tables_exists = checkTableExists(TB_PREFIX."biller");
-if ($install_tables_exists == true)
-{
-	$install_data_exists = checkDataExists();
-}
-
 include_once('./include/language.php');
 
-//add class files for extensions
-
-checkConnection();
 
 include_once('./include/manageCustomFields.php');
 include_once("./include/validation.php");
-
-//get the url - used for templates / pdf
-$siUrl = getURL();
-
-//If using the folowing line, the DB settings should be appended to the config array, instead of replacing it (NOT TESTED!)
-//$config->extension() = $DB_extensions;
-
-
-include_once("./include/backup.lib.php");
-
-$defaults = getSystemDefaults();
-$smarty -> assign("defaults",$defaults);

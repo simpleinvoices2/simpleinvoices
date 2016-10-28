@@ -3,9 +3,8 @@
 function smarty_function_online_payment_link($params, &$smarty) 
 {
     global $LANG;
-    global $siUrl;
     global $config;
-    global $siUrl;
+    
     
     if (empty($params['domain_id'])) {
         $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -89,7 +88,7 @@ function smarty_function_online_payment_link($params, &$smarty)
             ."&pg_billto_telecom_phone_number=". urlencode($params['customer']['phone'])
             ."&pg_billto_online_email=". $params['customer']['email']
             ."&pg_consumerorderid=". $params['invoice']
-            ."&pg_return_url=". $siUrl. "/api-ach&pg_save_client=2'>";
+            ."&pg_return_url=". getUrl() . "/api-ach&pg_save_client=2'>";
 
         if($params['include_image'] == "true")
         {

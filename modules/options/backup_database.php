@@ -9,7 +9,8 @@ $smarty -> assign('active_tab', '#setting');
 
 if ($_GET['op'] == "backup_db") {
 
-
+    include_once("./include/backup.lib.php");
+    
 	$today = date("YmdGisa");
 	$oBack    = new backup_db;
 	$oBack->filename = "./tmp/database_backups/simple_invoices_backup_$today.sql"; // output file name
