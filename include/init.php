@@ -84,6 +84,9 @@ $config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getMo
 $auth_session = new \Zend\Session\Container('SI_AUTH');
 $smarty       = $serviceManager->get('Smarty');
 
+// TODO: This supports old code, should find a better way
+$menu         = true;
+
 /**
  * Old stuff follows...
  */
