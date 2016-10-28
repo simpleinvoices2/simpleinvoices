@@ -4,9 +4,8 @@ namespace SimpleInvoices\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use SimpleInvoices\View\Resolver\ResolverInterface;
-use SimpleInvoices\View\Resolver\TemplatePathStack;
-
+use Zend\View\Resolver\ResolverInterface;
+use Zend\View\Resolver\TemplatePathStack;
 
 class ViewTemplatePathStackFactory implements FactoryInterface
 {
@@ -68,7 +67,7 @@ class ViewTemplatePathStackFactory implements FactoryInterface
         // ============================================
         $templatePathStack = new TemplatePathStack();
         $templatePathStack->addPaths($paths);
-        
+        $templatePathStack->setDefaultSuffix('tpl');
         // Return the resolver
         return $templatePathStack;
     }

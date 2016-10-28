@@ -2,7 +2,7 @@
 namespace SimpleInvoices\Smarty;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
-use SimpleInvoices\View\Resolver\ResolverInterface;
+use Zend\View\Resolver\ResolverInterface;
 
 class Renderer
 {
