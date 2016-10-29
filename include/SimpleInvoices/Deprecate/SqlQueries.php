@@ -2,6 +2,7 @@
 namespace SimpleInvoices\Deprecate;
 
 use SimpleInvoices\SystemDefault\SystemDefaultManager;
+
 class SqlQueries
 {
     /**

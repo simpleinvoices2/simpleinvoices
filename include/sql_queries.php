@@ -6,15 +6,6 @@ use SimpleInvoices\Deprecate\Db;
 use SimpleInvoices\Deprecate\SqlQueries;
 use SimpleInvoices\Security\Encryption;
 
-/**
- * @var SqlQueries
- */
-$sqlQueries = $serviceManager->get('SimpleInvoices\SqlQueries');
-
-$log_dbh = $sqlQueries->getLogDbHandle();
-$dbh     = $sqlQueries->getDbHandle();
-$can_log = $sqlQueries->canLog();
-
 function mysqlQuery($sqlQuery) {
 	dbQuery($sqlQuery);
 }
@@ -45,48 +36,6 @@ function dbQuery($sqlQuery) {
     }
     
     return $sqlQueries->dbQuery($sqlQuery, $params);
-}
-
-// Used for logging all queries
-function dbLogger($sqlQuery) {
-// For PDO it gives only the skeleton sql before merging with data
-
-	global $log_dbh;
-	global $dbh;
-	global $auth_session;
-	global $can_log;
-
-	$userid = $auth_session->id;
-	if($can_log
-		&& (preg_match('/^\s*select/iD',$sqlQuery) == 0)
-		&& (preg_match('/^\s*show\s*tables\s*like/iD',$sqlQuery) == 0)
-	   ) {
-		// Only log queries that could result in data/database  modification
-
-		$last = null;
-		$tth = null;
-		$sql = "INSERT INTO ".TB_PREFIX."log (domain_id, timestamp, userid, sqlquerie, last_id) VALUES (?, CURRENT_TIMESTAMP , ?, ?, ?)";
-
-		/* SC: Check for the patch manager patch loader.  If a
-		 *     patch is being run, avoid $log_dbh due to the
-		 *     risk of deadlock.
-		 */
-		$call_stack = debug_backtrace();
-		//SC: XXX Change the number back to 1 if returned to directly
-		//    within dbQuery.  The joys of dealing with the call stack.
-
-		if ($call_stack[2]['function'] == 'run_sql_patch') {
-		/* Running the patch manager, avoid deadlock */
-			$tth = $dbh->prepare($sql);
-		} elseif (preg_match('/^(update|insert)/iD', $sqlQuery)) {
-			$last = lastInsertId();
-			$tth = $log_dbh->prepare($sql);
-		} else {
-			$tth = $log_dbh->prepare($sql);
-		}
-		$tth->execute(array($auth_session->domain_id, $userid, trim($sqlQuery), $last));
-		unset($tth);
-	}
 }
 
 /*

@@ -30,9 +30,3 @@ if (!extension_loaded('intl')) {
  * Init file
  */
 require_once("./include/init.php");
-	
-/**
- * Run the application
- */
-$application->run();
-

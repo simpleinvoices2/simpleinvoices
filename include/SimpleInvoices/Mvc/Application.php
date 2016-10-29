@@ -99,12 +99,29 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $events         = $this->events;
         $serviceManager = $this->serviceManager;
         
+        // Verify some folders
+        if (!is_writable('./tmp')) {
+            simpleInvoicesError('notWriteable','directory','./tmp');
+        }
+        
+        if (!is_writable('./tmp/cache')) {
+            simpleInvoicesError('notWriteable','file','./tmp/cache');
+        }
+        
         // Setup default listeners
         $listeners = array_unique(array_merge($this->defaultListeners, $listeners));
         
         foreach ($listeners as $listener) {
             $serviceManager->get($listener)->attach($events);
         }
+        
+        //set up app with relevant php setting
+        date_default_timezone_set($this->getConfig()->phpSettings->date->timezone);
+        error_reporting($this->getConfig()->debug->error_reporting);
+        ini_set('display_startup_errors', $this->getConfig()->phpSettings->display_startup_errors);
+        ini_set('display_errors', $this->getConfig()->phpSettings->display_errors);
+        ini_set('log_errors', $this->getConfig()->phpSettings->log_errors);
+        ini_set('error_log', $this->getConfig()->phpSettings->error_log);
         
         // Bootstrap session
         $session = $this->serviceManager->get(SessionManager::class);

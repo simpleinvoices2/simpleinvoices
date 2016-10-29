@@ -65,8 +65,8 @@ class sub_customer
     }
 
     public static function updateCustomer() {
-        global $db;
         global $config;
+        $db = \SimpleInvoices\Deprecate\Db::getInstance();
 
 		// $encrypted_credit_card_number = '';
 		$is_new_cc_num = ($_POST['credit_card_number_new'] !='');

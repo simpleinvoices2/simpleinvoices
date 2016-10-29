@@ -31,10 +31,9 @@ class SmartyFactory implements FactoryInterface
         
         // TODO: Probablly throw a exception
         //       Current code is in include/init.php
-        //if(!is_writable($smarty->compile_dir)) {
-        //    simpleInvoicesError("notWriteable", 'folder', $smarty -> compile_dir);
-        //    //exit("Simple Invoices Error : The folder <i>".$smarty -> compile_dir."</i> has to be writeable");
-        //}
+        if(!is_writable($smarty->compile_dir)) {
+            simpleInvoicesError("notWriteable", 'folder', $smarty->compile_dir);
+        }
         
         //adds own smarty plugins
         $smarty->plugins_dir = array("plugins","include/smarty_plugins");

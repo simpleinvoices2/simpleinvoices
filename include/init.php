@@ -27,6 +27,14 @@ if( is_file('./config/custom.config.php') ){
 }
 
 /**
+ * Non-refactored code
+ */
+include_once('./include/functions.php');
+include_once("./include/sql_queries.php");
+include_once('./include/manageCustomFields.php');
+include_once("./include/validation.php");
+
+/**
  * Service manager
  */
 $serviceManager = new \Zend\ServiceManager\ServiceManager([
@@ -85,75 +93,20 @@ $view              = $routeMatch->getParam('view', null);
 $action            = $routeMatch->getParam('action', null);
 $config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getModules();
 
-$auth_session = new \Zend\Session\Container('SI_AUTH');
-$smarty       = $serviceManager->get('Smarty');
+$auth_session      = new \Zend\Session\Container('SI_AUTH');
+$smarty            = $serviceManager->get('Smarty');
+$logger            = $serviceManager->get('SimpleInvoices\Logger');
 
-$systemDefaults = $serviceManager->get(SystemDefaultManager::class);
-$LANG = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $systemDefaults->get('language', 'en_GB'))->getArrayCopy();
+$systemDefaults    = $serviceManager->get(SystemDefaultManager::class);
+$LANG              = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $systemDefaults->get('language', 'en_GB'))->getArrayCopy();
+
+$sqlQueries        = $serviceManager->get('SimpleInvoices\SqlQueries');
+$dbh               = $sqlQueries->getDbHandle();
 
 // TODO: This supports old code, should find a better way
-$menu         = true;
+$menu              = true;
 
 /**
- * Old stuff follows...
+ * Run the application
  */
-
-/* 
- * Smarty inint - start
- */
-
-#ini_set('display_errors',true);
-
-include_once('./include/functions.php');
-
-//ob_start('addCSRFProtection');
-
-if (!is_writable('./tmp')) {
-    
-   simpleInvoicesError('notWriteable','directory','./tmp');
-}
-
-/**
- * Logger
- */
-$logger = $serviceManager->get('SimpleInvoices\Logger');
-
-/*
- * log file - end
- */
-
-if (!is_writable('./tmp/cache')) {
-    
-   simpleInvoicesError('notWriteable','file','./tmp/cache');
-}
-
-
-//cache directory. Have to be writeable (chmod 777)
-//$smarty->compile_dir = "tmp/cache";
-if(!is_writable($smarty -> compile_dir)) {
-	simpleInvoicesError("notWriteable", 'folder', $smarty -> compile_dir);
-	//exit("Simple Invoices Error : The folder <i>".$smarty -> compile_dir."</i> has to be writeable");
-}
-
-$path = pathinfo($_SERVER['REQUEST_URI']);
-//SC: Install path handling will need changes if used in non-HTML contexts
-$install_path = htmlsafe($path['dirname']);
-
-//set up app with relevant php setting
-date_default_timezone_set($config->phpSettings->date->timezone);
-error_reporting($config->debug->error_reporting);
-ini_set('display_startup_errors', $config->phpSettings->display_startup_errors);  
-ini_set('display_errors', $config->phpSettings->display_errors); 
-ini_set('log_errors', $config->phpSettings->log_errors); 
-ini_set('error_log', $config->phpSettings->error_log); 
-
-//include_once("./include/sql_patches.php");
-
-$db = \SimpleInvoices\Deprecate\Db::getInstance();
-
-include_once("./include/sql_queries.php");
-
-
-
-include_once('./include/manageCustomFields.php');
-include_once("./include/validation.php");
+$application->run();

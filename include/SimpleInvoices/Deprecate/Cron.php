@@ -235,9 +235,10 @@ class Cron {
 
 	public function run()
 	{
-        global $db;
         global $serviceManager;
 
+        $db = \SimpleInvoices\Deprecate\Db::getInstance();
+        
         $today = date('Y-m-d');
         $cron = new Cron();
         $data = $cron->select_crons_to_run();

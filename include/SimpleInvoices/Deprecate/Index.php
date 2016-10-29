@@ -121,7 +121,7 @@ class index
         {
             $subnode2 = " and sub_node_2 = ".$sub_node_2; 
         }
-        global $db;
+        $db = \SimpleInvoices\Deprecate\Db::getInstance();
         $sql = "select 
                     id 
                 from 
@@ -147,7 +147,7 @@ class index
     public static function next($node, $sub_node="", $sub_node_2="")
     {
 
-        global $db;
+        $db = \SimpleInvoices\Deprecate\Db::getInstance();
         global $auth_session;
 
 	$defaults = getSystemDefaults();
@@ -218,7 +218,7 @@ class index
 	#echo "next:".$next."current:".$current;
 	$defaults = getSystemDefaults();
 
-	global $db;
+	$db = \SimpleInvoices\Deprecate\Db::getInstance();
         global $auth_session;
 
      #   if ($sub_node !="") 
@@ -316,7 +316,7 @@ class index
     public static function rewind()
     {
 
-        global $db;
+        $db = \SimpleInvoices\Deprecate\Db::getInstance();
         global $auth_session;
 
         if ($sub_node !="")
