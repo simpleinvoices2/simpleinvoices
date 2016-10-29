@@ -91,7 +91,9 @@ class Export
 	function getData()
 	{
 		//echo "export - get data";
-		global $smarty;
+		global $serviceManager;
+		
+		$smarty = $serviceManager->get('Smarty');
 		
 		$siUrl =  getURL();
 		
@@ -283,8 +285,9 @@ class Export
 	// TODO: What a nasty function!!!
 	function assignTemplateLanguage($preference)
 	{
-	    global $smarty;
 	    global $serviceManager;
+	    
+	    $smarty = $serviceManager->get('Smarty');
 	    
 	    if (isset($preference['language'])) {
 	        $messages = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $preference['language'])->getArrayCopy();

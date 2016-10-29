@@ -460,7 +460,9 @@ class Invoice {
 
 	public function getInvoiceItems($id, $domain_id='') 
 	{
-		global $logger;
+		global $serviceManager;
+        
+        $logger = $serviceManager->get('SimpleInvoices\Logger');
 		
 		if(!empty($domain_id)) $this->domain_id = $domain_id;
 
@@ -546,7 +548,9 @@ class Invoice {
     **/
     public function max($domain_id='') {
 
-        global $logger;
+        global $serviceManager;
+        
+        $logger = $serviceManager->get('SimpleInvoices\Logger');
 
         if ( getNumberOfDonePatches() < '179')
         {

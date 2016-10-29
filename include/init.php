@@ -90,15 +90,6 @@ $application->runFirst();
  * These are things that have changed but still not fully 
  * refactored.
  */
-$routeMatch        = $application->getMvcEvent()->getRouteMatch();
-$module            = $routeMatch->getParam('module', null);
-$view              = $routeMatch->getParam('view', null);
-$action            = $routeMatch->getParam('action', null);
-//$config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getModules();
-
-$smarty            = $serviceManager->get('Smarty');
-$logger            = $serviceManager->get('SimpleInvoices\Logger');
-
 $systemDefaults    = $serviceManager->get(SystemDefaultManager::class);
 $LANG              = $serviceManager->get(\Zend\I18n\Translator\TranslatorInterface::class)->getAllMessages('default', $systemDefaults->get('language', 'en_GB'))->getArrayCopy();
 

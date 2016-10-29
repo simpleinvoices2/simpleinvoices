@@ -97,7 +97,9 @@ class expense
 
     public function save()
     {
-        global $logger;
+        global $serviceManager;
+        
+        $logger = $serviceManager->get('SimpleInvoices\Logger');
         
         $sql = "INSERT into
             ".TB_PREFIX."expense
@@ -195,7 +197,9 @@ class expense
     */
     public function expense_item_tax($expense_id,$line_item_tax_id,$unit_price,$quantity,$action="") 
     {    
-        global $logger;
+        global $serviceManager;
+        
+        $logger = $serviceManager->get('SimpleInvoices\Logger');
         
         $logger->info("Exp ITEM :: Key: ".$key." Value: ".$value);
 

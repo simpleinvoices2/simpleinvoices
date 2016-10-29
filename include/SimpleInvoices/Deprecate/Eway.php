@@ -22,7 +22,9 @@ class Eway
 
     public function pre_check()
     {
-        global $logger;
+        global $serviceManager;
+        
+        $logger = $serviceManager->get('SimpleInvoices\Logger');
 
         $return = 'false';
         
@@ -58,7 +60,9 @@ class Eway
     {
     
         global $config;
-        global $logger;
+        global $serviceManager;
+        
+        $logger = $serviceManager->get('SimpleInvoices\Logger');
 
         //set customer,biller and preference if not defined
         if(empty($this->customer))

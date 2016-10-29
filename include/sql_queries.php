@@ -618,7 +618,9 @@ function insertProductComplete($enabled=1,$visible=1,$description, $unit_price, 
 
 function insertProduct($enabled=1,$visible=1, $domain_id='') 
 {
-    global $logger;
+    global $serviceManager;
+        
+    $logger = $serviceManager->get('SimpleInvoices\Logger');
 
     if (empty($domain_id)) {
         $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -2109,9 +2111,11 @@ function updateInvoice($invoice_id, $domain_id='')
 
 function insertInvoiceItem($invoice_id,$quantity,$product_id,$line_number,$line_item_tax_id,$description="", $unit_price="", $attribute="", $domain_id='') 
 {
-	global $logger;
 	global $db_server;
 	global $LANG;
+	global $serviceManager;
+	
+	$logger = $serviceManager->get('SimpleInvoices\Logger');
     
 	if (empty($domain_id)) {
 	    $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -2209,7 +2213,9 @@ Purpose: get the total tax for the line item
 */
 function getTaxesPerLineItem($line_item_tax_id, $quantity, $unit_price, $domain_id='')
 {
-	global $logger;
+	global $serviceManager;
+        
+    $logger = $serviceManager->get('SimpleInvoices\Logger');
     
 	if (empty($domain_id)) {
 	    $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -2258,7 +2264,9 @@ Purpose: insert/update the multiple taxes per line item into the si_invoice_item
 */
 function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $quantity, $action='', $domain_id='') 
 {	
-	global $logger;
+	global $serviceManager;
+        
+    $logger = $serviceManager->get('SimpleInvoices\Logger');
     
 	if (empty($domain_id)) {
 	    $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -2331,9 +2339,11 @@ function invoice_item_tax($invoice_item_id, $line_item_tax_id, $unit_price, $qua
 
 function updateInvoiceItem($id, $quantity, $product_id, $line_number, $line_item_tax_id, $description, $unit_price, $attribute="", $domain_id='') 
 {
-	global $logger;
 	global $LANG;
 	global $db_server;
+	global $serviceManager;
+	
+	$logger = $serviceManager->get('SimpleInvoices\Logger');
  
 	if (empty($domain_id)) {
 	    $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -2536,7 +2546,9 @@ WHERE i.domain_id = :domain_id
 function delete($module, $idField, $id, $domain_id='') 
 {
 	global $dbh;
-	global $logger;
+	global $serviceManager;
+	
+	$logger = $serviceManager->get('SimpleInvoices\Logger');
 
 	if (empty($domain_id)) {
 	    $auth_session = new \Zend\Session\Container('SI_AUTH');
@@ -2915,6 +2927,8 @@ function runPatches() {
 	global $patch;
 	global $db_server;
 	global $dbh;
+	global $serviceManager;
+	
 	#DEFINE SQL PATCH
 
 	$display_block = "";
@@ -2959,23 +2973,28 @@ function runPatches() {
 
 	}
 
-	global $smarty;
-	$smarty-> assign("page",$smarty_datas);
+	$smarty = $serviceManager->get('Smarty');
+	$smarty->assign("page", $smarty_datas);
 
 }
 
 // ------------------------------------------------------------------------------
-function donePatches() {
+function donePatches() 
+{
+    global $serviceManager;
+    
 	$smarty_datas['message']="The database patches are uptodate. You can continue working with Simple Invoices";
 	$smarty_datas['html']	= "<div class='si_toolbar si_toolbar_form'><a href='index.php'>HOME</a></div>";
 	$smarty_datas['refresh']=3;
-	global $smarty;
-	$smarty-> assign("page",$smarty_datas);
+	
+	$smarty = $serviceManager->get('Smarty');
+	$smarty->assign("page", $smarty_datas);
 }
 
 // ------------------------------------------------------------------------------
 function listPatches() {
-		global $patch;
+	global $patch;
+    global $serviceManager;
 
 	//if(mysql_num_rows(mysqlQuery("SHOW TABLES LIKE '".TB_PREFIX."sql_patchmanager'")) == 1) {
 		
@@ -3005,8 +3024,8 @@ EOD;
 			}	
 		}
 
-	global $smarty;
-	$smarty-> assign("page",$smarty_datas);
+	$smarty = $serviceManager->get('Smarty');
+	$smarty->assign("page", $smarty_datas);
 }
 
 // ------------------------------------------------------------------------------
