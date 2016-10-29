@@ -17,6 +17,7 @@ use Zend\Db\Metadata\Metadata;
  */
 class Application implements ApplicationInterface, EventManagerAwareInterface
 {
+    const ERROR_CONTROLLER_NOT_FOUND       = 'error-controller-not-found';
     const ERROR_ROUTER_NO_MATCH            = 'error-router-no-match';
     const ERROR_NOT_AUTHORIZED             = 'error-not-authorized';
     
@@ -68,10 +69,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         }
         $this->defaultListeners[] = 'RouteListener';
         
-        if (!$serviceManager->has('DispatchListener')) {
-            $this->serviceManager->setService('DispatchListener', new DispatchListener());
-        }
-        $this->defaultListeners[] = 'DispatchListener';
+        $this->defaultListeners[] = \SimpleInvoices\Mvc\DispatchListener::class;
         
         if (!$serviceManager->has('RenderListener')) {
             $this->serviceManager->setService('RenderListener', new RenderListener());

@@ -32,6 +32,11 @@ class MvcEvent extends Event
     protected $response;
     
     /**
+     * @var mixed
+     */
+    protected $result;
+    
+    /**
      * @var null|Router\RouteMatch
      */
     protected $routeMatch;
@@ -196,6 +201,73 @@ class MvcEvent extends Event
     {
         $this->setParam('router', $router);
         $this->router = $router;
+        return $this;
+    }
+    
+    /**
+     * Get the currently registered controller name
+     *
+     * @return string
+     */
+    public function getController()
+    {
+        return $this->getParam('controller');
+    }
+    
+    /**
+     * Get controller class
+     *
+     * @return string
+     */
+    public function getControllerClass()
+    {
+        return $this->getParam('controller-class');
+    }
+    
+    /**
+     * Get result
+     *
+     * @return mixed
+     */
+    public function getResult()
+    {
+        return $this->result;
+    }
+    
+    /**
+     * Set controller name
+     *
+     * @param  string $name
+     * @return MvcEvent
+     */
+    public function setController($name)
+    {
+        $this->setParam('controller', $name);
+        return $this;
+    }
+    
+    /**
+     * Set controller class
+     *
+     * @param string $class
+     * @return MvcEvent
+     */
+    public function setControllerClass($class)
+    {
+        $this->setParam('controller-class', $class);
+        return $this;
+    }
+    
+    /**
+     * Set result
+     *
+     * @param mixed $result
+     * @return MvcEvent
+     */
+    public function setResult($result)
+    {
+        $this->setParam('__RESULT__', $result);
+        $this->result = $result;
         return $this;
     }
 }

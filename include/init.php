@@ -60,6 +60,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         \SimpleInvoices\SystemDefault\SystemDefaultManager::class => \SimpleInvoices\SystemDefault\Service\SystemDefaultManagerServiceFactory::class,
         // Controllers
         \SimpleInvoices\Mvc\Controller\ControllerManager::class => \SimpleInvoices\Mvc\Service\ControllerManagerFactory::class,
+        \SimpleInvoices\Mvc\DispatchListener::class => \SimpleInvoices\Mvc\Service\DispatchListenerFactory::class,
     ],
 ]);
 

@@ -3,9 +3,23 @@ namespace SimpleInvoices\Mvc;
 
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use SimpleInvoices\Mvc\Router\RouteMatch;
 
 class DispatchListener extends AbstractListenerAggregate
 {
+    /**
+     * @var Controller\ControllerManager
+     */
+    private $controllerManager;
+    
+    /**
+     * @param Controller\ControllerManager $controllerManager
+     */
+    public function __construct(Controller\ControllerManager $controllerManager)
+    {
+        $this->controllerManager = $controllerManager;
+    }
+    
     /**
      * Attach one or more listeners
      *
@@ -58,6 +72,32 @@ class DispatchListener extends AbstractListenerAggregate
      * @return mixed
      */
     public function onDispatch(MvcEvent $e)
+    {
+        $routeMatch        = $e->getRouteMatch();
+        $controllerName    = $routeMatch instanceof RouteMatch ? $routeMatch->getParam('controller', 'not-found') : 'not-found';
+        $application       = $e->getApplication();
+        $events            = $application->getEventManager();
+        $controllerManager = $this->controllerManager;
+        
+        // Query abstract controllers, too!
+        if (! $controllerManager->has($controllerName)) {
+            // TODO: Right now we are not exiting but going into compatibility
+            //$return = $this->marshalControllerNotFoundEvent($application::ERROR_CONTROLLER_NOT_FOUND, $controllerName, $e, $application);
+            //return $this->complete($return, $e);
+            return $this->backwardCompatibilityOnDispatch($e);
+        }
+        
+        
+        die("We shouldn't be here yet!!");
+    }
+    
+    /**
+     * Listen to the "dispatch" event
+     *
+     * @param  MvcEvent $e
+     * @return mixed
+     */
+    public function backwardCompatibilityOnDispatch(MvcEvent $e)
     {
         $config     = $e->getApplication()->getConfig();
         $routeMatch = $e->getRouteMatch();
@@ -241,5 +281,33 @@ class DispatchListener extends AbstractListenerAggregate
          * Backward compatibility
          */
         $e->setMenuVisibility($menu);
+    }
+    
+    /**
+     * Marshal a controller not found exception event
+     *
+     * @param  string $type
+     * @param  string $controllerName
+     * @param  MvcEvent $event
+     * @param  Application $application
+     * @param  \Throwable|\Exception $exception
+     * @return mixed
+     */
+    protected function marshalControllerNotFoundEvent($type, $controllerName, MvcEvent $event, Application $application, $exception = null) 
+    {
+        $event->setName(MvcEvent::EVENT_DISPATCH_ERROR);
+        $event->setError($type);
+        $event->setController($controllerName);
+        $event->setControllerClass('invalid controller class or alias: ' . $controllerName);
+        if ($exception !== null) {
+            $event->setParam('exception', $exception);
+        }
+        $events  = $application->getEventManager();
+        $results = $events->triggerEvent($event);
+        $return  = $results->last();
+        if (! $return) {
+            $return = $event->getResult();
+        }
+        return $return;
     }
 }
