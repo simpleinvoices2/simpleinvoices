@@ -58,6 +58,8 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         \Zend\I18n\Translator\TranslatorInterface::class => \SimpleInvoices\Service\TranslatorServiceFactory::class,
         \Zend\I18n\Translator\LoaderPluginManager::class => \Zend\I18n\Translator\LoaderPluginManagerFactory::class,
         \SimpleInvoices\SystemDefault\SystemDefaultManager::class => \SimpleInvoices\SystemDefault\Service\SystemDefaultManagerServiceFactory::class,
+        // Controllers
+        \SimpleInvoices\Mvc\Controller\ControllerManager::class => \SimpleInvoices\Mvc\Service\ControllerManagerFactory::class,
     ],
 ]);
 
