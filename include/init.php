@@ -76,18 +76,12 @@ $serviceManager->setService('SimpleInvoices', $application);
 $application->bootstrap();
 
 /**
- * TODO: Really it should be $application->run() but since code has not been
- *       completelly refactored we need to split the run method in half :( 
- */
-$application->runFirst();
-
-/**
  * Backward compatibility
- * 
- * We need to remove globals and use the service manager and events to replace 
+ *
+ * We need to remove globals and use the service manager and events to replace
  * them.
- * 
- * These are things that have changed but still not fully 
+ *
+ * These are things that have changed but still not fully
  * refactored.
  */
 $systemDefaults    = $serviceManager->get(SystemDefaultManager::class);

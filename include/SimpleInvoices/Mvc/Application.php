@@ -307,42 +307,8 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $events = $this->events;
         $event  = $this->getMvcEvent();
         
-        $smarty = $this->serviceManager->get('Smarty');
-        $smarty->assign("config", $this->getConfig()); // to toggle the login / logout button visibility in the menu
-        $smarty->assign("module", $event->getRouteMatch()->getParam('module', null));
-        $smarty->assign("view", $event->getRouteMatch()->getParam('view', null));
-        $smarty->assign("siUrl", getUrl());//used for template css
-        $smarty->assign("LANG", $LANG);
-        //For Making easy enabled pop-menus (see biller)
-        $smarty->assign("enabled", array($LANG['disabled'], $LANG['enabled']));
-        $smarty->assign("defaults", getSystemDefaults());
-        
-        /**
-         * trigger the 'dispatch' event.
-         */
-        $event->setName(MvcEvent::EVENT_DISPATCH);
-        $events->triggerEvent($event);
-     
-        /**
-         * Render the output
-         */
-        $event->setName(MvcEvent::EVENT_RENDER);
-        $events->triggerEvent($event);
-        //$renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
-        //$renderer->setResolver( $this->serviceManager->get(TemplatePathStack::class) );
-        //$renderer->render();
-    }
-    
-    /**
-     * While refactoring code we need another method but all this
-     * code should be inside the Application::run() method.
-     * 
-     * TODO: Move this code to the start or Application::run() when possible.
-     */
-    public function runFirst()
-    {
-        $events = $this->events;
-        $event  = $this->event;
+        // ===================================================
+        // --------------- RUN FIRST CODE START --------------
         
         // --------------- INSTALLER START ---------------
         $metadata = new Metadata($this->serviceManager->get('SimpleInvoices\Database\Adapter'));
@@ -421,7 +387,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
             }
             // ---------------   E N D   ---------------
             //==========================================
-            
+        
             // Define callback used to determine whether or not to short-circuit
             $shortCircuitAuthorization = function ($r) use ($event) {
                 if (!$r) {
@@ -430,12 +396,12 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
                 }
                 return false;
             };
-            
+        
             // Trigger authorization event
             $event->setName(MvcEvent::EVENT_AUTHORIZATION);
             $event->stopPropagation(false); // Clear before triggering
             $result = $events->triggerEventUntil($shortCircuitAuthorization, $event);
-            
+        
             if (!$result->last()) {
                 header('HTTP/1.0 403 Forbidden');
                 // $checkPermission == "denied" ? exit($LANG['denied_page']) :"" ;
@@ -443,6 +409,34 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
                 exit(1);
             }
         }
+        
+        // ---------------- RUN FIRST CODE END ---------------
+        // ===================================================
+        
+        $smarty = $this->serviceManager->get('Smarty');
+        $smarty->assign("config", $this->getConfig()); // to toggle the login / logout button visibility in the menu
+        $smarty->assign("module", $event->getRouteMatch()->getParam('module', null));
+        $smarty->assign("view", $event->getRouteMatch()->getParam('view', null));
+        $smarty->assign("siUrl", getUrl());//used for template css
+        $smarty->assign("LANG", $LANG);
+        //For Making easy enabled pop-menus (see biller)
+        $smarty->assign("enabled", array($LANG['disabled'], $LANG['enabled']));
+        $smarty->assign("defaults", getSystemDefaults());
+        
+        /**
+         * trigger the 'dispatch' event.
+         */
+        $event->setName(MvcEvent::EVENT_DISPATCH);
+        $events->triggerEvent($event);
+     
+        /**
+         * Render the output
+         */
+        $event->setName(MvcEvent::EVENT_RENDER);
+        $events->triggerEvent($event);
+        //$renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
+        //$renderer->setResolver( $this->serviceManager->get(TemplatePathStack::class) );
+        //$renderer->render();
     }
     
     /**
