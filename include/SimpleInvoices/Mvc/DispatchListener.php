@@ -88,7 +88,7 @@ class DispatchListener extends AbstractListenerAggregate
         }
         
         
-        die("We shouldn't be here yet!!");
+        die("We shouldn't be here yet!! Please, report this error-");
     }
     
     /**
