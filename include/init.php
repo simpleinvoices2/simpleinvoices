@@ -84,6 +84,9 @@ $application->runFirst();
 /**
  * Backward compatibility
  * 
+ * We need to remove globals and use the service manager and events to replace 
+ * them.
+ * 
  * These are things that have changed but still not fully 
  * refactored.
  */
@@ -91,9 +94,8 @@ $routeMatch        = $application->getMvcEvent()->getRouteMatch();
 $module            = $routeMatch->getParam('module', null);
 $view              = $routeMatch->getParam('view', null);
 $action            = $routeMatch->getParam('action', null);
-$config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getModules();
+//$config->extension = $serviceManager->get('SimpleInvoices\ModuleManager')->getModules();
 
-$auth_session      = new \Zend\Session\Container('SI_AUTH');
 $smarty            = $serviceManager->get('Smarty');
 $logger            = $serviceManager->get('SimpleInvoices\Logger');
 

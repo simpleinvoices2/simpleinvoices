@@ -65,6 +65,8 @@ class DispatchListener extends AbstractListenerAggregate
         $view       = $routeMatch->getParam('view', null);
         $action     = $routeMatch->getParam('action', null);
         
+        $extensions = $e->getApplication()->getServiceManager()->get('SimpleInvoices\ModuleManager')->getModules();
+        
         /**
          * Backward compatibility
          */
@@ -96,7 +98,7 @@ class DispatchListener extends AbstractListenerAggregate
              * Note: this system is probably slow - if you got a better method for handling extensions let me know
              */
             $extensionInvoiceTemplateFile = 0;
-            foreach($config->extension as $extension)
+            foreach($extensions as $extension)
             {
                 /*
                  * If extension is enabled then continue and include the requested file for that extension if it exists
@@ -135,7 +137,7 @@ class DispatchListener extends AbstractListenerAggregate
         if( strstr($module, "api") OR (strstr($view,"xml") OR (strstr($view, "ajax")) ) )
         {
             $extensionXml = 0;
-            foreach($config->extension as $extension)
+            foreach($extensions as $extension)
             {
                 /*
                  * If extension is enabled then continue and include the requested file for that extension if it exists
@@ -174,7 +176,7 @@ class DispatchListener extends AbstractListenerAggregate
          */
         $extension_jquery_files = "";
         
-        foreach($config->extension as $extension)
+        foreach($extensions as $extension)
         {
             /*
              * If extension is enabled then continue and include the requested file for that extension if it exists
@@ -206,7 +208,7 @@ class DispatchListener extends AbstractListenerAggregate
          * Note: this system is probably slow - if you got a better method for handling extensions let me know
          */
         $extensionPHPFile = 0;
-        foreach($config->extension as $extension)
+        foreach($extensions as $extension)
         {
             /*
              * If extension is enabled then continue and include the requested file for that extension if it exists

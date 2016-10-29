@@ -30,7 +30,7 @@ $saved = false;
 if ( $op === 'insert_user') {
 
     function insertUser() {
-		global $auth_session;
+		$auth_session = new \Zend\Session\Container('SI_AUTH');
 
         $sql = "INSERT INTO ".TB_PREFIX."user
                     (

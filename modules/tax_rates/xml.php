@@ -15,7 +15,8 @@ function sql($type='', $start, $dir, $sort, $rp, $page )
 {
 	global $config;
 	global $LANG;
-	global $auth_session;
+	
+	$auth_session = new \Zend\Session\Container('SI_AUTH');
 
 	$valid_search_fields = array('tax_id', 'tax_description', 'tax_percentage');
 

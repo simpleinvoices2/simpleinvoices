@@ -3,9 +3,6 @@ use SimpleInvoices\I18n\SiLocal;
 
 header("Content-type: text/xml");
 
-//global $auth_session;
-//global $dbh;
-
 $start = (isset($_POST['start'])) ? $_POST['start'] : "0" ;
 $dir = (isset($_POST['sortorder'])) ? $_POST['sortorder'] : "ASC" ;
 $sort = (isset($_POST['sortname'])) ? $_POST['sortname'] : "name" ;
@@ -18,7 +15,8 @@ function sql($type='', $start, $dir, $sort, $rp, $page )
 {
 	global $config;
 	global $LANG;
-	global $auth_session;
+	
+	$auth_session = new \Zend\Session\Container('SI_AUTH');
 
 	$valid_search_fields = array('c.id', 'c.name');
 

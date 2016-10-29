@@ -28,13 +28,16 @@ class ViewTemplatePathStackFactory implements FactoryInterface
         // TODO: Make this better
         $config = $container->get('SimpleInvoices\Config');
         
+        // Load extensions
+        $extensions = $container->get('SimpleInvoices\ModuleManager')->getModules();
+        
         // Paths
         // ============================================
         $paths = [];
         
         // extension templates
         // TODO: Make this better
-        foreach($config->extension as $extension) {
+        foreach($extensions as $extension) {
             if ($extension->enabled == "1") {
                 $extensionThemesPath = './extensions/' . $extension->name . '/templates';
                 

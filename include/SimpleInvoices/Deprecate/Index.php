@@ -148,7 +148,7 @@ class index
     {
 
         $db = \SimpleInvoices\Deprecate\Db::getInstance();
-        global $auth_session;
+        $auth_session = new \Zend\Session\Container('SI_AUTH');
 
 	$defaults = getSystemDefaults();
 	#
@@ -219,7 +219,7 @@ class index
 	$defaults = getSystemDefaults();
 
 	$db = \SimpleInvoices\Deprecate\Db::getInstance();
-        global $auth_session;
+        $auth_session = new \Zend\Session\Container('SI_AUTH');
 
      #   if ($sub_node !="") 
      #   {
@@ -317,7 +317,7 @@ class index
     {
 
         $db = \SimpleInvoices\Deprecate\Db::getInstance();
-        global $auth_session;
+        $auth_session = new \Zend\Session\Container('SI_AUTH');
 
         if ($sub_node !="")
         {

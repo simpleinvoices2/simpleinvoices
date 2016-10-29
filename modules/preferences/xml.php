@@ -13,7 +13,8 @@ function sql($type='', $dir, $sort, $rp, $page )
 {
 	global $config;
 	global $LANG;
-	global $auth_session;
+	
+	$auth_session = new \Zend\Session\Container('SI_AUTH');
 
 	$valid_search_fields = array('pref_id', 'pref_description');
 

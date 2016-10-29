@@ -12,7 +12,8 @@ $page = (isset($_POST['page'])) ? $_POST['page'] : "1" ;
 function sql($type='', $dir, $sort, $rp, $page )
 {
 	global $config;
-	global $auth_session;
+	
+	$auth_session = new \Zend\Session\Container('SI_AUTH');
 
 	$valid_search_fields = array('ap.id','b.name', 'c.name');
 

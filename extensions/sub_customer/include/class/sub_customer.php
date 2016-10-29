@@ -5,8 +5,10 @@ class sub_customer
 {
     public static function insertCustomer() {
         global $db_server;
-        global $auth_session;
         global $config;
+        
+        $auth_session = new \Zend\Session\Container('SI_AUTH');
+        
         extract( $_POST );
         $sql = "INSERT INTO 
             ".TB_PREFIX."customers
