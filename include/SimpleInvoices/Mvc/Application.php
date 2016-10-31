@@ -205,20 +205,15 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
      */
     protected function completeRequest(MvcEvent $event)
     {
-        echo "You should not be here!<br />";
-        echo "Something must of gone really bad if you arrived to this page.";
-        die();
-        // TODO: This is what it should do!
-        // ================================
-        //$events = $this->events;
-        //$event->setTarget($this);
-        //$event->setName(MvcEvent::EVENT_RENDER);
-        //$event->stopPropagation(false); // Clear before triggering
-        //$events->triggerEvent($event);
-        //$event->setName(MvcEvent::EVENT_FINISH);
-        //$event->stopPropagation(false); // Clear before triggering
-        //$events->triggerEvent($event);
-        //return $this;
+        $events = $this->events;
+        $event->setTarget($this);
+        $event->setName(MvcEvent::EVENT_RENDER);
+        $event->stopPropagation(false); // Clear before triggering
+        $events->triggerEvent($event);
+        $event->setName(MvcEvent::EVENT_FINISH);
+        $event->stopPropagation(false); // Clear before triggering
+        $events->triggerEvent($event);
+        return $this;
     }
     
     /**
@@ -421,20 +416,26 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         $smarty->assign("enabled", array($LANG['disabled'], $LANG['enabled']));
         $smarty->assign("defaults", getSystemDefaults());
         
-        /**
-         * trigger the 'dispatch' event.
-         */
+        // Trigger dispatch event
         $event->setName(MvcEvent::EVENT_DISPATCH);
-        $events->triggerEvent($event);
-     
-        /**
-         * Render the output
-         */
-        $event->setName(MvcEvent::EVENT_RENDER);
-        $events->triggerEvent($event);
-        //$renderer = new \SimpleInvoices\Smarty\Renderer($this->serviceManager);
-        //$renderer->setResolver( $this->serviceManager->get(TemplatePathStack::class) );
-        //$renderer->render();
+        $event->stopPropagation(false); // Clear before triggering
+        $result = $events->triggerEventUntil($shortCircuit, $event);
+        
+        // Complete response
+        $response = $result->last();
+        if ($response instanceof ResponseInterface) {
+            $event->setName(MvcEvent::EVENT_FINISH);
+            $event->setTarget($this);
+            $event->setResponse($response);
+            $event->stopPropagation(false); // Clear before triggering
+            $events->triggerEvent($event);
+            $this->response = $response;
+            return $this;
+        }
+        
+        $response = $this->response;
+        $event->setResponse($response);
+        return $this->completeRequest($event);
     }
     
     /**

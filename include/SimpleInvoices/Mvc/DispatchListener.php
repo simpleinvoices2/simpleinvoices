@@ -1,9 +1,11 @@
 <?php
 namespace SimpleInvoices\Mvc;
 
+use ArrayObject;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use SimpleInvoices\Mvc\Router\RouteMatch;
+use Zend\Stdlib\ArrayUtils;
 
 class DispatchListener extends AbstractListenerAggregate
 {
@@ -33,6 +35,24 @@ class DispatchListener extends AbstractListenerAggregate
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH, [$this, 'onDispatch']);
+    }
+    
+    /**
+     * Complete the dispatch
+     *
+     * @param  mixed $return
+     * @param  MvcEvent $event
+     * @return mixed
+     */
+    protected function complete($return, MvcEvent $event)
+    {
+        if (!is_object($return)) {
+            if (ArrayUtils::hasStringKeys($return)) {
+                $return = new ArrayObject($return, ArrayObject::ARRAY_AS_PROPS);
+            }
+        }
+        $event->setResult($return);
+        return $return;
     }
     
     /*
@@ -81,7 +101,7 @@ class DispatchListener extends AbstractListenerAggregate
         
         // Query abstract controllers, too!
         if (! $controllerManager->has($controllerName)) {
-            // TODO: Right now we are not exiting but going into compatibility
+            //TODO: Right now we are not exiting but going into compatibility
             //$return = $this->marshalControllerNotFoundEvent($application::ERROR_CONTROLLER_NOT_FOUND, $controllerName, $e, $application);
             //return $this->complete($return, $e);
             return $this->backwardCompatibilityOnDispatch($e);

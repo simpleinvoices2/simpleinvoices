@@ -13,6 +13,7 @@ class MvcEvent extends Event
     const EVENT_ROUTE          = 'route';
     const EVENT_RENDER         = 'render';
     const EVENT_AUTHORIZATION  = 'authorization';
+    const EVENT_FINISH         = 'finish';
     
     /**
      * @var Application
