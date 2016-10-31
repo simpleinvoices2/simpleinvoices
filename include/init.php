@@ -38,6 +38,9 @@ include_once("./include/validation.php");
  * Service manager
  */
 $serviceManager = new \Zend\ServiceManager\ServiceManager([
+    'aliases'   => [
+        'EventManager' => 'SimpleInvoices\EventManager', 
+    ],
     'factories' => [
         'Smarty' => \SimpleInvoices\Service\SmartyFactory::class,
         'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class,
@@ -61,6 +64,7 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         // Controllers
         \SimpleInvoices\Mvc\Controller\ControllerManager::class => \SimpleInvoices\Mvc\Service\ControllerManagerFactory::class,
         \SimpleInvoices\Mvc\DispatchListener::class => \SimpleInvoices\Mvc\Service\DispatchListenerFactory::class,
+        \SimpleInvoices\Mvc\ResponseSender::class => \SimpleInvoices\Mvc\Service\SendResponseListenerFactory::class,
     ],
 ]);
 
