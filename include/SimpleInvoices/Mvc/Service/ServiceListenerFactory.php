@@ -13,6 +13,8 @@ use Interop\Container\ContainerInterface;
 use SimpleInvoices\ModuleManager\Listener\ServiceListener;
 use SimpleInvoices\ModuleManager\Listener\ServiceListenerInterface;
 use SimpleInvoices\Mvc\Application;
+use SimpleInvoices\Mvc\Controller\ControllerManager;
+use SimpleInvoices\Mvc\SendResponseListener;
 use SimpleInvoices\Mvc\View;
 use ReflectionClass;
 use Zend\Config\Config;
@@ -45,7 +47,7 @@ class ServiceListenerFactory implements FactoryInterface
             //'HttpDefaultRenderingStrategy'               => View\Http\DefaultRenderingStrategy::class,
             //'MiddlewareListener'                         => 'Zend\Mvc\MiddlewareListener',
             //'RouteListener'                              => 'Zend\Mvc\RouteListener',
-            //'SendResponseListener'                       => 'Zend\Mvc\SendResponseListener',
+            'SendResponseListener'                       => SendResponseListener::class,
             //'View'                                       => 'Zend\View\View',
             //'ViewFeedRenderer'                           => 'Zend\View\Renderer\FeedRenderer',
             //'ViewJsonRenderer'                           => 'Zend\View\Renderer\JsonRenderer',
@@ -59,34 +61,35 @@ class ServiceListenerFactory implements FactoryInterface
             //'Zend\View\Resolver\TemplatePathStack'       => 'ViewTemplatePathStack',
             //'Zend\View\Resolver\AggregateResolver'       => 'ViewResolver',
             //'Zend\View\Resolver\ResolverInterface'       => 'ViewResolver',
+            'ControllerManager'                          => ControllerManager::class,
         ],
         'invokables' => [],
         'factories'  => [
-            //'Application'                    => ApplicationFactory::class,
+            'Application'                    => ApplicationFactory::class,
             //'config'                         => 'Zend\Mvc\Service\ConfigFactory',
-            'ControllerManager'              => ControllerManagerFactory::class,
+            ControllerManager::class         => ControllerManagerFactory::class,
             'ControllerPluginManager'        => ControllerPluginManagerFactory::class,
-            //'DispatchListener'               => 'Zend\Mvc\Service\DispatchListenerFactory',
+            'DispatchListener'               => DispatchListenerFactory::class,
             //'HttpExceptionStrategy'          => HttpExceptionStrategyFactory::class,
             //'HttpMethodListener'             => 'Zend\Mvc\Service\HttpMethodListenerFactory',
             //'HttpRouteNotFoundStrategy'      => HttpRouteNotFoundStrategyFactory::class,
-            //'HttpViewManager'                => 'Zend\Mvc\Service\HttpViewManagerFactory',
+            'HttpViewManager'                => HttpViewManagerFactory::class,
             //'InjectTemplateListener'         => 'Zend\Mvc\Service\InjectTemplateListenerFactory',
             //'PaginatorPluginManager'         => 'Zend\Mvc\Service\PaginatorPluginManagerFactory',
-            //'Request'                        => 'Zend\Mvc\Service\RequestFactory',
-            //'Response'                       => 'Zend\Mvc\Service\ResponseFactory',
+            'Request'                        => RequestFactory::class,
+            'Response'                       => ResponseFactory::class,
             'ViewHelperManager'              => ViewHelperManagerFactory::class,
             //View\Http\DefaultRenderingStrategy::class => HttpDefaultRenderingStrategyFactory::class,
             //'ViewFeedStrategy'               => 'Zend\Mvc\Service\ViewFeedStrategyFactory',
             //'ViewJsonStrategy'               => 'Zend\Mvc\Service\ViewJsonStrategyFactory',
-            //'ViewManager'                    => 'Zend\Mvc\Service\ViewManagerFactory',
+            'ViewManager'                    => ViewManagerFactory::class,
             //'ViewResolver'                   => 'Zend\Mvc\Service\ViewResolverFactory',
             //'ViewTemplateMapResolver'        => 'Zend\Mvc\Service\ViewTemplateMapResolverFactory',
             //'ViewTemplatePathStack'          => 'Zend\Mvc\Service\ViewTemplatePathStackFactory',
             //'ViewPrefixPathStackResolver'    => 'Zend\Mvc\Service\ViewPrefixPathStackResolverFactory',
             //'Zend\Mvc\MiddlewareListener'    => InvokableFactory::class,
             //'Zend\Mvc\RouteListener'         => InvokableFactory::class,
-            //'Zend\Mvc\SendResponseListener'  => SendResponseListenerFactory::class,
+            SendResponseListener::class      => SendResponseListenerFactory::class,
             //'Zend\View\Renderer\FeedRenderer' => InvokableFactory::class,
             //'Zend\View\Renderer\JsonRenderer' => InvokableFactory::class,
             //'Zend\View\Renderer\PhpRenderer' => ViewPhpRendererFactory::class,
@@ -277,9 +280,9 @@ class ServiceListenerFactory implements FactoryInterface
      */
     private function injectV3Aliases()
     {
-        //$this->defaultServiceConfig['aliases']['application'] = 'Application';
+        $this->defaultServiceConfig['aliases']['application'] = 'Application';
         //$this->defaultServiceConfig['aliases']['Config']      = 'config';
-        //$this->defaultServiceConfig['aliases']['request']     = 'Request';
-        //$this->defaultServiceConfig['aliases']['response']    = 'Response';
+        $this->defaultServiceConfig['aliases']['request']     = 'Request';
+        $this->defaultServiceConfig['aliases']['response']    = 'Response';
     }
 }

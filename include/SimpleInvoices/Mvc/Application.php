@@ -73,8 +73,8 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         }
         $this->defaultListeners[] = 'RouteListener';
         
-        $this->defaultListeners[] = \SimpleInvoices\Mvc\DispatchListener::class;
-        $this->defaultListeners[] = \SimpleInvoices\Mvc\ResponseSender::class;
+        $this->defaultListeners[] = 'DispatchListener';
+        $this->defaultListeners[] = 'SendResponseListener';
         
         if (!$serviceManager->has('RenderListener')) {
             $this->serviceManager->setService('RenderListener', new RenderListener());

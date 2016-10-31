@@ -41,8 +41,6 @@ $smConfig = [
     'factories' => [
         'Smarty' => \SimpleInvoices\Service\SmartyFactory::class,
         'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class,
-        'Request' => \SimpleInvoices\Service\RequestFactory::class,
-        'Response' => \SimpleInvoices\Service\ResponseFactory::class,
         'SimpleInvoices\Router' => \SimpleInvoices\Service\RouterFactory::class,
         'SimpleInvoices\Logger' => \SimpleInvoices\Service\LoggerFactory::class,
         'SimpleInvoices\SqlQueries' => \SimpleInvoices\Service\SqlQueriesFactory::class,
@@ -52,15 +50,10 @@ $smConfig = [
         \Zend\Session\SessionManager::class => \SimpleInvoices\Service\SessionManagerFactory::class,
         \SimpleInvoices\Authentication\AuthenticationService::class => \SimpleInvoices\Service\AuthenticationServiceFactory::class,
         'SimpleInvoices\Mail\TransportInterface' => \SimpleInvoices\Service\MailTransportFactory::class,
-        //'SimpleInvoices\ModuleManager' => \SimpleInvoices\Service\ModuleManagerFactory::class,
         'SimpleInvoices\PatchManager' => \SimpleInvoices\Service\PatchManagerFactory::class,
         \Zend\I18n\Translator\TranslatorInterface::class => \SimpleInvoices\Service\TranslatorServiceFactory::class,
         \Zend\I18n\Translator\LoaderPluginManager::class => \Zend\I18n\Translator\LoaderPluginManagerFactory::class,
         \SimpleInvoices\SystemDefault\SystemDefaultManager::class => \SimpleInvoices\SystemDefault\Service\SystemDefaultManagerServiceFactory::class,
-        // Controllers
-        \SimpleInvoices\Mvc\Controller\ControllerManager::class => \SimpleInvoices\Mvc\Service\ControllerManagerFactory::class,
-        \SimpleInvoices\Mvc\DispatchListener::class => \SimpleInvoices\Mvc\Service\DispatchListenerFactory::class,
-        \SimpleInvoices\Mvc\ResponseSender::class => \SimpleInvoices\Mvc\Service\SendResponseListenerFactory::class,
     ],
 ];
 
@@ -71,6 +64,9 @@ $smConfig->configureServiceManager($serviceManager);
 
 // ... add the configuration to the service manager
 $serviceManager->setService('SimpleInvoices\Config', $config);
+
+// Load modules
+$serviceManager->get('ModuleManager')->loadModules();
 
 /**
  * Initialize the application and store it in the service manager.
