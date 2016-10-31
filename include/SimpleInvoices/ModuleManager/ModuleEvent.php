@@ -12,6 +12,12 @@ class ModuleEvent extends Event
     const EVENT_LOAD_MODULES        = 'loadModules';
     const EVENT_LOAD_MODULES_POST   = 'loadModules.post';
     const EVENT_LOAD_MODULE_RESOLVE = 'loadModule.resolve';
+    const EVENT_MERGE_CONFIG        = 'mergeConfig';
+    
+    /**
+     * @var Listener\ConfigMergerInterface
+     */
+    protected $configListener;
     
     /**
      * @var mixed
@@ -22,6 +28,16 @@ class ModuleEvent extends Event
      * @var string
      */
     protected $moduleName;
+    
+    /**
+     * Get the config listener
+     *
+     * @return null|Listener\ConfigMergerInterface
+     */
+    public function getConfigListener()
+    {
+        return $this->configListener;
+    }
     
     /**
      * Get module object
@@ -41,6 +57,19 @@ class ModuleEvent extends Event
     public function getModuleName()
     {
         return $this->moduleName;
+    }
+    
+    /**
+     * Set module object to compose in this event
+     *
+     * @param  Listener\ConfigMergerInterface $configListener
+     * @return ModuleEvent
+     */
+    public function setConfigListener(Listener\ConfigMergerInterface $configListener)
+    {
+        $this->setParam('configListener', $configListener);
+        $this->configListener = $configListener;
+        return $this;
     }
     
     /**

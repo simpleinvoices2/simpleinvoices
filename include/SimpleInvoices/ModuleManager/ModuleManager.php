@@ -1,6 +1,7 @@
 <?php
 namespace SimpleInvoices\ModuleManager;
 
+use Traversable;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManager;
 use Zend\Db\Adapter\AdapterInterface;
@@ -147,6 +148,21 @@ class ModuleManager implements ModuleManagerInterface
             $this->setEventManager( new EventManager() );
         }
         return $this->events;
+    }
+    
+    /**
+     * Get an array of the loaded modules.
+     *
+     * @param  bool  $loadModules If true, load modules if they're not already
+     * @return array An array of Module objects, keyed by module name
+     */
+    public function getLoadedModules($loadModules = false)
+    {
+        if (true === $loadModules) {
+            $this->loadModules();
+        }
+    
+        return $this->loadedModules;
     }
     
     /**
@@ -370,6 +386,29 @@ class ModuleManager implements ModuleManagerInterface
         ]);
         $this->events = $events;
         $this->attachDefaultListeners($events);
+        return $this;
+    }
+    
+    /**
+     * Set an array or Traversable of module names that this module manager should load.
+     *
+     * @param  mixed $modules array or Traversable of module names
+     * @throws Exception\InvalidArgumentException
+     * @return ModuleManager
+     */
+    public function setModules($modules)
+    {
+        if (is_array($modules) || $modules instanceof Traversable) {
+            $this->modules = $modules;
+        } else {
+            throw new Exception\InvalidArgumentException(
+                sprintf(
+                    'Parameter to %s\'s %s method must be an array or implement the Traversable interface',
+                    __CLASS__,
+                    __METHOD__
+                    )
+                );
+        }
         return $this;
     }
 }

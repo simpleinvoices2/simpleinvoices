@@ -5,7 +5,7 @@ use SimpleInvoices\ModuleManager\ModuleEvent;
 use Zend\Loader\AutoloaderFactory;
 use SimpleInvoices\ModuleManager\Feature\AutoloaderProviderInterface;
 
-class AutoloaderListener
+class AutoloaderListener extends AbstractListener
 {
     /**
      * @param  ModuleEvent $e

@@ -4,7 +4,7 @@ namespace SimpleInvoices\ModuleManager\Listener;
 use SimpleInvoices\ModuleManager\ModuleEvent;
 use SimpleInvoices\ModuleManager\DumbModule;
 
-class ModuleResolverListener
+class ModuleResolverListener extends AbstractListener
 {
     /**
      * @param  ModuleEvent $e

@@ -6,7 +6,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\EventManagerInterface;
 use SimpleInvoices\ModuleManager\ModuleEvent;
 
-class ModuleLoaderListener implements ListenerAggregateInterface
+class ModuleLoaderListener extends AbstractListener implements ListenerAggregateInterface
 {
     /**
      * @var array
@@ -14,16 +14,34 @@ class ModuleLoaderListener implements ListenerAggregateInterface
     protected $callbacks = [];
     
     /**
+     * @var bool
+     */
+    protected $generateCache;
+    
+    /**
      * @var array
      */
     protected $moduleLoader;
     
-    public function __construct()
+    /**
+     * Constructor.
+     *
+     * Creates an instance of the ModuleAutoloader and injects the module paths
+     * into it.
+     *
+     * @param  ListenerOptions $options
+     */
+    public function __construct(ListenerOptions $options = null)
     {
-        $this->moduleLoader = new ModuleAutoloader([
-            './extensions',
-            './modules',
-        ]);
+        parent::__construct($options);
+        
+        $this->generateCache = $this->options->getModuleMapCacheEnabled();
+        $this->moduleLoader  = new ModuleAutoloader($this->options->getModulePaths());
+        
+        if ($this->hasCachedClassMap()) {
+            $this->generateCache = false;
+            $this->moduleLoader->setModuleClassMap($this->getCachedConfig());
+        }
     }
     
     /**
@@ -44,11 +62,12 @@ class ModuleLoaderListener implements ListenerAggregateInterface
             9000
         );
         
-        //$this->callbacks[] = $events->attach(
-        //    ModuleEvent::EVENT_LOAD_MODULES_POST,
-        //    [$this->moduleLoader, 'unregister'],
-        //    9000
-        //);
+        if ($this->generateCache) {
+            $this->callbacks[] = $events->attach(
+                ModuleEvent::EVENT_LOAD_MODULES_POST,
+                [$this, 'onLoadModulesPost']
+            );
+        }
     }
     
     /**
@@ -59,6 +78,46 @@ class ModuleLoaderListener implements ListenerAggregateInterface
      */
     public function detach(EventManagerInterface $events)
     {
-        
+        foreach ($this->callbacks as $index => $callback) {
+            if ($events->detach($callback)) {
+                unset($this->callbacks[$index]);
+            }
+        }
+    }
+    
+    /**
+     * @return array
+     */
+    protected function getCachedConfig()
+    {
+        return include $this->options->getModuleMapCacheFile();
+    }
+    
+    /**
+     * @return bool
+     */
+    protected function hasCachedClassMap()
+    {
+        if ($this->options->getModuleMapCacheEnabled() && file_exists($this->options->getModuleMapCacheFile())) 
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * loadModulesPost
+     *
+     * Unregisters the ModuleLoader and generates the module class map cache.
+     *
+     * @param  ModuleEvent $event
+     */
+    public function onLoadModulesPost(ModuleEvent $event)
+    {
+        $this->moduleLoader->unregister();
+        $this->writeArrayToFile(
+            $this->options->getModuleMapCacheFile(),
+            $this->moduleLoader->getModuleClassMap()
+            );
     }
 }

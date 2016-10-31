@@ -8,7 +8,7 @@ use SimpleInvoices\ModuleManager\ModuleManager;
 /**
  * Bootstrap listener
  */
-class OnBootstrapListener
+class OnBootstrapListener extends AbstractListener
 {
     /**
      * @param  ModuleEvent $e
@@ -24,8 +24,7 @@ class OnBootstrapListener
         
         $moduleManager = $e->getTarget();
         $events        = $moduleManager->getEventManager();
-        //$sharedEvents  = $events->getSharedManager();
-        //$sharedEvents->attach('Simpleinvoices\Mvc\Application', ModuleManager::EVENT_BOOTSTRAP, [$module, 'onBootstrap']);
-        $events->attach(ModuleManager::EVENT_BOOTSTRAP, [$module, 'onBootstrap']);
+        $sharedEvents  = $events->getSharedManager();
+        $sharedEvents->attach('Simpleinvoices\Mvc\Application', ModuleManager::EVENT_BOOTSTRAP, [$module, 'onBootstrap']);
     }
 }

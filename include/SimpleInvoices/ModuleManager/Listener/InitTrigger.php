@@ -6,7 +6,7 @@ use SimpleInvoices\ModuleManager\ModuleEvent;
 /**
  * Init trigger
  */
-class InitTrigger
+class InitTrigger extends AbstractListener
 {
     /**
      * @param ModuleEvent $e
