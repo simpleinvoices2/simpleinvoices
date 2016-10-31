@@ -68,11 +68,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         /**
          * Default listeners
          */
-        if (!$serviceManager->has('RouteListener')) {
-            $this->serviceManager->setService('RouteListener', new RouteListener());
-        }
-        $this->defaultListeners[] = 'RouteListener';
-        
+        $this->defaultListeners[] = 'RouteListener';       
         $this->defaultListeners[] = 'DispatchListener';
         $this->defaultListeners[] = 'SendResponseListener';
         

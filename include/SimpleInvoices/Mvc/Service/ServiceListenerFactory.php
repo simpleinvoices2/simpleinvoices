@@ -14,6 +14,7 @@ use SimpleInvoices\ModuleManager\Listener\ServiceListener;
 use SimpleInvoices\ModuleManager\Listener\ServiceListenerInterface;
 use SimpleInvoices\Mvc\Application;
 use SimpleInvoices\Mvc\Controller\ControllerManager;
+use SimpleInvoices\Mvc\RouteListener;
 use SimpleInvoices\Mvc\SendResponseListener;
 use SimpleInvoices\Mvc\View;
 use ReflectionClass;
@@ -46,7 +47,7 @@ class ServiceListenerFactory implements FactoryInterface
             //'Configuration'                              => 'config',
             //'HttpDefaultRenderingStrategy'               => View\Http\DefaultRenderingStrategy::class,
             //'MiddlewareListener'                         => 'Zend\Mvc\MiddlewareListener',
-            //'RouteListener'                              => 'Zend\Mvc\RouteListener',
+            'RouteListener'                              => RouteListener::class,
             'SendResponseListener'                       => SendResponseListener::class,
             //'View'                                       => 'Zend\View\View',
             //'ViewFeedRenderer'                           => 'Zend\View\Renderer\FeedRenderer',
@@ -88,7 +89,7 @@ class ServiceListenerFactory implements FactoryInterface
             //'ViewTemplatePathStack'          => 'Zend\Mvc\Service\ViewTemplatePathStackFactory',
             //'ViewPrefixPathStackResolver'    => 'Zend\Mvc\Service\ViewPrefixPathStackResolverFactory',
             //'Zend\Mvc\MiddlewareListener'    => InvokableFactory::class,
-            //'Zend\Mvc\RouteListener'         => InvokableFactory::class,
+            RouteListener::class             => InvokableFactory::class,
             SendResponseListener::class      => SendResponseListenerFactory::class,
             //'Zend\View\Renderer\FeedRenderer' => InvokableFactory::class,
             //'Zend\View\Renderer\JsonRenderer' => InvokableFactory::class,
