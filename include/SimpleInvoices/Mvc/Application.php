@@ -30,7 +30,11 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
      *
      * @var array
      */
-    protected $defaultListeners = [];
+    protected $defaultListeners = [
+        'RouteListener',
+        'DispatchListener',
+        'SendResponseListener',
+    ];
     
     /**
      * MVC event token
@@ -68,10 +72,6 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         /**
          * Default listeners
          */
-        $this->defaultListeners[] = 'RouteListener';       
-        $this->defaultListeners[] = 'DispatchListener';
-        $this->defaultListeners[] = 'SendResponseListener';
-        
         if (!$serviceManager->has('RenderListener')) {
             $this->serviceManager->setService('RenderListener', new RenderListener());
         }
