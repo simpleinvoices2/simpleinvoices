@@ -10,13 +10,13 @@
 namespace SimpleInvoices\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
+use SimpleInvoices\ModuleManager\Listener\ServiceListener;
+use SimpleInvoices\ModuleManager\ModuleManager;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\SharedEventManager;
 use Zend\EventManager\SharedEventManagerInterface;
-//use Zend\ModuleManager\Listener\ServiceListener;
-//use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Stdlib\ArrayUtils;
@@ -37,8 +37,8 @@ class ServiceManagerConfig extends Config
         'aliases'            => [
             'EventManagerInterface'            => EventManager::class,
             EventManagerInterface::class       => 'EventManager',
-            //ModuleManager::class               => 'ModuleManager',
-            //ServiceListener::class             => 'ServiceListener',
+            ModuleManager::class               => 'ModuleManager',
+            ServiceListener::class             => 'ServiceListener',
             SharedEventManager::class          => 'SharedEventManager',
             'SharedEventManagerInterface'      => 'SharedEventManager',
             SharedEventManagerInterface::class => 'SharedEventManager',
@@ -46,8 +46,8 @@ class ServiceManagerConfig extends Config
         'delegators' => [],
         'factories'  => [
             'EventManager'            => EventManagerFactory::class,
-            //'ModuleManager'           => ModuleManagerFactory::class,
-            //'ServiceListener'         => ServiceListenerFactory::class,
+            'ModuleManager'           => ModuleManagerFactory::class,
+            'ServiceListener'         => ServiceListenerFactory::class,
         ],
         'lazy_services' => [],
         'initializers'  => [],

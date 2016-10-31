@@ -171,7 +171,7 @@ class DispatchListener extends AbstractListenerAggregate
         $view       = $routeMatch->getParam('view', null);
         $action     = $routeMatch->getParam('action', null);
         
-        $extensions = $e->getApplication()->getServiceManager()->get('SimpleInvoices\ModuleManager')->getModules();
+        $extensions = $e->getApplication()->getServiceManager()->get('ModuleManager')->getModules();
         
         /**
          * Backward compatibility

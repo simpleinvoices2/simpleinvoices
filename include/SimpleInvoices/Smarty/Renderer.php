@@ -62,7 +62,7 @@ class Renderer
             $this->output = "fetch";
         }
         
-        $extensions = $this->serviceManager->get('SimpleInvoices\ModuleManager')->getModules();
+        $extensions = $this->serviceManager->get('ModuleManager')->getModules();
         
         // TODO: We should load extension jQuery files in a nicer way
         $extension_jquery_files = "";

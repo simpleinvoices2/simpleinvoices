@@ -29,7 +29,7 @@ class ViewTemplatePathStackFactory implements FactoryInterface
         $config = $container->get('SimpleInvoices\Config');
         
         // Load extensions
-        $extensions = $container->get('SimpleInvoices\ModuleManager')->getModules();
+        $extensions = $container->get('ModuleManager')->getModules();
         
         // Paths
         // ============================================

@@ -165,7 +165,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
         }
         
         // Initialize modules
-        $moduleManager = $serviceManager->get('SimpleInvoices\ModuleManager');
+        $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
         
         // TODO: This should go in the module manager but while we get it finished
