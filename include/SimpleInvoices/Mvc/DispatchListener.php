@@ -107,8 +107,54 @@ class DispatchListener extends AbstractListenerAggregate
             return $this->backwardCompatibilityOnDispatch($e);
         }
         
+        die("Backward compatibility should have been called!");
         
-        die("We shouldn't be here yet!! Please, report this error-");
+        try {
+            $controller = $controllerManager->get($controllerName);
+        } catch (Exception\InvalidControllerException $exception) {
+            $return = $this->marshalControllerNotFoundEvent($application::ERROR_CONTROLLER_INVALID, $controllerName, $e, $application, $exception);
+            return $this->complete($return, $e);
+        } catch (InvalidServiceException $exception) {
+            $return = $this->marshalControllerNotFoundEvent($application::ERROR_CONTROLLER_INVALID, $controllerName, $e, $application, $exception);
+            return $this->complete($return, $e);
+        } catch (\Throwable $exception) {
+            $return = $this->marshalBadControllerEvent($controllerName, $e, $application, $exception);
+            return $this->complete($return, $e);
+        } catch (\Exception $exception) {  // @TODO clean up once PHP 7 requirement is enforced
+            $return = $this->marshalBadControllerEvent($controllerName, $e, $application, $exception);
+            return $this->complete($return, $e);
+        }
+        
+        if ($controller instanceof InjectApplicationEventInterface) {
+            $controller->setEvent($e);
+        }
+        
+        $request  = $e->getRequest();
+        $response = $application->getResponse();
+        $caughtException = null;
+        
+        try {
+            $return = $controller->dispatch($request, $response);
+        } catch (\Throwable $ex) {
+            $caughtException = $ex;
+        } catch (\Exception $ex) {  // @TODO clean up once PHP 7 requirement is enforced
+            $caughtException = $ex;
+        }
+        
+        if ($caughtException !== null) {
+            $e->setName(MvcEvent::EVENT_DISPATCH_ERROR);
+            $e->setError($application::ERROR_EXCEPTION);
+            $e->setController($controllerName);
+            $e->setControllerClass(get_class($controller));
+            $e->setParam('exception', $caughtException);
+        
+            $return = $application->getEventManager()->triggerEvent($e)->last();
+            if (! $return) {
+                $return = $e->getResult();
+            }
+        }
+        
+        return $this->complete($return, $e);
     }
     
     /**
@@ -301,6 +347,30 @@ class DispatchListener extends AbstractListenerAggregate
          * Backward compatibility
          */
         $e->setMenuVisibility($menu);
+    }
+    
+    /**
+     * Marshal a bad controller exception event
+     *
+     * @param  string $controllerName
+     * @param  MvcEvent $event
+     * @param  Application $application
+     * @param  \Throwable|\Exception $exception
+     * @return mixed
+     */
+    protected function marshalBadControllerEvent($controllerName, MvcEvent $event, Application $application, $exception) 
+    {
+            $event->setName(MvcEvent::EVENT_DISPATCH_ERROR);
+            $event->setError($application::ERROR_EXCEPTION);
+            $event->setController($controllerName);
+            $event->setParam('exception', $exception);
+            $events  = $application->getEventManager();
+            $results = $events->triggerEvent($event);
+            $return  = $results->last();
+            if (! $return) {
+                return $event->getResult();
+            }
+            return $return;
     }
     
     /**

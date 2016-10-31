@@ -17,9 +17,13 @@ use Zend\Db\Metadata\Metadata;
  */
 class Application implements ApplicationInterface, EventManagerAwareInterface
 {
+    const ERROR_CONTROLLER_CANNOT_DISPATCH = 'error-controller-cannot-dispatch';
+    const ERROR_CONTROLLER_INVALID         = 'error-controller-invalid';
     const ERROR_CONTROLLER_NOT_FOUND       = 'error-controller-not-found';
-    const ERROR_ROUTER_NO_MATCH            = 'error-router-no-match';
+    const ERROR_EXCEPTION                  = 'error-exception';
+    const ERROR_MIDDLEWARE_CANNOT_DISPATCH = 'error-middleware-cannot-dispatch';
     const ERROR_NOT_AUTHORIZED             = 'error-not-authorized';
+    const ERROR_ROUTER_NO_MATCH            = 'error-router-no-match';
     
     /**
      * Default application event listeners
