@@ -24,7 +24,7 @@ class ModuleManagerFactory implements FactoryInterface
         $adapter        = $container->get('SimpleInvoices\Database\Adapter');
         $patchManager   = $container->get('SimpleInvoices\PatchManager');
         $doneSQLPatches = $patchManager->getNumberOfDoneSQLPatches();
-        $events         = $container->get('SimpleInvoices\EventManager');
+        $events         = $container->get('EventManager');
         
         $defaultListeners = new DefaultListenerAggregate();
         $defaultListeners->attach($events);

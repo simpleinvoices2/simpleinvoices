@@ -21,7 +21,7 @@ class AuthenticationServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $eventManager = $container->get('SimpleInvoices\EventManager');
+        $eventManager = $container->get('EventManager');
         $zendDb       = $container->get('SimpleInvoices\Database\Adapter');
         $storage      = new Session('SI_AUTH', 'id');
         $adapter      = new CredentialTreatmentAdapter($zendDb);

@@ -37,16 +37,12 @@ include_once("./include/validation.php");
 /**
  * Service manager
  */
-$serviceManager = new \Zend\ServiceManager\ServiceManager([
-    'aliases'   => [
-        'EventManager' => 'SimpleInvoices\EventManager', 
-    ],
+$smConfig = [
     'factories' => [
         'Smarty' => \SimpleInvoices\Service\SmartyFactory::class,
         'SimpleInvoices\Permission\Acl' => \SimpleInvoices\Service\AclFactory::class,
         'Request' => \SimpleInvoices\Service\RequestFactory::class,
         'Response' => \SimpleInvoices\Service\ResponseFactory::class,
-        'SimpleInvoices\EventManager' => \SimpleInvoices\Service\EventManagerFactory::class,
         'SimpleInvoices\Router' => \SimpleInvoices\Service\RouterFactory::class,
         'SimpleInvoices\Logger' => \SimpleInvoices\Service\LoggerFactory::class,
         'SimpleInvoices\SqlQueries' => \SimpleInvoices\Service\SqlQueriesFactory::class,
@@ -66,7 +62,12 @@ $serviceManager = new \Zend\ServiceManager\ServiceManager([
         \SimpleInvoices\Mvc\DispatchListener::class => \SimpleInvoices\Mvc\Service\DispatchListenerFactory::class,
         \SimpleInvoices\Mvc\ResponseSender::class => \SimpleInvoices\Mvc\Service\SendResponseListenerFactory::class,
     ],
-]);
+];
+
+$smConfig = new \SimpleInvoices\Mvc\Service\ServiceManagerConfig($smConfig);
+
+$serviceManager = new \Zend\ServiceManager\ServiceManager();
+$smConfig->configureServiceManager($serviceManager);
 
 // ... add the configuration to the service manager
 $serviceManager->setService('SimpleInvoices\Config', $config);
@@ -74,7 +75,7 @@ $serviceManager->setService('SimpleInvoices\Config', $config);
 /**
  * Initialize the application and store it in the service manager.
  */
-$application = new \SimpleInvoices\Mvc\Application($serviceManager, $serviceManager->get('SimpleInvoices\EventManager'));
+$application = new \SimpleInvoices\Mvc\Application($serviceManager, $serviceManager->get('EventManager'));
 $serviceManager->setService('SimpleInvoices', $application);
 
 /**
