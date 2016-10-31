@@ -6,7 +6,6 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
-use SimpleInvoices\View\Resolver\TemplatePathStack;
 use Zend\Session\SessionManager;
 use Zend\Session\Container as SessionContainer;
 use Zend\Db\Metadata\Metadata;
@@ -33,6 +32,7 @@ class Application implements ApplicationInterface, EventManagerAwareInterface
     protected $defaultListeners = [
         'RouteListener',
         'DispatchListener',
+        'ViewManager',
         'SendResponseListener',
     ];
     

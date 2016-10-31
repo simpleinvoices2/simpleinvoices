@@ -90,7 +90,9 @@ class ViewManager extends AbstractListenerAggregate
     {
         $application  = $event->getApplication();
         $services     = $application->getServiceManager();
-        $config       = $services->get('config');
+        // TODO: use config when ready
+        //$config       = $services->get('config');
+        $config       = [];
         $events       = $application->getEventManager();
         $sharedEvents = $events->getSharedManager();
 
@@ -106,7 +108,7 @@ class ViewManager extends AbstractListenerAggregate
 
         $this->injectViewModelIntoPlugin();
 
-        $injectTemplateListener  = $services->get('Zend\Mvc\View\Http\InjectTemplateListener');
+        $injectTemplateListener  = $services->get(InjectTemplateListener::class);
         $createViewModelListener = new CreateViewModelListener();
         $injectViewModelListener = new InjectViewModelListener();
 

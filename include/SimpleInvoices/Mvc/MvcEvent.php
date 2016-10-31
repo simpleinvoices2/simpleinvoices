@@ -4,6 +4,8 @@ namespace SimpleInvoices\Mvc;
 use Zend\EventManager\Event;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
+use Zend\View\Model\ModelInterface as Model;
+use Zend\View\Model\ViewModel;
 
 class MvcEvent extends Event
 {
@@ -12,6 +14,7 @@ class MvcEvent extends Event
     const EVENT_DISPATCH_ERROR = 'dispatch.error';
     const EVENT_ROUTE          = 'route';
     const EVENT_RENDER         = 'render';
+    const EVENT_RENDER_ERROR   = 'render.error';
     const EVENT_AUTHORIZATION  = 'authorization';
     const EVENT_FINISH         = 'finish';
     
@@ -46,6 +49,11 @@ class MvcEvent extends Event
      * @var Router\Router
      */
     protected $router;
+    
+    /**
+     * @var Model
+     */
+    protected $viewModel;
     
     /**
      * Get application instance
@@ -110,6 +118,19 @@ class MvcEvent extends Event
     public function getRouter()
     {
         return $this->router;
+    }
+    
+    /**
+     * Get the view model
+     *
+     * @return Model
+     */
+    public function getViewModel()
+    {
+        if (null === $this->viewModel) {
+            $this->setViewModel(new ViewModel());
+        }
+        return $this->viewModel;
     }
     
     /**
@@ -269,6 +290,18 @@ class MvcEvent extends Event
     {
         $this->setParam('__RESULT__', $result);
         $this->result = $result;
+        return $this;
+    }
+    
+    /**
+     * Set the view model
+     *
+     * @param  Model $viewModel
+     * @return MvcEvent
+     */
+    public function setViewModel(Model $viewModel)
+    {
+        $this->viewModel = $viewModel;
         return $this;
     }
 }
