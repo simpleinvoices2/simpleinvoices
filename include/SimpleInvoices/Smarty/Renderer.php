@@ -3,6 +3,7 @@ namespace SimpleInvoices\Smarty;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Resolver\ResolverInterface;
+use SimpleInvoices\Mvc\Router\RouteMatch;
 
 class Renderer
 {
@@ -29,19 +30,23 @@ class Renderer
     
     protected $menu = true;
     
+    protected $routeMatch = null;
+    
     public function __construct(ServiceLocatorInterface $serviceManager)
     {
         $this->serviceManager = $serviceManager;
-        $this->smarty = $serviceManager->get('Smarty');
-        $this->config = $serviceManager->get('SimpleInvoices\Config');
+        $this->smarty         = $serviceManager->get('Smarty');
+        $this->config         = $serviceManager->get('SimpleInvoices\Config');
         
-        $application = $serviceManager->get('SimpleInvoices');
-        $event       = $application->getMvcEvent();
-        $routeMatch  = $event->getRouteMatch();
+        $application          = $serviceManager->get('SimpleInvoices');
+        $event                = $application->getMvcEvent();
+        $this->routeMatch     = $event->getRouteMatch();
         
-        $this->moduleName = $routeMatch->getParam('module');
-        $this->viewName   = $routeMatch->getParam('view');
-        $this->actionName = $routeMatch->getParam('action');
+        if ($this->routeMatch instanceof RouteMatch) {
+            $this->moduleName = $this->routeMatch->getParam('module');
+            $this->viewName   = $this->routeMatch->getParam('view');
+            $this->actionName = $this->routeMatch->getParam('action');
+        }
         
         $this->early_exit = [
             "auth_login",
@@ -58,6 +63,10 @@ class Renderer
     
     public function render()
     {
+        if (!$this->routeMatch instanceof RouteMatch) {
+            return;
+        }
+        
         if (strcmp($this->moduleName, 'export') === 0) {
             $this->output = "fetch";
         }
