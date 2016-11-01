@@ -29,7 +29,7 @@ class ViewFactory implements FactoryInterface
         $events = $container->get('EventManager');
 
         $view->setEventManager($events);
-        $container->get(PhpRendererStrategy::class)->attach($events);
+        $container->get('ViewPhpRendererStrategy')->attach($events);
 
         return $view;
     }

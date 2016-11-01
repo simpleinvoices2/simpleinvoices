@@ -50,10 +50,10 @@ class ServiceListenerFactory implements FactoryInterface
             'RouteListener'                              => RouteListener::class,
             'SendResponseListener'                       => SendResponseListener::class,
             //'View'                                       => \Zend\View\View::class,
-            'View'                                       => \SimpleInvoices\Smarty\SmartyView::class,
+            'View'                                       => \Zend\View\View::class,
             //'ViewFeedRenderer'                           => 'Zend\View\Renderer\FeedRenderer',
             //'ViewJsonRenderer'                           => 'Zend\View\Renderer\JsonRenderer',
-            'ViewPhpRendererStrategy'                    => \SimpleInvoices\Smarty\SmartyRendererStrategy::class,
+            'ViewPhpRendererStrategy'                    => \SmartyView\Strategy\PhpRendererStrategy::class,
             //'ViewPhpRenderer'                            => \Zend\View\Renderer\PhpRenderer::class,
             'ViewPhpRenderer'                            => \SmartyView\Renderer\PhpRenderer::class,
             'ViewRenderer'                               => \SmartyView\Renderer\PhpRenderer::class,
@@ -100,10 +100,10 @@ class ServiceListenerFactory implements FactoryInterface
             //\Zend\View\Strategy\PhpRendererStrategy::class => ViewPhpRendererStrategyFactory::class,
             //\Zend\View\View::class           => ViewFactory::class,
             // Smarty renderer replaces PHP Renderer
-            \SmartyView\Renderer\PhpRenderer::class              => ViewSmartyRendererFactory::class,
-            \SimpleInvoices\Smarty\SmartyRendererStrategy::class => ViewSmartyRendererStrategyFactory::class,
-            \SimpleInvoices\Smarty\SmartyView::class             => SmartyViewFactory::class,
-            'Smarty'                                             => SmartyFactory::class,
+            \SmartyView\Renderer\PhpRenderer::class         => ViewSmartyRendererFactory::class,
+            \SmartyView\Strategy\PhpRendererStrategy::class => ViewSmartyRendererStrategyFactory::class,
+            \Zend\View\View::class           => ViewFactory::class,
+            'Smarty'                                        => SmartyFactory::class,
         ],
     ];
 
