@@ -5,7 +5,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Resolver\ResolverInterface;
 use SimpleInvoices\Mvc\Router\RouteMatch;
 
-class Renderer
+class OldRenderer
 {
     /**
      * @var ResolverInterface

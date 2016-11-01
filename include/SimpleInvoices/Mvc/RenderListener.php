@@ -26,7 +26,7 @@ class RenderListener extends AbstractListenerAggregate
     {
         $serviceManager = $event->getApplication()->getServiceManager();
 
-        $renderer = new \SimpleInvoices\Smarty\Renderer($serviceManager);
+        $renderer = new \SimpleInvoices\Smarty\OldRenderer($serviceManager);
         $renderer->setResolver( $serviceManager->get(TemplatePathStack::class) );
         $renderer->setMenu( $event->getMenuVisibility() );
         $renderer->render();
