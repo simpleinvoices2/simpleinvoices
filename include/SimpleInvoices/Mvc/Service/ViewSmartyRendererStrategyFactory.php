@@ -10,10 +10,10 @@
 namespace SimpleInvoices\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
-use SimpleInvoices\Smarty\SmartyRenderer;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Strategy\PhpRendererStrategy;
+use SmartyView\Strategy\PhpRendererStrategy;
+use SmartyView\Renderer\PhpRenderer;
 
 class ViewSmartyRendererStrategyFactory implements FactoryInterface
 {
@@ -25,7 +25,7 @@ class ViewSmartyRendererStrategyFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
-        return new PhpRendererStrategy($container->get(SmartyRenderer::class));
+        return new PhpRendererStrategy($container->get(PhpRenderer::class));
     }
 
     /**

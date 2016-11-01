@@ -10,7 +10,7 @@
 namespace SimpleInvoices\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
-use SimpleInvoices\Smarty\SmartyRenderer;
+use SmartyView\Renderer\PhpRenderer;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -20,12 +20,12 @@ class ViewSmartyRendererFactory implements FactoryInterface
      * @param  ContainerInterface $container
      * @param  string $name
      * @param  null|array $options
-     * @return SmartyRenderer
+     * @return PhpRenderer
      */
     public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
-        $renderer = new SmartyRenderer($container->get('Smarty'));
-        $renderer->setHelperPluginManager($container->get('ViewHelperManager'));
+        $renderer = new PhpRenderer($container->get('Smarty'));
+        //$renderer->setHelperPluginManager($container->get('ViewHelperManager'));
         $renderer->setResolver($container->get('ViewResolver'));
 
         return $renderer;
@@ -37,10 +37,10 @@ class ViewSmartyRendererFactory implements FactoryInterface
      * For use with zend-servicemanager v2; proxies to __invoke().
      *
      * @param ServiceLocatorInterface $container
-     * @return SmartyRenderer
+     * @return PhpRenderer
      */
     public function createService(ServiceLocatorInterface $container)
     {
-        return $this($container, SmartyRenderer::class);
+        return $this($container, PhpRenderer::class);
     }
 }
