@@ -1,30 +1,23 @@
 <?php
 use SimpleInvoices\SystemDefault\SystemDefaultManager;
+use Zend\Stdlib\ArrayUtils;
 /**
  * Composer autoloader
  */
 require_once './vendor/autoload.php';
 
-/**
- * Load configuration
- * 
- * Differences from ZF1
- *
- * The Zend\Config\Reader component no longer supports the following features:
- * 
- *     + Inheritance of sections.
- *     + Reading of specific sections.
- *     
- */
 include_once('./config/define.php');
-$reader = new \Zend\Config\Reader\Ini();
-if( is_file('./config/custom.config.php') ){
-    $config = $reader->fromFile('./config/custom.config.php');
-    $config = new \Zend\Config\Config($config['production'], true);
-} else {
-    $config = $reader->fromFile('./config/config.php');
-    $config = new \Zend\Config\Config($config['production'], true);
+
+// Retrieve configuration
+$appConfig = require './config/application.config.php';
+if (file_exists('./config/development.config.php')) {
+    $appConfig = ArrayUtils::merge($appConfig, require './config/development.config.php');
 }
+
+/**
+ * Backward compatibility
+ */
+$config = new \Zend\Config\Config($appConfig);
 
 /**
  * Non-refactored code
