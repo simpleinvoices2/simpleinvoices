@@ -20,8 +20,9 @@ if ($billers == null OR $customers == null OR $taxes == null OR $products == nul
     $smarty -> assign("first_run_wizard",$first_run_wizard);
 }
 
-$smarty -> assign("mysql",$mysql);
-$smarty -> assign("db_server",$db_server);
+// TODO: Re-enable this?
+//$smarty->assign("mysql",$mysql);
+//$smarty->assign("db_server",$db_server);
 /*
 $smarty -> assign("patch",count($patch));
 $smarty -> assign("max_patches_applied", $max_patches_applied);
