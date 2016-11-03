@@ -192,28 +192,34 @@ class ModuleManager implements ModuleManagerInterface
                 $resultSet->initialize($result);
                 
                 foreach ($resultSet as $result) {
-                    // By setting the name as key we avoid duplicates
-                    $this->modules[$result->name] = $result;
+                    if (strcasecmp($result->name, 'core') === 0 ) {
+                        $result->setName('SimpleInvoices\\Core');
+                        $result->setEnabled(true);
+                        $this->modules['SimpleInvoices\\Core'] = $result;
+                    } else {
+                        // By setting the name as key we avoid duplicates
+                        $this->modules[$result->name] = $result;
+                    }
                 }
             }
             
             // Check we have core as it is mandatory!
-            if (!isset($this->modules['core'])) {
+            if (!isset($this->modules['SimpleInvoices\\Core'])) {
                 $coreModule = new Model\Module();
                 $coreModule->exchangeArray([
                     'id'          => 1,
                     'domain_id'   => 1,
-                    'name'        => 'core',
+                    'name'        => 'SimpleInvoices\\Core',
                     'description' => 'Core part of Simple Invoices - always enabled',
                     'enabled'     => 1,
                 ]);
-                $this->modules['core'] = $coreModule;
+                $this->modules['SimpleInvoices\\Core'] = $coreModule;
             }
             
             // Make sure 'core' is enabled
-            $this->modules['core']->setEnabled(true);
+            $this->modules['SimpleInvoices\\Core']->setEnabled(true);
         }
-        
+
         return $this->modules;
     }
     

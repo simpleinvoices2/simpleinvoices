@@ -85,6 +85,15 @@ class Router implements RouteInterface
         } else {
             unset($_GET['case']);
         }
+        
+        switch($params['module']) {
+            case 'index':
+                {
+                    $params['controller'] = \SimpleInvoices\Core\Controller\IndexController::class;
+                    $params['action']     = $params['view'];
+                    break;
+                }
+        }
 
         return new RouteMatch($params);
     }

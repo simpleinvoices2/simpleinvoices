@@ -107,8 +107,6 @@ class DispatchListener extends AbstractListenerAggregate
             return $this->backwardCompatibilityOnDispatch($e);
         }
         
-        die("Backward compatibility should have been called!");
-        
         try {
             $controller = $controllerManager->get($controllerName);
         } catch (Exception\InvalidControllerException $exception) {

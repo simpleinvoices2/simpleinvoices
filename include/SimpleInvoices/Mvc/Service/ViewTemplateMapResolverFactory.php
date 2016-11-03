@@ -30,8 +30,8 @@ class ViewTemplateMapResolverFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $name, array $options = null)
     {
         // TODO: use config when ready
-        //$config = $container->get('config');
-        $config = [];
+        $config = $container->get('config');
+        
         $map = [];
         if (is_array($config) && isset($config['view_manager'])) {
             $config = $config['view_manager'];

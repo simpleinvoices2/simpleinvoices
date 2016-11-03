@@ -1,1 +1,41 @@
 
+[03-Nov-2016 13:34:19 Europe/London] PHP Warning:  Smarty error: unable to read resource: &quot;C:\wamp64\www\simpleinvoices2\module\Core\config/../view/error/index.phtml&quot; in C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php on line 1100
+[03-Nov-2016 13:34:19 Europe/London] PHP Stack trace:
+[03-Nov-2016 13:34:19 Europe/London] PHP   1. {main}() C:\wamp64\www\simpleinvoices2\index.php:0
+[03-Nov-2016 13:34:19 Europe/London] PHP   2. require_once() C:\wamp64\www\simpleinvoices2\index.php:32
+[03-Nov-2016 13:34:19 Europe/London] PHP   3. SimpleInvoices\Mvc\Application->run() C:\wamp64\www\simpleinvoices2\include\init.php:96
+[03-Nov-2016 13:34:19 Europe/London] PHP   4. SimpleInvoices\Mvc\Application->completeRequest() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\Application.php:439
+[03-Nov-2016 13:34:19 Europe/London] PHP   5. Zend\EventManager\EventManager->triggerEvent() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\Application.php:213
+[03-Nov-2016 13:34:19 Europe/London] PHP   6. Zend\EventManager\EventManager->triggerListeners() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:143
+[03-Nov-2016 13:34:19 Europe/London] PHP   7. SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:271
+[03-Nov-2016 13:34:19 Europe/London] PHP   8. Zend\EventManager\EventManager->triggerEvent() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy.php:123
+[03-Nov-2016 13:34:19 Europe/London] PHP   9. Zend\EventManager\EventManager->triggerListeners() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:143
+[03-Nov-2016 13:34:19 Europe/London] PHP  10. SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:271
+[03-Nov-2016 13:34:19 Europe/London] PHP  11. Zend\View\View->render() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy.php:105
+[03-Nov-2016 13:34:19 Europe/London] PHP  12. Zend\View\View->renderChildren() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-view\src\View.php:200
+[03-Nov-2016 13:34:19 Europe/London] PHP  13. Zend\View\View->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-view\src\View.php:236
+[03-Nov-2016 13:34:19 Europe/London] PHP  14. SimpleInvoices\Smarty\View\Renderer\PhpRenderer->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-view\src\View.php:207
+[03-Nov-2016 13:34:19 Europe/London] PHP  15. Smarty->fetch() C:\wamp64\www\simpleinvoices2\include\Smarty\src\View\Renderer\PhpRenderer.php:166
+[03-Nov-2016 13:34:19 Europe/London] PHP  16. Smarty->_compile_resource() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1268
+[03-Nov-2016 13:34:19 Europe/London] PHP  17. Smarty->_fetch_resource_info() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1422
+[03-Nov-2016 13:34:19 Europe/London] PHP  18. Smarty->trigger_error() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1596
+[03-Nov-2016 13:34:19 Europe/London] PHP  19. trigger_error() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1100
+[03-Nov-2016 13:34:19 Europe/London] PHP Warning:  Smarty error: unable to read resource: &quot;C:\wamp64\www\simpleinvoices2\module\Core\config/../view/layout/layout.phtml&quot; in C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php on line 1100
+[03-Nov-2016 13:34:19 Europe/London] PHP Stack trace:
+[03-Nov-2016 13:34:19 Europe/London] PHP   1. {main}() C:\wamp64\www\simpleinvoices2\index.php:0
+[03-Nov-2016 13:34:19 Europe/London] PHP   2. require_once() C:\wamp64\www\simpleinvoices2\index.php:32
+[03-Nov-2016 13:34:19 Europe/London] PHP   3. SimpleInvoices\Mvc\Application->run() C:\wamp64\www\simpleinvoices2\include\init.php:96
+[03-Nov-2016 13:34:20 Europe/London] PHP   4. SimpleInvoices\Mvc\Application->completeRequest() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\Application.php:439
+[03-Nov-2016 13:34:20 Europe/London] PHP   5. Zend\EventManager\EventManager->triggerEvent() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\Application.php:213
+[03-Nov-2016 13:34:20 Europe/London] PHP   6. Zend\EventManager\EventManager->triggerListeners() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:143
+[03-Nov-2016 13:34:20 Europe/London] PHP   7. SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:271
+[03-Nov-2016 13:34:20 Europe/London] PHP   8. Zend\EventManager\EventManager->triggerEvent() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy.php:123
+[03-Nov-2016 13:34:20 Europe/London] PHP   9. Zend\EventManager\EventManager->triggerListeners() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:143
+[03-Nov-2016 13:34:20 Europe/London] PHP  10. SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-eventmanager\src\EventManager.php:271
+[03-Nov-2016 13:34:20 Europe/London] PHP  11. Zend\View\View->render() C:\wamp64\www\simpleinvoices2\include\SimpleInvoices\Mvc\View\Http\DefaultRenderingStrategy.php:105
+[03-Nov-2016 13:34:20 Europe/London] PHP  12. SimpleInvoices\Smarty\View\Renderer\PhpRenderer->render() C:\wamp64\www\simpleinvoices2\vendor\zendframework\zend-view\src\View.php:207
+[03-Nov-2016 13:34:20 Europe/London] PHP  13. Smarty->fetch() C:\wamp64\www\simpleinvoices2\include\Smarty\src\View\Renderer\PhpRenderer.php:166
+[03-Nov-2016 13:34:20 Europe/London] PHP  14. Smarty->_compile_resource() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1268
+[03-Nov-2016 13:34:20 Europe/London] PHP  15. Smarty->_fetch_resource_info() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1422
+[03-Nov-2016 13:34:20 Europe/London] PHP  16. Smarty->trigger_error() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1596
+[03-Nov-2016 13:34:20 Europe/London] PHP  17. trigger_error() C:\wamp64\www\simpleinvoices2\vendor\smarty\smarty\libs\Smarty.class.php:1100

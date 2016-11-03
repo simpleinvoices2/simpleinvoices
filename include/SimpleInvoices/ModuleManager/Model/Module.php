@@ -39,4 +39,10 @@ class Module
         $this->enabled = (bool) $enabled;
         return $this;
     }
+    
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
+    }
 }

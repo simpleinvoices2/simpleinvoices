@@ -11,13 +11,13 @@ namespace SimpleInvoices\Mvc\View\Http;
 
 use ArrayAccess;
 use SimpleInvoices\Mvc\MvcEvent;
+use SimpleInvoices\Smarty\View\Resolver as ViewResolver;
 use Traversable;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\View\HelperPluginManager as ViewHelperManager;
-use Zend\View\Resolver as ViewResolver;
 use Zend\View\View;
 
 /**

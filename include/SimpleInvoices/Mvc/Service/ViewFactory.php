@@ -10,9 +10,9 @@
 namespace SimpleInvoices\Mvc\Service;
 
 use Interop\Container\ContainerInterface;
+use SimpleInvoices\Smarty\View\Strategy\PhpRendererStrategy;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Strategy\PhpRendererStrategy;
 use Zend\View\View;
 
 class ViewFactory implements FactoryInterface

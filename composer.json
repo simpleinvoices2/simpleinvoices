@@ -28,7 +28,9 @@
     },
     "autoload": {
         "psr-4": {
-            "SimpleInvoices\\": "include/SimpleInvoices/"
+            "SimpleInvoices\\": "include/SimpleInvoices/",
+            "SimpleInvoices\\Core\\": "module/Core/src/",
+            "SimpleInvoices\\Smarty\\": "include/Smarty/src/"
         }
     }
 }

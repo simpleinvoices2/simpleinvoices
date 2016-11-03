@@ -43,8 +43,8 @@ class ServiceListenerFactory implements FactoryInterface
      */
     protected $defaultServiceConfig = [
         'aliases' => [
-            //'configuration'                              => 'config',
-            //'Configuration'                              => 'config',
+            'configuration'                              => 'config',
+            'Configuration'                              => 'config',
             'HttpDefaultRenderingStrategy'               => DefaultRenderingStrategy::class,
             //'MiddlewareListener'                         => 'Zend\Mvc\MiddlewareListener',
             'RouteListener'                              => RouteListener::class,
@@ -52,9 +52,9 @@ class ServiceListenerFactory implements FactoryInterface
             'View'                                       => \Zend\View\View::class,
             //'ViewFeedRenderer'                           => 'Zend\View\Renderer\FeedRenderer',
             //'ViewJsonRenderer'                           => 'Zend\View\Renderer\JsonRenderer',
-            'ViewPhpRendererStrategy'                    => \Zend\View\Strategy\PhpRendererStrategy::class,
-            'ViewPhpRenderer'                            => \Zend\View\Renderer\PhpRenderer::class,
-            'ViewRenderer'                               => \Zend\View\Renderer\PhpRenderer::class,
+            'ViewPhpRendererStrategy'                    => \SimpleInvoices\Smarty\View\Strategy\PhpRendererStrategy::class,
+            'ViewPhpRenderer'                            => \SimpleInvoices\Smarty\View\Renderer\PhpRenderer::class,
+            'ViewRenderer'                               => \SimpleInvoices\Smarty\View\Renderer\PhpRenderer::class,
             //'Zend\Mvc\Controller\PluginManager'          => 'ControllerPluginManager',
             \SimpleInvoices\Mvc\View\Http\InjectTemplateListener::class  => 'InjectTemplateListener',
             //'Zend\View\Renderer\RendererInterface'       => 'Zend\View\Renderer\PhpRenderer',
@@ -67,7 +67,7 @@ class ServiceListenerFactory implements FactoryInterface
         'invokables' => [],
         'factories'  => [
             'Application'                    => ApplicationFactory::class,
-            //'config'                         => 'Zend\Mvc\Service\ConfigFactory',
+            'config'                         => ConfigFactory::class,
             ControllerManager::class         => ControllerManagerFactory::class,
             'ControllerPluginManager'        => ControllerPluginManagerFactory::class,
             'DispatchListener'               => DispatchListenerFactory::class,
@@ -93,8 +93,8 @@ class ServiceListenerFactory implements FactoryInterface
             SendResponseListener::class      => SendResponseListenerFactory::class,
             //'Zend\View\Renderer\FeedRenderer' => InvokableFactory::class,
             //'Zend\View\Renderer\JsonRenderer' => InvokableFactory::class,
-            \Zend\View\Renderer\PhpRenderer::class         => ViewPhpRendererFactory::class,
-            \Zend\View\Strategy\PhpRendererStrategy::class => ViewPhpRendererStrategyFactory::class,
+            \SimpleInvoices\Smarty\View\Renderer\PhpRenderer::class         => ViewPhpRendererFactory::class,
+            \SimpleInvoices\Smarty\View\Strategy\PhpRendererStrategy::class => ViewPhpRendererStrategyFactory::class,
             \Zend\View\View::class           => ViewFactory::class,
         ],
     ];
@@ -282,7 +282,7 @@ class ServiceListenerFactory implements FactoryInterface
     private function injectV3Aliases()
     {
         $this->defaultServiceConfig['aliases']['application'] = 'Application';
-        //$this->defaultServiceConfig['aliases']['Config']      = 'config';
+        $this->defaultServiceConfig['aliases']['Config']      = 'config';
         $this->defaultServiceConfig['aliases']['request']     = 'Request';
         $this->defaultServiceConfig['aliases']['response']    = 'Response';
     }

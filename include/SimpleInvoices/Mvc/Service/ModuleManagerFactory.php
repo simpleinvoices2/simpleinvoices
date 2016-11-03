@@ -39,8 +39,24 @@ class ModuleManagerFactory implements FactoryInterface
     {
         //$configuration    = $container->get('ApplicationConfig');
         $configuration    = [
-            'module_listener_options' => [],
+            'module_listener_options' => [
+                // This should be an array of paths in which modules reside.
+                // If a string key is provided, the listener will consider that a module
+                // namespace, the value of that key the specific path to that module's
+                // Module class.
+                'module_paths' => [
+                    './module',
+                    './vendor',
+                ],
+                // An array of paths from which to glob configuration files after
+                // modules are loaded. These effectively override configuration
+                // provided by modules themselves. Paths may use GLOB_BRACE notation.
+                'config_glob_paths' => [
+                    realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php',
+                ],
+            ],
         ];
+        
         $listenerOptions  = new ListenerOptions($configuration['module_listener_options']);
         $defaultListeners = new DefaultListenerAggregate($listenerOptions);
         $serviceListener  = $container->get('ServiceListener');
