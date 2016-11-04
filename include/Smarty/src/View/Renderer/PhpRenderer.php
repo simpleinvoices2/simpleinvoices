@@ -23,6 +23,13 @@ class PhpRenderer implements RendererInterface, TreeRendererInterface
     private $__engine;
     
     /**
+     * Script file name to execute
+     *
+     * @var string
+     */
+    private $__file = null;
+    
+    /**
      * Template being rendered
      *
      * @var null|string
@@ -153,6 +160,7 @@ class PhpRenderer implements RendererInterface, TreeRendererInterface
         unset($values);
         
         while ($this->__template = array_pop($this->__templates)) {
+            
             $this->__file = $this->resolver($this->__template);
             if (!$this->__file) {
                 throw new Exception\RuntimeException(sprintf(
@@ -161,9 +169,18 @@ class PhpRenderer implements RendererInterface, TreeRendererInterface
                     $this->__template
                 ));
             }
+            
+            if (!$this->templateExists($this->__file)) {
+                throw new Exception\RuntimeException(sprintf(
+                    '%s: Unable to render template "%s"; Smarty template does not exist',
+                    __METHOD__,
+                    $this->__template
+                ));
+            }
+            
             try {
                 ob_start();
-                $this->__engine->fetch($this->__file);
+                $this->__engine->display($this->__file);
                 $this->__content = ob_get_clean();
             } catch (\Exception $ex) {
                 ob_end_clean();
@@ -176,6 +193,13 @@ class PhpRenderer implements RendererInterface, TreeRendererInterface
             //        $this->__file
             //    ));
             //}
+            if (empty($this->__content)) {
+                throw new Exception\UnexpectedValueException(sprintf(
+                    '%s: Unable to render template "%s"; Smarty::fetch() failed',
+                    __METHOD__,
+                    $this->__file
+                ));
+            }
         }
         
         return $this->__content;
@@ -221,6 +245,24 @@ class PhpRenderer implements RendererInterface, TreeRendererInterface
         $this->__engine->assign($variables);
         
         return $this;
+    }
+
+    /**
+     * Checks whether the specified template exists
+     * 
+     * @param string $template
+     * @throws Exception\RuntimeException
+     * @return boolean
+     */
+    public function templateExists($template)
+    {
+        if (method_exists($this->__engine, 'templateExists')) {
+            return $this->__engine->templateExists($template);
+        } elseif (method_exists($this->__engine, 'template_exists')) {
+            return $this->__engine->template_exists($template);
+        } else {
+            throw new Exception\RuntimeException('Smarty does not allow to check if a template exists.');
+        }
     }
     
     /**
